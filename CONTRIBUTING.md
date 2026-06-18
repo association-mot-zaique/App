@@ -24,6 +24,7 @@ Vous pouvez contribuer de plusieurs manières :
 ## Rejoindre le projet
 
 Pour les développeurs et testeurs les plus motivés, vous pouvez devenir bénévole auprès de l'association MOT-ZAIQUE en nous contactant à l'adresse suivante :
+
 contact@motzaique.fr
 
 ---
@@ -48,7 +49,9 @@ Pour contribuer au code :
 
 1. Forker le dépôt
 2. Créer une branche dédiée :
+
 	feature/[ma-nouvelle-fonctionnalite]
+
 	fix/correction-[du-bug]
 
 3. Effectuer vos modifications
