@@ -1,0 +1,21 @@
+Bonjour John, j'ai pas mal de retours pour toi. Globalement, l'appli est très appréciée et on admire tous ton travail, encore merci.
+
+- Déjà, je te l'avais dis, il faut que la phrase formée soit aussi affichée en pictogrammes.
+
+- Ensuite, l'interface peut être facilement simplifiée :  Pas besoin de marquer communiquer et le texte qu'il y a en dessous, ni même "phrase actuelle". L'appli ne peut être utilisée que par des gens qui connaissent la CAA, donc qui n'ont pas besoin de ces textes, et ils peuvent désorienter les bénéficiaires.
+
+- Le système de recherche n'est pas utile non plus, si le bénéficiaire sait écrire il n'a pas besoin de la tablette, et sinon ça risque de le désorienter. C'est toi qui voit, soit tu l'enlève soit par défaut il n'apparait pas.
+
+- Les catégories sont bien, simplement, ça serait sympa que leurs boutons aient tous une couleur différentes, et que les pictos de la catégorie aient ausi leur contour et leurs boutons de cette couleur.
+
+Le reste c'est quelques détails simples qu'on m'a remonté :
+- Problème de couleur sur le fond du logo
+- Le nom de l'appli serait mieux en majuscules
+- Les crédits, comme je t'ai dis, et on m'a même demandé si tu mettrais ton nom dedans donc vas-y, même le bureau approuve que tu peux t'y mettre si tu veux
+
+Hormis ça je vais quand même te remonter les bons points, car ça n'a pas manqué :
+- ils ont adoré qu'on puisse récup les pictos de l'ARASAAC, couplé à un upload local ça fera des merveilles sans nous coûter d'infrastructure web,
+- Quand les textes seront enlevés le design sera très épuré et simple, c'est parfait et moderne
+- y'a pas de ressemblance avec une appli déjà existante, donc pas de risque d'embrouilles
+- sauvegarde locale, c'est vraiment une super bonne idée
+- filtre de qualité pareil, on y aurait jamais pensé
