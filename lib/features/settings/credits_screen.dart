@@ -26,12 +26,16 @@ class CreditsScreen extends StatelessWidget {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
+                        color: colorScheme.surface,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: Image.asset(
-                        'assets/branding/mot-zaique-logo.png',
-                        fit: BoxFit.cover,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Image.asset(
+                          'assets/branding/mot-zaique-logo.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),

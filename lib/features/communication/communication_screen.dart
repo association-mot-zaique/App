@@ -573,7 +573,6 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
         _PhraseComposer(
           phrasePictograms: widget.phraseBookController.currentPhrase,
           phraseText: widget.phraseBookController.currentText,
-          emptyMessage: l10n.phraseEmpty,
           speakLabel: l10n.speakPhrase,
           removeLastLabel: l10n.removeLast,
           clearLabel: l10n.clear,
@@ -660,7 +659,6 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
               _PhraseComposer(
                 phrasePictograms: widget.phraseBookController.currentPhrase,
                 phraseText: widget.phraseBookController.currentText,
-                emptyMessage: l10n.phraseEmpty,
                 speakLabel: l10n.speakPhrase,
                 removeLastLabel: l10n.removeLast,
                 clearLabel: l10n.clear,
@@ -1177,7 +1175,6 @@ class _PhraseComposer extends StatelessWidget {
   const _PhraseComposer({
     required this.phrasePictograms,
     required this.phraseText,
-    required this.emptyMessage,
     required this.speakLabel,
     required this.removeLastLabel,
     required this.clearLabel,
@@ -1191,7 +1188,6 @@ class _PhraseComposer extends StatelessWidget {
 
   final List<Pictogram> phrasePictograms;
   final String phraseText;
-  final String emptyMessage;
   final String speakLabel;
   final String removeLastLabel;
   final String clearLabel;
@@ -1214,9 +1210,7 @@ class _PhraseComposer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!hasPhrase)
-              Text(emptyMessage)
-            else ...[
+            if (hasPhrase) ...[
               SizedBox(
                 height: stripHeight,
                 child: ListView.separated(

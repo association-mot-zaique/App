@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'mot-zaique';
+  String get appTitle => 'MOT-ZAIQUE';
 
   @override
   String get communicateTitle => 'Comunicar';

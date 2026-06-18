@@ -12,6 +12,7 @@ class LogoTitle extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
           ),
           clipBehavior: Clip.antiAlias,
@@ -19,7 +20,7 @@ class LogoTitle extends StatelessWidget {
             padding: const EdgeInsets.all(4),
             child: Image.asset(
               'assets/branding/mot-zaique-logo.png',
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
           ),
         ),
