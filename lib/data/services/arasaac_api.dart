@@ -25,9 +25,7 @@ class ArasaacApi {
     final response = await _client.get(uri);
 
     if (response.statusCode != 200) {
-      throw ArasaacException(
-        'ARASAAC returned ${response.statusCode}.',
-      );
+      throw ArasaacException(statusCode: response.statusCode);
     }
 
     final decoded = jsonDecode(response.body);
@@ -41,7 +39,7 @@ class ArasaacApi {
         try {
           pictograms.add(Pictogram.fromArasaacJson(item, language: language));
         } on FormatException {
-          // Ignora pictogramas corruptos para mantener la busqueda estable.
+          // Skip corrupted pictograms to keep the search stable.
         }
       } else if (item is Map) {
         try {
@@ -52,7 +50,7 @@ class ArasaacApi {
             ),
           );
         } on FormatException {
-          // Ignora pictogramas corruptos para mantener la busqueda estable.
+          // Skip corrupted pictograms to keep the search stable.
         }
       }
     }
@@ -65,11 +63,16 @@ class ArasaacApi {
   }
 }
 
+/// Internal failure marker for ARASAAC access. It deliberately carries **no
+/// user-facing message**: the UI always shows a localized string
+/// (`serviceUnavailable`). [statusCode] is diagnostic only (logs), null when
+/// the service was simply unreachable.
 class ArasaacException implements Exception {
-  const ArasaacException(this.message);
+  const ArasaacException({this.statusCode});
 
-  final String message;
+  final int? statusCode;
 
   @override
-  String toString() => message;
+  String toString() =>
+      'ArasaacException(${statusCode != null ? 'status $statusCode' : 'unreachable'})';
 }

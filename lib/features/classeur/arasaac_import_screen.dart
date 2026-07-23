@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../data/models/pictogram.dart';
+import '../../data/services/arasaac_api.dart';
 import '../../data/services/pictogram_search_service.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../settings/settings_controller.dart';
@@ -100,7 +101,7 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
       final response =
           await _httpClient.get(Uri.parse(pictogram.imageUrl(size: 500)));
       if (response.statusCode != 200) {
-        throw Exception('image download failed');
+        throw ArasaacException(statusCode: response.statusCode);
       }
       await widget.controller.addPictogram(
         label: pictogram.label,
