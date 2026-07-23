@@ -454,4 +454,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get pictogramAddedNotice => 'Piktogramm hinzugefuegt';
+
+  @override
+  String get lockAidant => 'Betreuer-Modus sperren';
 }

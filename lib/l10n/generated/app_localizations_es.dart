@@ -451,4 +451,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pictogramAddedNotice => 'Pictograma anadido';
+
+  @override
+  String get lockAidant => 'Bloquear el modo asistente';
 }

@@ -47,32 +47,38 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _selectedIndex = 0;
-  bool _favoritesUnlocked = false;
+  bool _aidantUnlocked = false;
+
+  /// Favorites (1) and Settings (2) make up the PIN-protected aidant area
+  /// (CDC A-01). The communication tab (0) stays freely accessible.
+  static bool _isAidantTab(int index) => index == 1 || index == 2;
 
   Future<void> _onDestinationSelected(int index) async {
     if (index == _selectedIndex) {
       return;
     }
 
-    if (index == 1) {
-      final canOpenFavorites = await _ensureFavoritesUnlocked();
-      if (!mounted || !canOpenFavorites) {
+    if (_isAidantTab(index)) {
+      final unlocked = await _ensureAidantUnlocked();
+      if (!mounted || !unlocked) {
         return;
       }
     }
 
     setState(() {
-      if (_selectedIndex == 1 && index != 1) {
-        _favoritesUnlocked = false;
+      // Returning to the communication tab re-locks the aidant area, so the
+      // end user cannot reach the configuration again without the PIN.
+      if (index == 0) {
+        _aidantUnlocked = false;
       }
       _selectedIndex = index;
     });
   }
 
-  Future<bool> _ensureFavoritesUnlocked() async {
+  Future<bool> _ensureAidantUnlocked() async {
     final l10n = AppLocalizations.of(context);
 
-    if (_favoritesUnlocked) {
+    if (_aidantUnlocked) {
       return true;
     }
 
@@ -107,7 +113,7 @@ class _HomeShellState extends State<HomeShell> {
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.pinCreated)));
 
-      _favoritesUnlocked = true;
+      _aidantUnlocked = true;
       return true;
     }
 
@@ -120,7 +126,7 @@ class _HomeShellState extends State<HomeShell> {
         ) ??
         false;
 
-    _favoritesUnlocked = isValid;
+    _aidantUnlocked = isValid;
     return isValid;
   }
 
@@ -157,7 +163,7 @@ class _HomeShellState extends State<HomeShell> {
     }
 
     setState(() {
-      _favoritesUnlocked = false;
+      _aidantUnlocked = false;
     });
   }
 
@@ -169,19 +175,19 @@ class _HomeShellState extends State<HomeShell> {
       appBar: AppBar(
         title: const LogoTitle(),
         actions: [
-          if (_selectedIndex == 1)
+          if (_isAidantTab(_selectedIndex))
             IconButton(
               tooltip: l10n.changePinAction,
               onPressed: _changePin,
               icon: const Icon(Icons.password_rounded),
             ),
-          if (_selectedIndex == 1)
+          if (_isAidantTab(_selectedIndex))
             IconButton(
-              tooltip: l10n.lockFavorites,
+              tooltip: l10n.lockAidant,
               onPressed: () {
                 setState(() {
                   _selectedIndex = 0;
-                  _favoritesUnlocked = false;
+                  _aidantUnlocked = false;
                 });
               },
               icon: const Icon(Icons.lock_outline_rounded),

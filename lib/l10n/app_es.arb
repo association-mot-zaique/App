@@ -163,5 +163,6 @@
   "deletePictogramConfirm": "Eliminar este pictograma?",
   "categoryEmptyPictograms": "Aun no hay pictogramas en esta categoria.",
   "importFromArasaac": "Anadir desde ARASAAC",
-  "pictogramAddedNotice": "Pictograma anadido"
+  "pictogramAddedNotice": "Pictograma anadido",
+  "lockAidant": "Bloquear el modo asistente"
 }

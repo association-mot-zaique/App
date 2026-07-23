@@ -452,4 +452,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pictogramAddedNotice => 'Pictogramme ajoute';
+
+  @override
+  String get lockAidant => 'Verrouiller le mode aidant';
 }

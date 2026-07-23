@@ -961,6 +961,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pictogram added'**
   String get pictogramAddedNotice;
+
+  /// No description provided for @lockAidant.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock aidant mode'**
+  String get lockAidant;
 }
 
 class _AppLocalizationsDelegate

@@ -73,11 +73,12 @@ _Réf : A-06 · **livré** — gestion par catégorie, création via ARASAAC (vo
 ### US-1.07 · Extension du verrou PIN à tout le mode aidant `Must`
 > **En tant qu'**aidant, **je veux** que l'intégralité du mode aidant (Réglages compris) soit protégée par code PIN, **afin d'**empêcher l'utilisateur final d'y accéder accidentellement.
 
-_Réf : A-01 · le verrou existe mais Réglages/Favoris restaient accessibles sans code (§6.2)_
+_Réf : A-01 · le verrou existe mais Réglages restait accessible sans code (§6.2) · **livré**_
 
-- [ ] Protéger tous les écrans du mode aidant par le PIN
-- [ ] Protéger l'écran Réglages (fuite constatée à corriger)
-- [ ] Conserver le verrou salé (dérivation existante) et le code de récupération
+- [x] Protéger tous les écrans du mode aidant par le PIN — zone aidant = Favoris + Réglages (+ Gérer le classeur, atteint depuis Réglages)
+- [x] Protéger l'écran Réglages (fuite constatée à corriger) — l'onglet Réglages passe désormais par le même verrou
+- [x] Conserver le verrou salé (dérivation existante) et le code de récupération — `PinRepository` réutilisé sans modification
+- [x] Reverrouillage automatique au retour sur l'onglet communication
 
 ### US-1.08 · Masquage des phrases enregistrées dans le mode communication `Should`
 > **En tant que** mainteneur, **je veux** masquer les fonctions de phrases enregistrées (C-11 à C-13) de l'interface communication, tout en les **conservant dans le code**, **afin de** ne pas court-circuiter la composition tout en préservant la non-régression.
