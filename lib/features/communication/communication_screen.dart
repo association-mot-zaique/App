@@ -45,6 +45,11 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
   int _selectedCategoryIndex = 0;
   bool _showSearch = false;
   String _lastLocaleCode = '';
+  // System language, cached from didChangeDependencies. Reading
+  // Localizations.of(context) directly inside a ChangeNotifier callback breaks
+  // inherited-dependency bookkeeping (the '_dependents.isEmpty' assertion), so
+  // callbacks read this cache instead of touching the context.
+  String _systemLocaleCode = 'fr';
   _CategoryPreset? _lastCategoryPreset;
   String _lastStandaloneQuery = '';
 
@@ -77,14 +82,20 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     });
   }
 
-  /// The manual language choice, or the system-resolved language when the
-  /// user left the setting on automatic (empty [AppSettings.localeCode]).
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Safe place to read inherited widgets; cache the system language so
+    // callbacks never touch the context.
+    _systemLocaleCode = Localizations.localeOf(context).languageCode;
+  }
+
+  /// The manual language choice, or the cached system-resolved language when
+  /// the user left the setting on automatic (empty [AppSettings.localeCode]).
+  /// Never touches the context, so it is safe to call from any callback.
   String _effectiveLocaleCode() {
     final code = widget.settingsController.settings.localeCode;
-    if (code.isNotEmpty) {
-      return code;
-    }
-    return Localizations.localeOf(context).languageCode;
+    return code.isNotEmpty ? code : _systemLocaleCode;
   }
 
   @override

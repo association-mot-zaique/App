@@ -40,6 +40,16 @@ class _ClasseurCommunicationScreenState
   // Keeps owned-pictogram ids clear of ARASAAC ids in the shared phrase book.
   static const int _localIdOffset = 1000000000;
 
+  // System language cached from didChangeDependencies, so callbacks never read
+  // the context (avoids the '_dependents.isEmpty' inherited-widget assertion).
+  String _systemLocaleCode = 'fr';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _systemLocaleCode = Localizations.localeOf(context).languageCode;
+  }
+
   @override
   void dispose() {
     widget.speechService.stop();
@@ -48,10 +58,7 @@ class _ClasseurCommunicationScreenState
 
   String _effectiveLocaleCode() {
     final settings = widget.settingsController.settings;
-    if (!settings.isAutomaticLocale) {
-      return settings.localeCode;
-    }
-    return Localizations.localeOf(context).languageCode;
+    return settings.isAutomaticLocale ? _systemLocaleCode : settings.localeCode;
   }
 
   Pictogram _toPictogram(LocalPictogram picto) {
