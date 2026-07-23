@@ -41,6 +41,7 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
   final http.Client _httpClient = http.Client();
 
   List<Pictogram> _results = const [];
+  final Set<int> _addedIds = <int>{};
   bool _isLoading = false;
   bool _isImporting = false;
   String? _error;
@@ -92,7 +93,7 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
   }
 
   Future<void> _import(Pictogram pictogram) async {
-    if (_isImporting) {
+    if (_isImporting || _addedIds.contains(pictogram.id)) {
       return;
     }
     setState(() => _isImporting = true);
@@ -112,9 +113,17 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
       if (!mounted) {
         return;
       }
-      Navigator.of(context).pop();
+      // Stay on the screen so the aidant can add several pictograms in a row;
+      // added ones get a check mark. Close with the back button when done.
+      setState(() {
+        _addedIds.add(pictogram.id);
+        _isImporting = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.pictogramAddedNotice)),
+        SnackBar(
+          content: Text(l10n.pictogramAddedNotice),
+          duration: const Duration(milliseconds: 700),
+        ),
       );
     } catch (_) {
       if (!mounted) {
@@ -187,19 +196,46 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
         itemCount: _results.length,
         itemBuilder: (context, index) {
           final pictogram = _results[index];
+          final added = _addedIds.contains(pictogram.id);
           return InkWell(
             onTap: () => _import(pictogram),
             borderRadius: BorderRadius.circular(12),
             child: Column(
               children: [
                 Expanded(
-                  child: CachedNetworkImage(
-                    imageUrl: pictogram.imageUrl(size: 300),
-                    fit: BoxFit.contain,
-                    placeholder: (_, _) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (_, _, _) =>
-                        const Icon(Icons.broken_image_outlined),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Opacity(
+                          opacity: added ? 0.4 : 1,
+                          child: CachedNetworkImage(
+                            imageUrl: pictogram.imageUrl(size: 300),
+                            fit: BoxFit.contain,
+                            placeholder: (_, _) =>
+                                const Center(child: CircularProgressIndicator()),
+                            errorWidget: (_, _, _) =>
+                                const Icon(Icons.broken_image_outlined),
+                          ),
+                        ),
+                      ),
+                      if (added)
+                        Positioned(
+                          top: 2,
+                          right: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF2E7D32),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(2),
+                            child: const Icon(
+                              Icons.check_rounded,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 4),

@@ -235,9 +235,9 @@ class _CategoryPictogramsScreen extends StatelessWidget {
 
     switch (source) {
       case 'file':
-        await _addFromDevice(context, ImageSource.gallery);
+        await _addFromGallery(context);
       case 'camera':
-        await _addFromDevice(context, ImageSource.camera);
+        await _addFromCamera(context);
       case 'arasaac':
         await Navigator.of(context).push(
           MaterialPageRoute<void>(
@@ -253,11 +253,35 @@ class _CategoryPictogramsScreen extends StatelessWidget {
     }
   }
 
-  /// Picks an image from the gallery/files or the camera, copies its bytes to
-  /// disk and creates a pictogram. The original format is kept (no re-encode),
-  /// so imported PNG transparency is preserved.
-  Future<void> _addFromDevice(BuildContext context, ImageSource source) async {
-    final XFile? picked = await ImagePicker().pickImage(source: source);
+  /// Imports **several** images at once from the gallery/files (US-1.02). Each
+  /// becomes a pictogram whose label defaults to the file name (renamed later),
+  /// so the aidant can garnish a category quickly. The original format is kept
+  /// (no re-encode), preserving PNG transparency.
+  Future<void> _addFromGallery(BuildContext context) async {
+    final files = await ImagePicker().pickMultiImage();
+    if (files.isEmpty || !context.mounted) {
+      return;
+    }
+    for (final file in files) {
+      final bytes = await file.readAsBytes();
+      await controller.addPictogram(
+        label: _labelFromFileName(file.name),
+        categoryId: categoryId,
+        imageBytes: bytes,
+        extension: _extensionOf(file.name),
+      );
+    }
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).pictogramAddedNotice)),
+    );
+  }
+
+  /// Takes a single photo (US-1.03) and creates a pictogram with a typed label.
+  Future<void> _addFromCamera(BuildContext context) async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.camera);
     if (picked == null || !context.mounted) {
       return;
     }
@@ -265,7 +289,6 @@ class _CategoryPictogramsScreen extends StatelessWidget {
     if (!context.mounted) {
       return;
     }
-
     final l10n = AppLocalizations.of(context);
     final label = await _promptText(
       context,
@@ -275,7 +298,6 @@ class _CategoryPictogramsScreen extends StatelessWidget {
     if (label == null) {
       return;
     }
-
     await controller.addPictogram(
       label: label,
       categoryId: categoryId,
@@ -296,6 +318,12 @@ class _CategoryPictogramsScreen extends StatelessWidget {
       return 'png';
     }
     return name.substring(dot + 1);
+  }
+
+  static String _labelFromFileName(String name) {
+    final dot = name.lastIndexOf('.');
+    final stem = dot > 0 ? name.substring(0, dot) : name;
+    return stem.trim().isEmpty ? name : stem.trim();
   }
 }
 
