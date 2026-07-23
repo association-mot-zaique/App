@@ -132,6 +132,35 @@ class CreditsScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              _SectionCard(
+                icon: Icons.balance_rounded,
+                color: colorScheme.primary,
+                title: l10n.creditsLicense,
+                children: [
+                  Text(
+                    l10n.creditsLicenseDescription,
+                    style: textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      'GNU GPL v3.0',
+                      style: textTheme.labelMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

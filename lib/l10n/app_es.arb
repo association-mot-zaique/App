@@ -166,5 +166,7 @@
   "pictogramAddedNotice": "Pictograma anadido",
   "lockAidant": "Bloquear el modo asistente",
   "addFromFile": "Desde un archivo",
-  "addFromCamera": "Tomar una foto"
+  "addFromCamera": "Tomar una foto",
+  "creditsLicense": "Licencia",
+  "creditsLicenseDescription": "MOT-ZAIQUE es software libre, publicado bajo la licencia GNU General Public License v3.0."
 }

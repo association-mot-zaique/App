@@ -3,7 +3,9 @@
     <application
         android:label="MOT-ZAIQUE"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:fullBackupContent="false"><!-- CDC 5.1 : aucune remontee du classeur vers Google Drive -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

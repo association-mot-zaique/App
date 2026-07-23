@@ -166,5 +166,7 @@
   "pictogramAddedNotice": "Pittogramma aggiunto",
   "lockAidant": "Blocca la modalita assistente",
   "addFromFile": "Da un file",
-  "addFromCamera": "Scatta una foto"
+  "addFromCamera": "Scatta una foto",
+  "creditsLicense": "Licenza",
+  "creditsLicenseDescription": "MOT-ZAIQUE e software libero, pubblicato con licenza GNU General Public License v3.0."
 }

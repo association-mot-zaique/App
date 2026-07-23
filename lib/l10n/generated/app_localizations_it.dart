@@ -459,4 +459,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get addFromCamera => 'Scatta una foto';
+
+  @override
+  String get creditsLicense => 'Licenza';
+
+  @override
+  String get creditsLicenseDescription =>
+      'MOT-ZAIQUE e software libero, pubblicato con licenza GNU General Public License v3.0.';
 }

@@ -96,20 +96,20 @@ _Réf : C-11→C-13, A-17 · décision du 22 juillet 2026_
 ### US-1.09 · Conformité confidentialité — `allowBackup="false"` `Must`
 > **En tant que** mainteneur, **je veux** interdire la remontée silencieuse des classeurs vers Google Drive, **afin de** garantir qu'aucune donnée ne quitte l'appareil.
 
-_Réf : §5.1, §6.2 · attribut absent du manifeste (correction d'une ligne)_
+_Réf : §5.1, §6.2 · attribut absent du manifeste (correction d'une ligne) · **livré**_
 
-- [ ] Ajouter `android:allowBackup="false"` au manifeste Android
-- [ ] Vérifier l'absence de sauvegarde système du classeur
+- [x] Ajouter `android:allowBackup="false"` au manifeste Android (+ `fullBackupContent="false"`)
+- [ ] Vérifier l'absence de sauvegarde système du classeur sur appareil réel (`adb backup`)
 
 ### US-1.10 · Conformité confidentialité — permissions et attribution `Must`
 > **En tant que** mainteneur, **je veux** des permissions au strict nécessaire et l'attribution ARASAAC visible, **afin de** respecter les exigences légales et de licence.
 
-_Réf : §5.1, §5.4_
+_Réf : §5.1, §5.4 · **livré**_
 
-- [ ] Réduire les permissions au strict nécessaire, demandées au moment de l'usage
-- [ ] Aucune bibliothèque d'analytics ou de télémétrie
-- [ ] Écran « À propos » : attribution ARASAAC (CC BY-NC-SA, auteur Sergio Palao, Gouvernement d'Aragon)
-- [ ] Mention de la licence du code (GNU GPL v3.0)
+- [x] Réduire les permissions au strict nécessaire — manifeste = `INTERNET` seul (galerie/photo via Photo Picker / app caméra système, sans permission)
+- [x] Aucune bibliothèque d'analytics ou de télémétrie (confirmé à l'audit)
+- [x] Écran « À propos » : attribution ARASAAC (CC BY-NC-SA, auteur Sergio Palao, Gouvernement d'Aragon)
+- [x] Mention de la licence du code (GNU GPL v3.0) — section « Licence » ajoutée aux Crédits
 
 ### US-1.11 · Bascule de la langue par défaut sur le français `Must`
 > **En tant qu'**utilisateur francophone, **je veux** que l'application démarre en français, **afin de** l'utiliser dans ma langue.

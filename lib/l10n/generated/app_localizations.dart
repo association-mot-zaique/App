@@ -979,6 +979,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take a photo'**
   String get addFromCamera;
+
+  /// No description provided for @creditsLicense.
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get creditsLicense;
+
+  /// No description provided for @creditsLicenseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'MOT-ZAIQUE is free software, released under the GNU General Public License v3.0.'**
+  String get creditsLicenseDescription;
 }
 
 class _AppLocalizationsDelegate
