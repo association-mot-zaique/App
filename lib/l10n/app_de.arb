@@ -164,5 +164,7 @@
   "categoryEmptyPictograms": "Noch keine Piktogramme in dieser Kategorie.",
   "importFromArasaac": "Aus ARASAAC hinzufuegen",
   "pictogramAddedNotice": "Piktogramm hinzugefuegt",
-  "lockAidant": "Betreuer-Modus sperren"
+  "lockAidant": "Betreuer-Modus sperren",
+  "addFromFile": "Aus einer Datei",
+  "addFromCamera": "Foto aufnehmen"
 }

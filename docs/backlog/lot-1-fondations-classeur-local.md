@@ -24,20 +24,22 @@ _Réf : §6.3, §6.4 · dérive A-05→A-08 · **couche data livrée** (branche 
 ### US-1.02 · Source d'alimentation — import depuis les fichiers `Must`
 > **En tant qu'**aidant, **je veux** importer un pictogramme depuis les fichiers de l'appareil, **afin de** garnir le classeur avec mes propres images.
 
-_Réf : A-02 · fonction absente au diagnostic (`file_picker` à introduire)_
+_Réf : A-02 · **livré** via `image_picker` (galerie/fichiers) · sélecteur de source dans « Ajouter un pictogramme »_
 
-- [ ] Sélectionner une image depuis les fichiers de l'appareil
-- [ ] Copier l'image dans le stockage local du classeur
-- [ ] Créer le pictogramme (libellé, catégorie) à partir de l'image importée
+- [x] Sélectionner une image depuis les fichiers/galerie de l'appareil (`ImageSource.gallery`)
+- [x] Copier l'image dans le stockage local du classeur (format d'origine préservé — transparence PNG conservée)
+- [x] Créer le pictogramme (libellé saisi, catégorie courante) à partir de l'image importée
+- [ ] Valider sur appareil réel (Photo Picker Android, sans permission)
 
 ### US-1.03 · Source d'alimentation — prise de photo directe `Must`
 > **En tant qu'**aidant, **je veux** prendre une photo pour créer un pictogramme, **afin d'**intégrer des objets, lieux et visages familiers de l'environnement réel de la personne.
 
-_Réf : A-03 · fonction absente au diagnostic (`image_picker` à introduire) · condition de viabilité (§6.3)_
+_Réf : A-03 · condition de viabilité (§6.3) · **livré** via `image_picker` (`ImageSource.camera`)_
 
-- [ ] Déclencher la prise de photo (permission caméra demandée au moment de l'usage)
-- [ ] Enregistrer la photo dans le stockage local du classeur
-- [ ] Créer le pictogramme à partir de la photo
+- [x] Déclencher la prise de photo (permission caméra gérée par l'app caméra système, au moment de l'usage)
+- [x] Enregistrer la photo dans le stockage local du classeur
+- [x] Créer le pictogramme à partir de la photo
+- [ ] Valider sur appareil réel (permission caméra, taille des fichiers)
 
 ### US-1.04 · Source d'alimentation — recherche et import ARASAAC `Must`
 > **En tant qu'**aidant, **je veux** rechercher et importer un pictogramme depuis ARASAAC, **afin de** compléter le classeur — mais **jamais comme seule source**.

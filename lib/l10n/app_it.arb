@@ -164,5 +164,7 @@
   "categoryEmptyPictograms": "Nessun pittogramma in questa categoria.",
   "importFromArasaac": "Aggiungi da ARASAAC",
   "pictogramAddedNotice": "Pittogramma aggiunto",
-  "lockAidant": "Blocca la modalita assistente"
+  "lockAidant": "Blocca la modalita assistente",
+  "addFromFile": "Da un file",
+  "addFromCamera": "Scatta una foto"
 }

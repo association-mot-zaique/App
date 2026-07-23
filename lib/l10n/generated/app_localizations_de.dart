@@ -457,4 +457,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get lockAidant => 'Betreuer-Modus sperren';
+
+  @override
+  String get addFromFile => 'Aus einer Datei';
+
+  @override
+  String get addFromCamera => 'Foto aufnehmen';
 }

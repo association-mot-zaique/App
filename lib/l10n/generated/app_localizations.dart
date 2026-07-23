@@ -967,6 +967,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lock aidant mode'**
   String get lockAidant;
+
+  /// No description provided for @addFromFile.
+  ///
+  /// In en, this message translates to:
+  /// **'From a file'**
+  String get addFromFile;
+
+  /// No description provided for @addFromCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get addFromCamera;
 }
 
 class _AppLocalizationsDelegate

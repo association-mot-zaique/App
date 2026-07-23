@@ -453,4 +453,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get lockAidant => 'Blocca la modalita assistente';
+
+  @override
+  String get addFromFile => 'Da un file';
+
+  @override
+  String get addFromCamera => 'Scatta una foto';
 }

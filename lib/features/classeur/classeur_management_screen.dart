@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/local_category.dart';
 import '../../data/models/local_pictogram.dart';
@@ -139,17 +140,7 @@ class _CategoryPictogramsScreen extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => ArasaacImportScreen(
-                controller: controller,
-                categoryId: categoryId,
-                languageCode: languageCode,
-              ),
-            ),
-          );
-        },
+        onPressed: () => _addPictogram(context),
         icon: const Icon(Icons.add_photo_alternate_outlined),
         label: Text(l10n.addPictogram),
       ),
@@ -195,6 +186,102 @@ class _CategoryPictogramsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// Offers the three alimentation sources at parity (CDC 6.3): a file
+  /// (US-1.02), a photo (US-1.03) or ARASAAC (US-1.04).
+  Future<void> _addPictogram(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final source = await showModalBottomSheet<String>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l10n.addFromFile),
+              onTap: () => Navigator.of(context).pop('file'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_camera_outlined),
+              title: Text(l10n.addFromCamera),
+              onTap: () => Navigator.of(context).pop('camera'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.travel_explore_outlined),
+              title: Text(l10n.importFromArasaac),
+              onTap: () => Navigator.of(context).pop('arasaac'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null || !context.mounted) {
+      return;
+    }
+
+    switch (source) {
+      case 'file':
+        await _addFromDevice(context, ImageSource.gallery);
+      case 'camera':
+        await _addFromDevice(context, ImageSource.camera);
+      case 'arasaac':
+        await Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => ArasaacImportScreen(
+              controller: controller,
+              categoryId: categoryId,
+              languageCode: languageCode,
+            ),
+          ),
+        );
+    }
+  }
+
+  /// Picks an image from the gallery/files or the camera, copies its bytes to
+  /// disk and creates a pictogram. The original format is kept (no re-encode),
+  /// so imported PNG transparency is preserved.
+  Future<void> _addFromDevice(BuildContext context, ImageSource source) async {
+    final XFile? picked = await ImagePicker().pickImage(source: source);
+    if (picked == null || !context.mounted) {
+      return;
+    }
+    final bytes = await picked.readAsBytes();
+    if (!context.mounted) {
+      return;
+    }
+
+    final l10n = AppLocalizations.of(context);
+    final label = await _promptText(
+      context,
+      title: l10n.addPictogram,
+      label: l10n.pictogramLabelLabel,
+    );
+    if (label == null) {
+      return;
+    }
+
+    await controller.addPictogram(
+      label: label,
+      categoryId: categoryId,
+      imageBytes: bytes,
+      extension: _extensionOf(picked.name),
+    );
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.pictogramAddedNotice)),
+    );
+  }
+
+  static String _extensionOf(String name) {
+    final dot = name.lastIndexOf('.');
+    if (dot == -1 || dot == name.length - 1) {
+      return 'png';
+    }
+    return name.substring(dot + 1);
   }
 }
 

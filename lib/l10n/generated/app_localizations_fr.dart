@@ -455,4 +455,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get lockAidant => 'Verrouiller le mode aidant';
+
+  @override
+  String get addFromFile => 'Depuis un fichier';
+
+  @override
+  String get addFromCamera => 'Prendre une photo';
 }
