@@ -487,4 +487,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get suggestionToys => 'Giochi';
+
+  @override
+  String get categoryExists => 'Questa categoria esiste gia';
 }

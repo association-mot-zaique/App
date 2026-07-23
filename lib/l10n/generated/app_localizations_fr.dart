@@ -489,4 +489,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get suggestionToys => 'Jouets';
+
+  @override
+  String get categoryExists => 'Cette categorie existe deja';
 }

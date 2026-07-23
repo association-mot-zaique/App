@@ -486,4 +486,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get suggestionToys => 'Toys';
+
+  @override
+  String get categoryExists => 'This category already exists';
 }

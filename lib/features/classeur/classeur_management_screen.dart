@@ -112,7 +112,12 @@ class ClasseurManagementScreen extends StatelessWidget {
       builder: (_) => _AddCategoryDialog(suggestions: suggestions),
     );
     if (name != null && name.isNotEmpty) {
-      await controller.addCategory(name);
+      final added = await controller.addCategory(name);
+      if (context.mounted && !added) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.categoryExists)),
+        );
+      }
     }
   }
 
@@ -128,7 +133,12 @@ class ClasseurManagementScreen extends StatelessWidget {
       initialValue: category.name,
     );
     if (name != null) {
-      await controller.renameCategory(category.id, name);
+      final renamed = await controller.renameCategory(category.id, name);
+      if (context.mounted && !renamed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.categoryExists)),
+        );
+      }
     }
   }
 

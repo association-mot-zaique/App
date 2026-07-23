@@ -1033,6 +1033,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Toys'**
   String get suggestionToys;
+
+  /// No description provided for @categoryExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This category already exists'**
+  String get categoryExists;
 }
 
 class _AppLocalizationsDelegate

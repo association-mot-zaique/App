@@ -36,8 +36,33 @@ void main() {
     });
 
     test('blank category name is ignored', () async {
-      await controller.addCategory('   ');
+      final added = await controller.addCategory('   ');
+      expect(added, isFalse);
       expect(controller.classeur.categories, isEmpty);
+    });
+
+    test('duplicate category name is refused (case-insensitive)', () async {
+      final first = await controller.addCategory('Maison');
+      final dup = await controller.addCategory('  maison ');
+
+      expect(first, isTrue);
+      expect(dup, isFalse);
+      expect(controller.classeur.categories, hasLength(1));
+    });
+
+    test('renaming onto an existing name is refused', () async {
+      await controller.addCategory('Maison');
+      await controller.addCategory('Ecole');
+      final ecoleId = controller.classeur.categories
+          .firstWhere((c) => c.name == 'Ecole')
+          .id;
+
+      final renamed = await controller.renameCategory(ecoleId, 'maison');
+      expect(renamed, isFalse);
+      expect(
+        controller.classeur.categories.firstWhere((c) => c.id == ecoleId).name,
+        'Ecole',
+      );
     });
   });
 

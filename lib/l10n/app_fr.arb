@@ -175,5 +175,6 @@
   "suggestionPeople": "Personnes",
   "suggestionActivities": "Activites",
   "suggestionPlaces": "Lieux",
-  "suggestionToys": "Jouets"
+  "suggestionToys": "Jouets",
+  "categoryExists": "Cette categorie existe deja"
 }

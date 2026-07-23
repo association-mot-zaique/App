@@ -25,19 +25,31 @@ class LocalClasseurController extends ChangeNotifier {
 
   // ── Categories (US-1.05) ────────────────────────────────────────────
 
-  Future<void> addCategory(String name) async {
+  bool _categoryNameExists(String name, {int? exceptId}) {
+    final normalized = name.trim().toLowerCase();
+    return _classeur.categories.any(
+      (c) => c.id != exceptId && c.name.trim().toLowerCase() == normalized,
+    );
+  }
+
+  /// Adds a category. Returns false (and does nothing) when the name is empty
+  /// or already used by another category — no duplicates.
+  Future<bool> addCategory(String name) async {
     final trimmed = name.trim();
-    if (trimmed.isEmpty) {
-      return;
+    if (trimmed.isEmpty || _categoryNameExists(trimmed)) {
+      return false;
     }
     _classeur = _classeur.addCategory(trimmed).classeur;
     await _persist();
+    return true;
   }
 
-  Future<void> renameCategory(int id, String name) async {
+  /// Renames a category. Returns false when the name is empty or already used
+  /// by another category.
+  Future<bool> renameCategory(int id, String name) async {
     final trimmed = name.trim();
-    if (trimmed.isEmpty) {
-      return;
+    if (trimmed.isEmpty || _categoryNameExists(trimmed, exceptId: id)) {
+      return false;
     }
     _classeur = _classeur.copyWith(
       categories: _classeur.categories
@@ -45,6 +57,7 @@ class LocalClasseurController extends ChangeNotifier {
           .toList(),
     );
     await _persist();
+    return true;
   }
 
   /// Deletes the category, its pictograms and their image files.

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -44,6 +46,7 @@ class ArasaacImportScreen extends StatefulWidget {
 class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
   final TextEditingController _queryController = TextEditingController();
   final http.Client _httpClient = http.Client();
+  Timer? _debounce;
 
   List<Pictogram> _results = const [];
   final Set<int> _addedIds = <int>{};
@@ -67,9 +70,24 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _queryController.dispose();
     _httpClient.close();
     super.dispose();
+  }
+
+  /// Live search: debounces typing so results refresh as the aidant types,
+  /// without pressing the button.
+  void _onQueryChanged(String value) {
+    _debounce?.cancel();
+    if (value.trim().isEmpty) {
+      setState(() {
+        _results = const [];
+        _error = null;
+      });
+      return;
+    }
+    _debounce = Timer(const Duration(milliseconds: 400), _search);
   }
 
   Future<void> _search() async {
@@ -171,6 +189,7 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
                   child: TextField(
                     controller: _queryController,
                     textInputAction: TextInputAction.search,
+                    onChanged: _onQueryChanged,
                     onSubmitted: (_) => _search(),
                     decoration: InputDecoration(
                       labelText: l10n.searchHint,
