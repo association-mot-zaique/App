@@ -495,4 +495,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get addStarterCategories => 'Ajouter des categories de depart';
+
+  @override
+  String get speechRate => 'Vitesse d\'elocution';
 }

@@ -1,7 +1,11 @@
 import 'package:flutter_tts/flutter_tts.dart';
 
 abstract class SpeechService {
-  Future<void> speak(String text, {required String languageCode});
+  Future<void> speak(
+    String text, {
+    required String languageCode,
+    double rate,
+  });
   Future<void> stop();
 }
 
@@ -11,14 +15,18 @@ class FlutterSpeechService implements SpeechService {
   final FlutterTts _flutterTts = FlutterTts();
 
   @override
-  Future<void> speak(String text, {required String languageCode}) async {
+  Future<void> speak(
+    String text, {
+    required String languageCode,
+    double rate = 0.42,
+  }) async {
     final cleanedText = text.trim();
     if (cleanedText.isEmpty) {
       return;
     }
 
     await _flutterTts.setLanguage(_mapTtsLanguage(languageCode));
-    await _flutterTts.setSpeechRate(0.42);
+    await _flutterTts.setSpeechRate(rate.clamp(0.1, 1.0));
     await _flutterTts.setPitch(1.0);
     await _flutterTts.awaitSpeakCompletion(true);
     await _flutterTts.stop();
@@ -49,7 +57,11 @@ class FlutterSpeechService implements SpeechService {
 
 class NoopSpeechService implements SpeechService {
   @override
-  Future<void> speak(String text, {required String languageCode}) async {}
+  Future<void> speak(
+    String text, {
+    required String languageCode,
+    double rate = 0.42,
+  }) async {}
 
   @override
   Future<void> stop() async {}

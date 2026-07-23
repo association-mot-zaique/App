@@ -355,6 +355,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     await widget.speechService.speak(
       phraseText,
       languageCode: _effectiveLocaleCode(),
+      rate: widget.settingsController.settings.speechRate,
     );
   }
 

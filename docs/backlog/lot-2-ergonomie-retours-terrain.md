@@ -56,10 +56,11 @@ _Réf : A-12, §11 (question 3, nombre par défaut à statuer par l'IME)_
 ### US-2.06 · Réglage de la vitesse d'élocution `Must`
 > **En tant qu'**aidant, **je veux** régler la vitesse d'élocution, **afin de** garantir l'intelligibilité pour l'utilisateur final.
 
-_Réf : A-13 (reclassé en Must) · vitesse figée à 0,42 dans le code (§6.2)_
+_Réf : A-13 (reclassé en Must) · vitesse figée à 0,42 dans le code (§6.2) · **livré** (anticipé depuis le Lot 1)_
 
-- [ ] Exposer la vitesse d'élocution en paramètre configurable (retirer la valeur figée 0,42)
-- [ ] Appliquer le réglage à la restitution au picto (C-07) et à la lecture globale (C-06)
+- [x] Exposer la vitesse d'élocution en paramètre configurable — `AppSettings.speechRate` (défaut 0,42) + curseur dans les Réglages
+- [x] Appliquer le réglage à la restitution au picto (C-07) et à la lecture globale (C-06) — passé à `SpeechService.speak(rate:)`
+- [ ] Valider la plage/valeur par défaut avec l'IME (motricité/intelligibilité)
 
 ### US-2.07 · Affichage optionnel du texte sous l'image `Should`
 > **En tant qu'**aidant, **je veux** activer ou masquer le texte sous le pictogramme, **afin d'**adapter l'affichage au profil de la personne.

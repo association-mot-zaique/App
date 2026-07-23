@@ -175,6 +175,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       widget.settingsController.updateScale(value),
                 ),
                 const SizedBox(height: 6),
+                Text(
+                  l10n.speechRate,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Slider(
+                  min: 0.2,
+                  max: 0.8,
+                  divisions: 12,
+                  value: settings.speechRate.clamp(0.2, 0.8),
+                  label: settings.speechRate.toStringAsFixed(2),
+                  onChanged: (value) =>
+                      widget.settingsController.updateSpeechRate(value),
+                ),
+                const SizedBox(height: 6),
                 SwitchListTile.adaptive(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.highContrast),

@@ -1045,6 +1045,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add starter categories'**
   String get addStarterCategories;
+
+  /// No description provided for @speechRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech rate'**
+  String get speechRate;
 }
 
 class _AppLocalizationsDelegate

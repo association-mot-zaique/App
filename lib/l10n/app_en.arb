@@ -177,5 +177,6 @@
   "suggestionPlaces": "Places",
   "suggestionToys": "Toys",
   "categoryExists": "This category already exists",
-  "addStarterCategories": "Add starter categories"
+  "addStarterCategories": "Add starter categories",
+  "speechRate": "Speech rate"
 }

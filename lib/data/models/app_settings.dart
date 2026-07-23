@@ -11,6 +11,7 @@ class AppSettings {
     required this.onlySchematicPictograms,
     required this.minDownloads,
     required this.savedPhrasesEnabled,
+    required this.speechRate,
   });
 
   static const AppSettings defaults = AppSettings(
@@ -26,6 +27,7 @@ class AppSettings {
     onlySchematicPictograms: false,
     minDownloads: 0,
     savedPhrasesEnabled: false,
+    speechRate: 0.42,
   );
 
   final double pictogramScale;
@@ -41,6 +43,11 @@ class AppSettings {
   /// by default; the aidant can turn them on (A-17). The feature code stays in
   /// place for non-regression (CDC 4.1).
   final bool savedPhrasesEnabled;
+
+  /// TTS speech rate (A-13, reclassed Must): governs intelligibility once the
+  /// spoken output is a first-class feature (C-06/C-07). 0.42 is the previous
+  /// fixed value, now the default.
+  final double speechRate;
 
   /// Empty [localeCode] means "automatic": follow the system language.
   /// Returning `null` lets [MaterialApp] resolve the locale from the device.
@@ -58,6 +65,7 @@ class AppSettings {
     bool? onlySchematicPictograms,
     int? minDownloads,
     bool? savedPhrasesEnabled,
+    double? speechRate,
   }) {
     return AppSettings(
       pictogramScale: pictogramScale ?? this.pictogramScale,
@@ -70,6 +78,7 @@ class AppSettings {
           onlySchematicPictograms ?? this.onlySchematicPictograms,
       minDownloads: minDownloads ?? this.minDownloads,
       savedPhrasesEnabled: savedPhrasesEnabled ?? this.savedPhrasesEnabled,
+      speechRate: speechRate ?? this.speechRate,
     );
   }
 
@@ -90,6 +99,7 @@ class AppSettings {
       'onlySchematicPictograms': onlySchematicPictograms,
       'minDownloads': minDownloads,
       'savedPhrasesEnabled': savedPhrasesEnabled,
+      'speechRate': speechRate,
     };
   }
 
@@ -113,6 +123,7 @@ class AppSettings {
           json['onlySchematicPictograms'] as bool? ?? false,
       minDownloads: json['minDownloads'] as int? ?? 0,
       savedPhrasesEnabled: json['savedPhrasesEnabled'] as bool? ?? false,
+      speechRate: (json['speechRate'] as num?)?.toDouble() ?? 0.42,
     );
   }
 }

@@ -492,4 +492,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addStarterCategories => 'Add starter categories';
+
+  @override
+  String get speechRate => 'Speech rate';
 }

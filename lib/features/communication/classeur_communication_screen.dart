@@ -82,7 +82,11 @@ class _ClasseurCommunicationScreenState
     final pictogram = _toPictogram(picto);
     await widget.phraseBookController.addToCurrent(pictogram);
     // Speak the pictogram as it is added (C-07).
-    await widget.speechService.speak(picto.label, languageCode: languageCode);
+    await widget.speechService.speak(
+      picto.label,
+      languageCode: languageCode,
+      rate: widget.settingsController.settings.speechRate,
+    );
   }
 
   Future<void> _speakPhrase() async {
@@ -90,7 +94,11 @@ class _ClasseurCommunicationScreenState
     if (text.isEmpty) {
       return;
     }
-    await widget.speechService.speak(text, languageCode: _effectiveLocaleCode());
+    await widget.speechService.speak(
+      text,
+      languageCode: _effectiveLocaleCode(),
+      rate: widget.settingsController.settings.speechRate,
+    );
   }
 
   @override

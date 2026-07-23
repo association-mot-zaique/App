@@ -52,6 +52,10 @@ class SettingsController extends ChangeNotifier {
     return _update(_settings.copyWith(savedPhrasesEnabled: value));
   }
 
+  Future<void> updateSpeechRate(double value) {
+    return _update(_settings.copyWith(speechRate: value));
+  }
+
   Future<void> _update(AppSettings newSettings) async {
     _settings = newSettings;
     await _repository.save(newSettings);

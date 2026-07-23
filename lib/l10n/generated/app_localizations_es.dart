@@ -494,4 +494,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get addStarterCategories => 'Anadir categorias iniciales';
+
+  @override
+  String get speechRate => 'Velocidad de voz';
 }

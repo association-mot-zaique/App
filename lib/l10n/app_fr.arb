@@ -177,5 +177,6 @@
   "suggestionPlaces": "Lieux",
   "suggestionToys": "Jouets",
   "categoryExists": "Cette categorie existe deja",
-  "addStarterCategories": "Ajouter des categories de depart"
+  "addStarterCategories": "Ajouter des categories de depart",
+  "speechRate": "Vitesse d'elocution"
 }
