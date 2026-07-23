@@ -85,13 +85,13 @@ _Réf : A-01 · le verrou existe mais Réglages restait accessible sans code (§
 ### US-1.08 · Masquage des phrases enregistrées dans le mode communication `Should`
 > **En tant que** mainteneur, **je veux** masquer les fonctions de phrases enregistrées (C-11 à C-13) de l'interface communication, tout en les **conservant dans le code**, **afin de** ne pas court-circuiter la composition tout en préservant la non-régression.
 
-_Réf : C-11→C-13, A-17 · décision du 22 juillet 2026_
+_Réf : C-11→C-13, A-17 · décision du 22 juillet 2026 · **livré** (réglage `savedPhrasesEnabled`, défaut off)_
 
-- [ ] Retirer C-11 (enregistrement sous un nom) de l'interface communication
-- [ ] Retirer C-12 (rappel d'une phrase) de l'interface communication
-- [ ] Retirer C-13 (suppression d'une phrase) de l'interface communication
-- [ ] Conserver le code fonctionnel (couvert par le critère de non-régression §8)
-- [ ] Rendre ces fonctions **activables depuis le mode aidant** (bascule A-17)
+- [x] Retirer C-11 (enregistrement sous un nom) de l'interface communication — bouton « Enregistrer » masqué
+- [x] Retirer C-12 (rappel d'une phrase) de l'interface communication — bande des phrases enregistrées masquée
+- [x] Retirer C-13 (suppression d'une phrase) de l'interface communication — masquée avec la bande
+- [x] Conserver le code fonctionnel — `PhraseBookController` et widgets intacts (non-régression §8)
+- [x] Rendre ces fonctions **activables depuis le mode aidant** (bascule A-17) — switch « Activer les phrases enregistrées » dans les Réglages
 
 ### US-1.09 · Conformité confidentialité — `allowBackup="false"` `Must`
 > **En tant que** mainteneur, **je veux** interdire la remontée silencieuse des classeurs vers Google Drive, **afin de** garantir qu'aucune donnée ne quitte l'appareil.

@@ -168,5 +168,6 @@
   "addFromFile": "Aus einer Datei",
   "addFromCamera": "Foto aufnehmen",
   "creditsLicense": "Lizenz",
-  "creditsLicenseDescription": "MOT-ZAIQUE ist freie Software, veroeffentlicht unter der GNU General Public License v3.0."
+  "creditsLicenseDescription": "MOT-ZAIQUE ist freie Software, veroeffentlicht unter der GNU General Public License v3.0.",
+  "savedPhrasesToggle": "Gespeicherte Saetze aktivieren"
 }

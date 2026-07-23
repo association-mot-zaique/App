@@ -466,4 +466,7 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get creditsLicenseDescription =>
       'MOT-ZAIQUE e software libero, pubblicato con licenza GNU General Public License v3.0.';
+
+  @override
+  String get savedPhrasesToggle => 'Attiva le frasi salvate';
 }

@@ -188,6 +188,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   value: settings.offlineOnly,
                   onChanged: widget.settingsController.updateOfflineOnly,
                 ),
+                SwitchListTile.adaptive(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.savedPhrasesToggle),
+                  value: settings.savedPhrasesEnabled,
+                  onChanged:
+                      widget.settingsController.updateSavedPhrasesEnabled,
+                ),
                 const SizedBox(height: 8),
                 Text(
                   l10n.language,

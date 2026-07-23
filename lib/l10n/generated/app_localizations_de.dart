@@ -470,4 +470,7 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get creditsLicenseDescription =>
       'MOT-ZAIQUE ist freie Software, veroeffentlicht unter der GNU General Public License v3.0.';
+
+  @override
+  String get savedPhrasesToggle => 'Gespeicherte Saetze aktivieren';
 }

@@ -34,6 +34,7 @@ void main() {
         onlyAacPictograms: false,
         onlySchematicPictograms: true,
         minDownloads: 120,
+        savedPhrasesEnabled: true,
       );
 
       await repository.save(settings);

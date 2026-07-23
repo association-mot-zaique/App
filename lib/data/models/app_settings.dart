@@ -10,6 +10,7 @@ class AppSettings {
     required this.onlyAacPictograms,
     required this.onlySchematicPictograms,
     required this.minDownloads,
+    required this.savedPhrasesEnabled,
   });
 
   static const AppSettings defaults = AppSettings(
@@ -21,6 +22,7 @@ class AppSettings {
     onlyAacPictograms: true,
     onlySchematicPictograms: false,
     minDownloads: 0,
+    savedPhrasesEnabled: false,
   );
 
   final double pictogramScale;
@@ -31,6 +33,11 @@ class AppSettings {
   final bool onlyAacPictograms;
   final bool onlySchematicPictograms;
   final int minDownloads;
+
+  /// Saved sentences (C-11..C-13) are hidden from the communication interface
+  /// by default; the aidant can turn them on (A-17). The feature code stays in
+  /// place for non-regression (CDC 4.1).
+  final bool savedPhrasesEnabled;
 
   /// Empty [localeCode] means "automatic": follow the system language.
   /// Returning `null` lets [MaterialApp] resolve the locale from the device.
@@ -47,6 +54,7 @@ class AppSettings {
     bool? onlyAacPictograms,
     bool? onlySchematicPictograms,
     int? minDownloads,
+    bool? savedPhrasesEnabled,
   }) {
     return AppSettings(
       pictogramScale: pictogramScale ?? this.pictogramScale,
@@ -58,6 +66,7 @@ class AppSettings {
       onlySchematicPictograms:
           onlySchematicPictograms ?? this.onlySchematicPictograms,
       minDownloads: minDownloads ?? this.minDownloads,
+      savedPhrasesEnabled: savedPhrasesEnabled ?? this.savedPhrasesEnabled,
     );
   }
 
@@ -77,6 +86,7 @@ class AppSettings {
       'onlyAacPictograms': onlyAacPictograms,
       'onlySchematicPictograms': onlySchematicPictograms,
       'minDownloads': minDownloads,
+      'savedPhrasesEnabled': savedPhrasesEnabled,
     };
   }
 
@@ -99,6 +109,7 @@ class AppSettings {
       onlySchematicPictograms:
           json['onlySchematicPictograms'] as bool? ?? false,
       minDownloads: json['minDownloads'] as int? ?? 0,
+      savedPhrasesEnabled: json['savedPhrasesEnabled'] as bool? ?? false,
     );
   }
 }

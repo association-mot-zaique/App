@@ -991,6 +991,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'MOT-ZAIQUE is free software, released under the GNU General Public License v3.0.'**
   String get creditsLicenseDescription;
+
+  /// No description provided for @savedPhrasesToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable saved sentences'**
+  String get savedPhrasesToggle;
 }
 
 class _AppLocalizationsDelegate

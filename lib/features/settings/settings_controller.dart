@@ -48,6 +48,10 @@ class SettingsController extends ChangeNotifier {
     return _update(_settings.copyWith(localeCode: localeCode));
   }
 
+  Future<void> updateSavedPhrasesEnabled(bool value) {
+    return _update(_settings.copyWith(savedPhrasesEnabled: value));
+  }
+
   Future<void> _update(AppSettings newSettings) async {
     _settings = newSettings;
     await _repository.save(newSettings);

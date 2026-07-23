@@ -595,6 +595,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
           onRemoveLast: _removeLastPhraseItem,
           onClear: _clearPhrase,
           onSavePhrase: _saveCurrentPhrase,
+          showSavePhrase: settings.savedPhrasesEnabled,
         ),
         const SizedBox(height: 8),
         Expanded(
@@ -633,16 +634,18 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                   selectedCategory: selectedCategory,
                 ),
               ),
-              const SizedBox(height: 8),
-              _SavedPhrasesStrip(
-                title: l10n.savedPhrasesTitle,
-                emptyMessage: l10n.savedPhrasesEmpty,
-                loadLabel: l10n.loadPhrase,
-                deleteLabel: l10n.deletePhrase,
-                phrases: widget.phraseBookController.savedPhrases,
-                onLoad: _loadSavedPhrase,
-                onDelete: _deleteSavedPhrase,
-              ),
+              if (settings.savedPhrasesEnabled) ...[
+                const SizedBox(height: 8),
+                _SavedPhrasesStrip(
+                  title: l10n.savedPhrasesTitle,
+                  emptyMessage: l10n.savedPhrasesEmpty,
+                  loadLabel: l10n.loadPhrase,
+                  deleteLabel: l10n.deletePhrase,
+                  phrases: widget.phraseBookController.savedPhrases,
+                  onLoad: _loadSavedPhrase,
+                  onDelete: _deleteSavedPhrase,
+                ),
+              ],
             ],
           ),
         ),
@@ -681,6 +684,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                 onRemoveLast: _removeLastPhraseItem,
                 onClear: _clearPhrase,
                 onSavePhrase: _saveCurrentPhrase,
+                showSavePhrase: settings.savedPhrasesEnabled,
               ),
               const SizedBox(height: 10),
               if (settings.offlineOnly)
@@ -1197,6 +1201,7 @@ class _PhraseComposer extends StatelessWidget {
     required this.onRemoveLast,
     required this.onClear,
     required this.onSavePhrase,
+    required this.showSavePhrase,
   });
 
   final List<Pictogram> phrasePictograms;
@@ -1210,6 +1215,9 @@ class _PhraseComposer extends StatelessWidget {
   final Future<void> Function() onRemoveLast;
   final Future<void> Function() onClear;
   final Future<void> Function() onSavePhrase;
+
+  /// Saved sentences (C-11) are hidden unless the aidant enabled them (A-17).
+  final bool showSavePhrase;
 
   @override
   Widget build(BuildContext context) {
@@ -1295,12 +1303,13 @@ class _PhraseComposer extends StatelessWidget {
                   icon: const Icon(Icons.volume_up_rounded),
                   label: Text(speakLabel),
                 ),
-                FilledButton.tonalIcon(
-                  key: const Key('save_phrase_button'),
-                  onPressed: hasPhrase ? onSavePhrase : null,
-                  icon: const Icon(Icons.save_outlined),
-                  label: Text(savePhraseLabel),
-                ),
+                if (showSavePhrase)
+                  FilledButton.tonalIcon(
+                    key: const Key('save_phrase_button'),
+                    onPressed: hasPhrase ? onSavePhrase : null,
+                    icon: const Icon(Icons.save_outlined),
+                    label: Text(savePhraseLabel),
+                  ),
                 FilledButton.tonalIcon(
                   onPressed: hasPhrase ? onRemoveLast : null,
                   icon: const Icon(Icons.backspace_outlined),
