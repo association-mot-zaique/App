@@ -9,6 +9,7 @@ import '../../data/services/pictogram_search_service.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../settings/settings_controller.dart';
 import 'arasaac_import_screen.dart';
+import 'category_seeds.dart';
 import 'local_classeur_controller.dart';
 
 /// Aidant screen to manage the local classeur: create/rename/delete
@@ -266,6 +267,10 @@ class _CategoryPictogramsScreen extends StatelessWidget {
             .where((c) => c.id == categoryId)
             .toList();
         final categoryName = match.isEmpty ? '' : match.single.name;
+        final seeds = categorySeedKeywords(
+          AppLocalizations.of(context),
+          categoryName,
+        );
         await Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (_) => ArasaacImportScreen(
@@ -275,6 +280,7 @@ class _CategoryPictogramsScreen extends StatelessWidget {
               categoryId: categoryId,
               languageCode: languageCode,
               initialQuery: categoryName,
+              seedKeywords: seeds,
             ),
           ),
         );

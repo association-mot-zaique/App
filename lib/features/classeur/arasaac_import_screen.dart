@@ -26,6 +26,7 @@ class ArasaacImportScreen extends StatefulWidget {
     required this.categoryId,
     required this.languageCode,
     this.initialQuery = '',
+    this.seedKeywords = const [],
     super.key,
   });
 
@@ -35,9 +36,12 @@ class ArasaacImportScreen extends StatefulWidget {
   final int categoryId;
   final String languageCode;
 
-  /// Pre-filled query (usually the category name) searched automatically on
-  /// open, so the aidant sees relevant pictograms without typing.
+  /// Pre-filled query (usually the category name) shown in the search box.
   final String initialQuery;
+
+  /// Keywords searched all at once on open (the category's seed vocabulary),
+  /// so a rich set of pictograms shows up without typing word by word.
+  final List<String> seedKeywords;
 
   @override
   State<ArasaacImportScreen> createState() => _ArasaacImportScreenState();
@@ -60,12 +64,61 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
     final initial = widget.initialQuery.trim();
     if (initial.isNotEmpty) {
       _queryController.text = initial;
+    }
+    if (widget.seedKeywords.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _seedSearch(widget.seedKeywords);
+        }
+      });
+    } else if (initial.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           _search();
         }
       });
     }
+  }
+
+  /// Searches every seed keyword and merges the results (dedup by semantic key,
+  /// keeping the best-quality pictogram) — the same aggregation the category
+  /// presets use, so opening a category shows many relevant pictograms at once.
+  Future<void> _seedSearch(List<String> keywords) async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+    final settings = widget.settingsController.settings;
+    final language = widget.languageCode.isEmpty ? 'fr' : widget.languageCode;
+    final merged = <String, Pictogram>{};
+    for (final keyword in keywords) {
+      try {
+        final result = await widget.searchService.search(
+          keyword,
+          language: language,
+          offlineOnly: settings.offlineOnly,
+          onlyAacPictograms: settings.onlyAacPictograms,
+          onlySchematicPictograms: settings.onlySchematicPictograms,
+          minDownloads: settings.minDownloads,
+        );
+        for (final pictogram in result.pictograms) {
+          final existing = merged[pictogram.semanticKey];
+          if (existing == null ||
+              pictogram.qualityScore > existing.qualityScore) {
+            merged[pictogram.semanticKey] = pictogram;
+          }
+        }
+      } catch (_) {
+        // Skip a failing keyword, keep the others.
+      }
+    }
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _results = merged.values.toList();
+      _isLoading = false;
+    });
   }
 
   @override
