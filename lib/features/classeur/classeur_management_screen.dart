@@ -520,16 +520,58 @@ Future<String?> _promptText(
   required String label,
   String initialValue = '',
 }) async {
-  final controller = TextEditingController(text: initialValue);
-  final l10n = AppLocalizations.of(context);
   final result = await showDialog<String>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text(title),
+    builder: (_) => _TextPromptDialog(
+      title: title,
+      label: label,
+      initialValue: initialValue,
+    ),
+  );
+  if (result == null || result.isEmpty) {
+    return null;
+  }
+  return result;
+}
+
+/// Owns its [TextEditingController] via State so it is disposed only once the
+/// dialog route is gone — avoids "used after disposed" that happens when a
+/// controller is disposed synchronously right after showDialog returns.
+class _TextPromptDialog extends StatefulWidget {
+  const _TextPromptDialog({
+    required this.title,
+    required this.label,
+    required this.initialValue,
+  });
+
+  final String title;
+  final String label;
+  final String initialValue;
+
+  @override
+  State<_TextPromptDialog> createState() => _TextPromptDialogState();
+}
+
+class _TextPromptDialogState extends State<_TextPromptDialog> {
+  late final TextEditingController _controller =
+      TextEditingController(text: widget.initialValue);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return AlertDialog(
+      title: Text(widget.title),
       content: TextField(
-        controller: controller,
+        controller: _controller,
         autofocus: true,
-        decoration: InputDecoration(labelText: label),
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(labelText: widget.label),
         onSubmitted: (value) => Navigator.of(context).pop(value.trim()),
       ),
       actions: [
@@ -538,17 +580,12 @@ Future<String?> _promptText(
           child: Text(l10n.cancel),
         ),
         FilledButton(
-          onPressed: () => Navigator.of(context).pop(controller.text.trim()),
+          onPressed: () => Navigator.of(context).pop(_controller.text.trim()),
           child: Text(l10n.save),
         ),
       ],
-    ),
-  );
-  controller.dispose();
-  if (result == null || result.isEmpty) {
-    return null;
+    );
   }
-  return result;
 }
 
 Future<bool> _confirmDelete(BuildContext context, String message) async {
