@@ -6,11 +6,13 @@ import 'data/services/app_settings_repository.dart';
 import 'data/services/arasaac_api.dart';
 import 'data/services/favorites_repository.dart';
 import 'data/services/local_backup_service.dart';
+import 'data/services/local_classeur_repository.dart';
 import 'data/services/phrase_book_repository.dart';
 import 'data/services/pictogram_search_service.dart';
 import 'data/services/pin_repository.dart';
 import 'data/services/search_cache_repository.dart';
 import 'data/services/speech_service.dart';
+import 'features/classeur/local_classeur_controller.dart';
 import 'features/communication/phrase_book_controller.dart';
 import 'features/favorites/favorites_controller.dart';
 import 'features/settings/settings_controller.dart';
@@ -38,10 +40,14 @@ Future<void> main() async {
   );
   final localBackupService = LocalBackupService(preferences);
 
+  final classeurRepository = await LocalClasseurRepository.create();
+  final classeurController = LocalClasseurController(classeurRepository);
+
   await Future.wait([
     favoritesController.load(),
     phraseBookController.load(),
     settingsController.load(),
+    classeurController.load(),
   ]);
 
   runApp(
@@ -51,6 +57,7 @@ Future<void> main() async {
       favoritesController: favoritesController,
       phraseBookController: phraseBookController,
       settingsController: settingsController,
+      classeurController: classeurController,
       pinRepository: PinRepository(preferences),
       speechService: FlutterSpeechService(),
       localBackupService: localBackupService,

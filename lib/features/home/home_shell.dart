@@ -9,6 +9,7 @@ import '../../data/services/search_cache_repository.dart';
 import '../../data/services/speech_service.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../widgets/logo_title.dart';
+import '../classeur/local_classeur_controller.dart';
 import '../communication/communication_screen.dart';
 import '../communication/phrase_book_controller.dart';
 import '../favorites/favorites_controller.dart';
@@ -23,6 +24,7 @@ class HomeShell extends StatefulWidget {
     required this.favoritesController,
     required this.phraseBookController,
     required this.settingsController,
+    required this.classeurController,
     required this.pinRepository,
     required this.speechService,
     required this.localBackupService,
@@ -34,6 +36,7 @@ class HomeShell extends StatefulWidget {
   final FavoritesController favoritesController;
   final PhraseBookController phraseBookController;
   final SettingsController settingsController;
+  final LocalClasseurController classeurController;
   final PinRepository pinRepository;
   final SpeechService speechService;
   final LocalBackupService localBackupService;
@@ -201,6 +204,7 @@ class _HomeShellState extends State<HomeShell> {
           ),
           SettingsScreen(
             settingsController: widget.settingsController,
+            classeurController: widget.classeurController,
             searchCacheRepository: widget.searchCacheRepository,
             localBackupService: widget.localBackupService,
             onBackupRestored: _refreshAfterBackupRestore,

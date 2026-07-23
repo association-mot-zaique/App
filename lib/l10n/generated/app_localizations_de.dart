@@ -409,4 +409,49 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get serviceUnavailable =>
       'ARASAAC ist nicht verfuegbar. Bitte erneut versuchen.';
+
+  @override
+  String get deleteAction => 'Loeschen';
+
+  @override
+  String get renameAction => 'Umbenennen';
+
+  @override
+  String get classeurManageTitle => 'Ordner verwalten';
+
+  @override
+  String get classeurEmpty =>
+      'Noch keine Kategorie. Fuege eine hinzu, um zu starten.';
+
+  @override
+  String get addCategory => 'Kategorie hinzufuegen';
+
+  @override
+  String get categoryNameLabel => 'Kategoriename';
+
+  @override
+  String get deleteCategoryConfirm =>
+      'Diese Kategorie und alle ihre Piktogramme loeschen?';
+
+  @override
+  String get pictogramsWord => 'Piktogramme';
+
+  @override
+  String get addPictogram => 'Piktogramm hinzufuegen';
+
+  @override
+  String get pictogramLabelLabel => 'Piktogramm-Bezeichnung';
+
+  @override
+  String get deletePictogramConfirm => 'Dieses Piktogramm loeschen?';
+
+  @override
+  String get categoryEmptyPictograms =>
+      'Noch keine Piktogramme in dieser Kategorie.';
+
+  @override
+  String get importFromArasaac => 'Aus ARASAAC hinzufuegen';
+
+  @override
+  String get pictogramAddedNotice => 'Piktogramm hinzugefuegt';
 }

@@ -149,5 +149,19 @@
   "creditsPictograms": "Pittogrammi",
   "creditsArasaacDescription": "Pittogrammi creati da Sergio Palao per il Governo d'Aragona.",
   "showSearch": "Cerca",
-  "serviceUnavailable": "ARASAAC non e disponibile. Riprova."
+  "serviceUnavailable": "ARASAAC non e disponibile. Riprova.",
+  "deleteAction": "Elimina",
+  "renameAction": "Rinomina",
+  "classeurManageTitle": "Gestisci il raccoglitore",
+  "classeurEmpty": "Nessuna categoria. Aggiungine una per iniziare.",
+  "addCategory": "Aggiungi categoria",
+  "categoryNameLabel": "Nome della categoria",
+  "deleteCategoryConfirm": "Eliminare questa categoria e tutti i suoi pittogrammi?",
+  "pictogramsWord": "pittogrammi",
+  "addPictogram": "Aggiungi pittogramma",
+  "pictogramLabelLabel": "Etichetta del pittogramma",
+  "deletePictogramConfirm": "Eliminare questo pittogramma?",
+  "categoryEmptyPictograms": "Nessun pittogramma in questa categoria.",
+  "importFromArasaac": "Aggiungi da ARASAAC",
+  "pictogramAddedNotice": "Pittogramma aggiunto"
 }

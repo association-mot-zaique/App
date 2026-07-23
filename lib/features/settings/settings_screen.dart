@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../data/services/local_backup_service.dart';
 import '../../data/services/search_cache_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../classeur/classeur_management_screen.dart';
+import '../classeur/local_classeur_controller.dart';
 import 'credits_screen.dart';
 import 'legal_content.dart';
 import 'legal_text_screen.dart';
@@ -11,6 +13,7 @@ import 'settings_controller.dart';
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     required this.settingsController,
+    required this.classeurController,
     required this.searchCacheRepository,
     required this.localBackupService,
     required this.onBackupRestored,
@@ -18,6 +21,7 @@ class SettingsScreen extends StatefulWidget {
   });
 
   final SettingsController settingsController;
+  final LocalClasseurController classeurController;
   final SearchCacheRepository searchCacheRepository;
   final LocalBackupService localBackupService;
   final Future<void> Function() onBackupRestored;
@@ -129,6 +133,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   l10n.settingsAction,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.folder_special_outlined),
+                    title: Text(l10n.classeurManageTitle),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => ClasseurManagementScreen(
+                            controller: widget.classeurController,
+                            languageCode: effectiveLocaleCode,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 14),

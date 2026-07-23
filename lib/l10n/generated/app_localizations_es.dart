@@ -407,4 +407,48 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get serviceUnavailable =>
       'ARASAAC no esta disponible. Intenta de nuevo.';
+
+  @override
+  String get deleteAction => 'Eliminar';
+
+  @override
+  String get renameAction => 'Renombrar';
+
+  @override
+  String get classeurManageTitle => 'Gestionar el cuaderno';
+
+  @override
+  String get classeurEmpty => 'Aun no hay categorias. Anade una para empezar.';
+
+  @override
+  String get addCategory => 'Anadir categoria';
+
+  @override
+  String get categoryNameLabel => 'Nombre de la categoria';
+
+  @override
+  String get deleteCategoryConfirm =>
+      'Eliminar esta categoria y todos sus pictogramas?';
+
+  @override
+  String get pictogramsWord => 'pictogramas';
+
+  @override
+  String get addPictogram => 'Anadir pictograma';
+
+  @override
+  String get pictogramLabelLabel => 'Etiqueta del pictograma';
+
+  @override
+  String get deletePictogramConfirm => 'Eliminar este pictograma?';
+
+  @override
+  String get categoryEmptyPictograms =>
+      'Aun no hay pictogramas en esta categoria.';
+
+  @override
+  String get importFromArasaac => 'Anadir desde ARASAAC';
+
+  @override
+  String get pictogramAddedNotice => 'Pictograma anadido';
 }

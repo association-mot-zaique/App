@@ -877,6 +877,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ARASAAC is not available. Please try again.'**
   String get serviceUnavailable;
+
+  /// No description provided for @deleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteAction;
+
+  /// No description provided for @renameAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get renameAction;
+
+  /// No description provided for @classeurManageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage classeur'**
+  String get classeurManageTitle;
+
+  /// No description provided for @classeurEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No category yet. Add one to get started.'**
+  String get classeurEmpty;
+
+  /// No description provided for @addCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add category'**
+  String get addCategory;
+
+  /// No description provided for @categoryNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name'**
+  String get categoryNameLabel;
+
+  /// No description provided for @deleteCategoryConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this category and all its pictograms?'**
+  String get deleteCategoryConfirm;
+
+  /// No description provided for @pictogramsWord.
+  ///
+  /// In en, this message translates to:
+  /// **'pictograms'**
+  String get pictogramsWord;
+
+  /// No description provided for @addPictogram.
+  ///
+  /// In en, this message translates to:
+  /// **'Add pictogram'**
+  String get addPictogram;
+
+  /// No description provided for @pictogramLabelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pictogram label'**
+  String get pictogramLabelLabel;
+
+  /// No description provided for @deletePictogramConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this pictogram?'**
+  String get deletePictogramConfirm;
+
+  /// No description provided for @categoryEmptyPictograms.
+  ///
+  /// In en, this message translates to:
+  /// **'No pictogram in this category yet.'**
+  String get categoryEmptyPictograms;
+
+  /// No description provided for @importFromArasaac.
+  ///
+  /// In en, this message translates to:
+  /// **'Add from ARASAAC'**
+  String get importFromArasaac;
+
+  /// No description provided for @pictogramAddedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Pictogram added'**
+  String get pictogramAddedNotice;
 }
 
 class _AppLocalizationsDelegate

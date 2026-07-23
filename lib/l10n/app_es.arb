@@ -149,5 +149,19 @@
   "creditsPictograms": "Pictogramas",
   "creditsArasaacDescription": "Pictogramas creados por Sergio Palao para el Gobierno de Aragon.",
   "showSearch": "Buscar",
-  "serviceUnavailable": "ARASAAC no esta disponible. Intenta de nuevo."
+  "serviceUnavailable": "ARASAAC no esta disponible. Intenta de nuevo.",
+  "deleteAction": "Eliminar",
+  "renameAction": "Renombrar",
+  "classeurManageTitle": "Gestionar el cuaderno",
+  "classeurEmpty": "Aun no hay categorias. Anade una para empezar.",
+  "addCategory": "Anadir categoria",
+  "categoryNameLabel": "Nombre de la categoria",
+  "deleteCategoryConfirm": "Eliminar esta categoria y todos sus pictogramas?",
+  "pictogramsWord": "pictogramas",
+  "addPictogram": "Anadir pictograma",
+  "pictogramLabelLabel": "Etiqueta del pictograma",
+  "deletePictogramConfirm": "Eliminar este pictograma?",
+  "categoryEmptyPictograms": "Aun no hay pictogramas en esta categoria.",
+  "importFromArasaac": "Anadir desde ARASAAC",
+  "pictogramAddedNotice": "Pictograma anadido"
 }

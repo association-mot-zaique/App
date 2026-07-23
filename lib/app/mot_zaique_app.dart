@@ -7,6 +7,7 @@ import '../data/services/pin_repository.dart';
 import '../data/services/pictogram_search_service.dart';
 import '../data/services/search_cache_repository.dart';
 import '../data/services/speech_service.dart';
+import '../features/classeur/local_classeur_controller.dart';
 import '../features/communication/phrase_book_controller.dart';
 import '../features/favorites/favorites_controller.dart';
 import '../features/home/home_shell.dart';
@@ -20,6 +21,7 @@ class MotZaiqueApp extends StatelessWidget {
     required this.favoritesController,
     required this.phraseBookController,
     required this.settingsController,
+    required this.classeurController,
     required this.pinRepository,
     required this.speechService,
     required this.localBackupService,
@@ -31,6 +33,7 @@ class MotZaiqueApp extends StatelessWidget {
   final FavoritesController favoritesController;
   final PhraseBookController phraseBookController;
   final SettingsController settingsController;
+  final LocalClasseurController classeurController;
   final PinRepository pinRepository;
   final SpeechService speechService;
   final LocalBackupService localBackupService;
@@ -70,6 +73,7 @@ class MotZaiqueApp extends StatelessWidget {
             favoritesController: favoritesController,
             phraseBookController: phraseBookController,
             settingsController: settingsController,
+            classeurController: classeurController,
             pinRepository: pinRepository,
             speechService: speechService,
             localBackupService: localBackupService,

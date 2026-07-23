@@ -42,30 +42,33 @@ _Réf : A-03 · fonction absente au diagnostic (`image_picker` à introduire) ·
 ### US-1.04 · Source d'alimentation — recherche et import ARASAAC `Must`
 > **En tant qu'**aidant, **je veux** rechercher et importer un pictogramme depuis ARASAAC, **afin de** compléter le classeur — mais **jamais comme seule source**.
 
-_Réf : A-04 · seule connexion sortante autorisée (§5.1) · ARASAAC à parité avec fichier et photo_
+_Réf : A-04 · seule connexion sortante autorisée (§5.1) · ARASAAC à parité avec fichier et photo · **partiellement livré** via `ArasaacImportScreen` (utilisé pour la création de pictos US-1.06)_
 
-- [ ] Rechercher par mot-clé sur `api.arasaac.org`
-- [ ] **Télécharger et copier l'image sur le disque** au moment de l'import (picto possédé, plus jamais re-sollicité en réseau)
-- [ ] Import accessible **depuis le mode aidant uniquement**
+- [x] Rechercher par mot-clé sur `api.arasaac.org`
+- [x] **Télécharger et copier l'image sur le disque** au moment de l'import (picto possédé, plus jamais re-sollicité en réseau)
+- [x] Import accessible **depuis le mode aidant uniquement** (entrée dans Réglages → Gérer le classeur)
 - [ ] Repli automatique sur le cache en cas d'échec réseau
+- [ ] Réutiliser le service de recherche existant (filtres qualité) plutôt qu'un `ArasaacApi` dédié
 
 ### US-1.05 · Écran de gestion — catégories `Must`
 > **En tant qu'**aidant, **je veux** créer, renommer et supprimer des catégories, **afin d'**organiser le classeur.
 
-_Réf : A-05_
+_Réf : A-05 · **livré** (branche `feat/lot1-classeur-local`) — `LocalClasseurController` + `ClasseurManagementScreen`, accessible depuis Réglages_
 
-- [ ] Créer une catégorie
-- [ ] Renommer une catégorie
-- [ ] Supprimer une catégorie (gestion des pictos rattachés)
+- [x] Créer une catégorie
+- [x] Renommer une catégorie
+- [x] Supprimer une catégorie (supprime aussi ses pictos et leurs images)
 
 ### US-1.06 · Écran de gestion — pictogrammes `Must`
 > **En tant qu'**aidant, **je veux** renommer et supprimer des pictogrammes, **afin de** maintenir le classeur à jour.
 
-_Réf : A-06_
+_Réf : A-06 · **livré** — gestion par catégorie, création via ARASAAC (voir US-1.04)_
 
-- [ ] Renommer un pictogramme
-- [ ] Supprimer un pictogramme (et l'image locale associée)
-- [ ] Créer un pictogramme en **moins de 30 s** (objectif §3.2)
+- [x] Renommer un pictogramme
+- [x] Supprimer un pictogramme (et l'image locale associée)
+- [x] Créer un pictogramme via ARASAAC (`ArasaacImportScreen`) — télécharge l'image sur le disque
+- [ ] Valider l'objectif **< 30 s** sur appareil réel (§3.2)
+- [ ] Sources fichier (US-1.02) et photo (US-1.03) — à venir (nouvelle dépendance à décider)
 
 ### US-1.07 · Extension du verrou PIN à tout le mode aidant `Must`
 > **En tant qu'**aidant, **je veux** que l'intégralité du mode aidant (Réglages compris) soit protégée par code PIN, **afin d'**empêcher l'utilisateur final d'y accéder accidentellement.
