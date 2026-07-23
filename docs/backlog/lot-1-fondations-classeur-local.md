@@ -12,13 +12,14 @@
 ### US-1.01 · Modèle de données du classeur local `Must`
 > **En tant que** mainteneur, **je veux** un modèle de données de classeur possédé par l'utilisateur, **afin d'**être indépendant de toute URL distante.
 
-_Réf : §6.3, §6.4 · dérive A-05→A-08_
+_Réf : §6.3, §6.4 · dérive A-05→A-08 · **couche data livrée** (branche `feat/lot1-classeur-local`)_
 
-- [ ] Entité `Catégorie` (id, nom, ordre d'affichage)
-- [ ] Entité `Pictogramme` (id, libellé, chemin image **locale**, catégorie, favori)
-- [ ] Stockage des images sur le disque (répertoire privé de l'application)
-- [ ] Persistance locale au-delà de `shared_preferences` (base locale)
-- [ ] Aucune dépendance à une URL distante pour l'affichage d'un picto possédé
+- [x] Entité `Catégorie` (id, nom, ordre d'affichage) — `LocalCategory`
+- [x] Entité `Pictogramme` (id, libellé, chemin image **locale**, catégorie, favori) — `LocalPictogram`
+- [x] Stockage des images sur le disque (répertoire privé de l'application) — `LocalClasseurRepository.storeImageBytes` + `path_provider`
+- [x] Persistance locale au-delà de `shared_preferences` (base locale) — manifeste JSON sur disque (`manifest.json`)
+- [x] Aucune dépendance à une URL distante pour l'affichage d'un picto possédé — `LocalPictogram` n'a aucun champ URL
+- [ ] Branchement dans l'app (fourniture du repository, chargement au démarrage) — avec US-1.05/1.06
 
 ### US-1.02 · Source d'alimentation — import depuis les fichiers `Must`
 > **En tant qu'**aidant, **je veux** importer un pictogramme depuis les fichiers de l'appareil, **afin de** garnir le classeur avec mes propres images.
