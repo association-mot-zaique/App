@@ -19,7 +19,10 @@ class AppSettings {
     reducedMotion: false,
     offlineOnly: false,
     localeCode: '',
-    onlyAacPictograms: true,
+    // Off by default: ARASAAC tags few pictograms as "aac", so filtering on it
+    // emptied whole categories (e.g. the emotions "afraid"/"calm"). The aidant
+    // can re-enable it in the settings.
+    onlyAacPictograms: false,
     onlySchematicPictograms: false,
     minDownloads: 0,
     savedPhrasesEnabled: false,
@@ -105,7 +108,7 @@ class AppSettings {
       reducedMotion: json['reducedMotion'] as bool? ?? false,
       offlineOnly: json['offlineOnly'] as bool? ?? false,
       localeCode: localeCode,
-      onlyAacPictograms: json['onlyAacPictograms'] as bool? ?? true,
+      onlyAacPictograms: json['onlyAacPictograms'] as bool? ?? false,
       onlySchematicPictograms:
           json['onlySchematicPictograms'] as bool? ?? false,
       minDownloads: json['minDownloads'] as int? ?? 0,
