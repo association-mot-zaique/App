@@ -252,6 +252,10 @@ class _CategoryPictogramsScreen extends StatelessWidget {
       case 'camera':
         await _addFromCamera(context);
       case 'arasaac':
+        final match = controller.classeur.categoriesSorted
+            .where((c) => c.id == categoryId)
+            .toList();
+        final categoryName = match.isEmpty ? '' : match.single.name;
         await Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (_) => ArasaacImportScreen(
@@ -260,6 +264,7 @@ class _CategoryPictogramsScreen extends StatelessWidget {
               settingsController: settingsController,
               categoryId: categoryId,
               languageCode: languageCode,
+              initialQuery: categoryName,
             ),
           ),
         );

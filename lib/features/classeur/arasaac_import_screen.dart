@@ -23,6 +23,7 @@ class ArasaacImportScreen extends StatefulWidget {
     required this.settingsController,
     required this.categoryId,
     required this.languageCode,
+    this.initialQuery = '',
     super.key,
   });
 
@@ -31,6 +32,10 @@ class ArasaacImportScreen extends StatefulWidget {
   final SettingsController settingsController;
   final int categoryId;
   final String languageCode;
+
+  /// Pre-filled query (usually the category name) searched automatically on
+  /// open, so the aidant sees relevant pictograms without typing.
+  final String initialQuery;
 
   @override
   State<ArasaacImportScreen> createState() => _ArasaacImportScreenState();
@@ -45,6 +50,20 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
   bool _isLoading = false;
   bool _isImporting = false;
   String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialQuery.trim();
+    if (initial.isNotEmpty) {
+      _queryController.text = initial;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _search();
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {
