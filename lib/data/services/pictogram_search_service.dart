@@ -104,7 +104,9 @@ class ArasaacSearchService implements PictogramSearchService {
           offlineOnly: false,
         );
       }
-      throw const ArasaacException();
+      throw const ArasaacException(
+        debugInfo: 'network failed and no cached results',
+      );
     }
   }
 

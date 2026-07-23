@@ -63,16 +63,22 @@ class ArasaacApi {
   }
 }
 
-/// Internal failure marker for ARASAAC access. It deliberately carries **no
-/// user-facing message**: the UI always shows a localized string
-/// (`serviceUnavailable`). [statusCode] is diagnostic only (logs), null when
-/// the service was simply unreachable.
+/// Internal failure marker for ARASAAC access. Its fields are **developer
+/// diagnostics only and are never displayed** — the UI always shows a
+/// localized string (`serviceUnavailable`). [statusCode] holds the HTTP status
+/// when the failure came from a response; [debugInfo] is an optional dev note.
 class ArasaacException implements Exception {
-  const ArasaacException({this.statusCode});
+  const ArasaacException({this.statusCode, this.debugInfo});
 
   final int? statusCode;
+  final String? debugInfo;
 
   @override
-  String toString() =>
-      'ArasaacException(${statusCode != null ? 'status $statusCode' : 'unreachable'})';
+  String toString() {
+    final parts = <String>[
+      if (statusCode != null) 'status $statusCode',
+      ?debugInfo,
+    ];
+    return 'ArasaacException(${parts.isEmpty ? 'unreachable' : parts.join(', ')})';
+  }
 }

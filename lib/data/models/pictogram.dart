@@ -37,9 +37,9 @@ class Pictogram {
         ? rawId
         : int.tryParse(rawId?.toString() ?? '');
     if (parsedId == null) {
-      // Internal parse guard: caught and skipped by the search loop, never
-      // surfaced to the user. No message needed.
-      throw const FormatException();
+      // Developer diagnostic: caught and skipped by the search loop, never
+      // surfaced to the user (who always sees a localized message).
+      throw const FormatException('Pictogram without a valid ID');
     }
 
     final tags = <String>[];
