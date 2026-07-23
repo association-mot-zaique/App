@@ -132,10 +132,11 @@ _Réf : §6.2 (symptôme signalé, aucun défaut détecté à l'analyse statique
 ### US-1.13 · Compilation automatique (GitHub Actions) `Must`
 > **En tant que** mainteneur, **je veux** une compilation automatique de l'APK à chaque modification, **afin de** garantir la reprise du projet par un tiers sans accompagnement.
 
-_Réf : §5.5, §7 (Lot 1)_
+_Réf : §5.5, §7 (Lot 1) · **livré** (`.github/workflows/ci.yml`, Flutter 3.44.1 épinglé)_
 
-- [ ] Pipeline GitHub Actions compilant l'APK à chaque modification
-- [ ] Build en échec bloquant (APK doit compiler sans erreur — critère §8.1)
+- [x] Pipeline GitHub Actions compilant l'APK à chaque push/PR (`flutter build apk --release`) + artefact APK téléchargeable
+- [x] Build en échec bloquant : `flutter analyze` + `flutter test` + build échouent le job (critère §8.1)
+- [ ] Vérifier le premier run vert une fois la branche poussée (rien poussé pour l'instant)
 
 ### US-1.14 · Mode communication alimenté par le classeur local `Must`
 > **En tant qu'**utilisateur final, **je veux** composer ma phrase à partir des pictogrammes **possédés** de mon classeur, **afin de** communiquer 100 % hors-ligne, sans dépendre d'ARASAAC.
