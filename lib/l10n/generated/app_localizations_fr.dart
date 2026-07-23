@@ -471,4 +471,22 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get savedPhrasesToggle => 'Activer les phrases enregistrees';
+
+  @override
+  String get categorySuggestionsLabel => 'Suggestions';
+
+  @override
+  String get suggestionMeals => 'Repas';
+
+  @override
+  String get suggestionPeople => 'Personnes';
+
+  @override
+  String get suggestionActivities => 'Activites';
+
+  @override
+  String get suggestionPlaces => 'Lieux';
+
+  @override
+  String get suggestionToys => 'Jouets';
 }

@@ -473,4 +473,22 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get savedPhrasesToggle => 'Gespeicherte Saetze aktivieren';
+
+  @override
+  String get categorySuggestionsLabel => 'Vorschlaege';
+
+  @override
+  String get suggestionMeals => 'Mahlzeiten';
+
+  @override
+  String get suggestionPeople => 'Personen';
+
+  @override
+  String get suggestionActivities => 'Aktivitaeten';
+
+  @override
+  String get suggestionPlaces => 'Orte';
+
+  @override
+  String get suggestionToys => 'Spielzeug';
 }

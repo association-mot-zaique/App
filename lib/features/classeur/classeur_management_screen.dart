@@ -93,12 +93,25 @@ class ClasseurManagementScreen extends StatelessWidget {
 
   Future<void> _addCategory(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    final name = await _promptText(
-      context,
-      title: l10n.addCategory,
-      label: l10n.categoryNameLabel,
+    // Localized suggestions to avoid blind typing; the aidant can still write a
+    // fully custom name (personalization stays — CDC 6.3).
+    final suggestions = <String>[
+      l10n.categoryNeeds,
+      l10n.categoryEmotions,
+      l10n.categoryHome,
+      l10n.categorySchool,
+      l10n.suggestionMeals,
+      l10n.categoryHealth,
+      l10n.suggestionPeople,
+      l10n.suggestionActivities,
+      l10n.suggestionPlaces,
+      l10n.suggestionToys,
+    ];
+    final name = await showDialog<String>(
+      context: context,
+      builder: (_) => _AddCategoryDialog(suggestions: suggestions),
     );
-    if (name != null) {
+    if (name != null && name.isNotEmpty) {
       await controller.addCategory(name);
     }
   }
@@ -399,6 +412,88 @@ class _PictogramTile extends StatelessWidget {
     if (confirmed) {
       await controller.deletePictogram(pictogram.id);
     }
+  }
+}
+
+/// Category creation with localized, clickable suggestions plus a free text
+/// field. Suggestions pre-fill the field; the aidant can still type a fully
+/// custom name (keeps the classeur personalized — CDC 6.3).
+class _AddCategoryDialog extends StatefulWidget {
+  const _AddCategoryDialog({required this.suggestions});
+
+  final List<String> suggestions;
+
+  @override
+  State<_AddCategoryDialog> createState() => _AddCategoryDialogState();
+}
+
+class _AddCategoryDialogState extends State<_AddCategoryDialog> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _pick(String value) {
+    setState(() {
+      _controller.text = value;
+      _controller.selection =
+          TextSelection.collapsed(offset: value.length);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return AlertDialog(
+      title: Text(l10n.addCategory),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _controller,
+              autofocus: true,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(labelText: l10n.categoryNameLabel),
+              onSubmitted: (value) =>
+                  Navigator.of(context).pop(value.trim()),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              l10n.categorySuggestionsLabel,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                for (final suggestion in widget.suggestions)
+                  ActionChip(
+                    label: Text(suggestion),
+                    onPressed: () => _pick(suggestion),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_controller.text.trim()),
+          child: Text(l10n.save),
+        ),
+      ],
+    );
   }
 }
 

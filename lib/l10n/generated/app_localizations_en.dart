@@ -468,4 +468,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savedPhrasesToggle => 'Enable saved sentences';
+
+  @override
+  String get categorySuggestionsLabel => 'Suggestions';
+
+  @override
+  String get suggestionMeals => 'Meals';
+
+  @override
+  String get suggestionPeople => 'People';
+
+  @override
+  String get suggestionActivities => 'Activities';
+
+  @override
+  String get suggestionPlaces => 'Places';
+
+  @override
+  String get suggestionToys => 'Toys';
 }

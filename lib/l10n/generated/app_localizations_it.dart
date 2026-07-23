@@ -469,4 +469,22 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get savedPhrasesToggle => 'Attiva le frasi salvate';
+
+  @override
+  String get categorySuggestionsLabel => 'Suggerimenti';
+
+  @override
+  String get suggestionMeals => 'Pasti';
+
+  @override
+  String get suggestionPeople => 'Persone';
+
+  @override
+  String get suggestionActivities => 'Attivita';
+
+  @override
+  String get suggestionPlaces => 'Luoghi';
+
+  @override
+  String get suggestionToys => 'Giochi';
 }

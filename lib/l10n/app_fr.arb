@@ -169,5 +169,11 @@
   "addFromCamera": "Prendre une photo",
   "creditsLicense": "Licence",
   "creditsLicenseDescription": "MOT-ZAIQUE est un logiciel libre, publie sous licence GNU General Public License v3.0.",
-  "savedPhrasesToggle": "Activer les phrases enregistrees"
+  "savedPhrasesToggle": "Activer les phrases enregistrees",
+  "categorySuggestionsLabel": "Suggestions",
+  "suggestionMeals": "Repas",
+  "suggestionPeople": "Personnes",
+  "suggestionActivities": "Activites",
+  "suggestionPlaces": "Lieux",
+  "suggestionToys": "Jouets"
 }

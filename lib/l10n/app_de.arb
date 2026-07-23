@@ -169,5 +169,11 @@
   "addFromCamera": "Foto aufnehmen",
   "creditsLicense": "Lizenz",
   "creditsLicenseDescription": "MOT-ZAIQUE ist freie Software, veroeffentlicht unter der GNU General Public License v3.0.",
-  "savedPhrasesToggle": "Gespeicherte Saetze aktivieren"
+  "savedPhrasesToggle": "Gespeicherte Saetze aktivieren",
+  "categorySuggestionsLabel": "Vorschlaege",
+  "suggestionMeals": "Mahlzeiten",
+  "suggestionPeople": "Personen",
+  "suggestionActivities": "Aktivitaeten",
+  "suggestionPlaces": "Orte",
+  "suggestionToys": "Spielzeug"
 }

@@ -997,6 +997,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enable saved sentences'**
   String get savedPhrasesToggle;
+
+  /// No description provided for @categorySuggestionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get categorySuggestionsLabel;
+
+  /// No description provided for @suggestionMeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals'**
+  String get suggestionMeals;
+
+  /// No description provided for @suggestionPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get suggestionPeople;
+
+  /// No description provided for @suggestionActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get suggestionActivities;
+
+  /// No description provided for @suggestionPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Places'**
+  String get suggestionPlaces;
+
+  /// No description provided for @suggestionToys.
+  ///
+  /// In en, this message translates to:
+  /// **'Toys'**
+  String get suggestionToys;
 }
 
 class _AppLocalizationsDelegate

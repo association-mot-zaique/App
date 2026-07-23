@@ -169,5 +169,11 @@
   "addFromCamera": "Scatta una foto",
   "creditsLicense": "Licenza",
   "creditsLicenseDescription": "MOT-ZAIQUE e software libero, pubblicato con licenza GNU General Public License v3.0.",
-  "savedPhrasesToggle": "Attiva le frasi salvate"
+  "savedPhrasesToggle": "Attiva le frasi salvate",
+  "categorySuggestionsLabel": "Suggerimenti",
+  "suggestionMeals": "Pasti",
+  "suggestionPeople": "Persone",
+  "suggestionActivities": "Attivita",
+  "suggestionPlaces": "Luoghi",
+  "suggestionToys": "Giochi"
 }

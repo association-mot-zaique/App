@@ -470,4 +470,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get savedPhrasesToggle => 'Activar frases guardadas';
+
+  @override
+  String get categorySuggestionsLabel => 'Sugerencias';
+
+  @override
+  String get suggestionMeals => 'Comidas';
+
+  @override
+  String get suggestionPeople => 'Personas';
+
+  @override
+  String get suggestionActivities => 'Actividades';
+
+  @override
+  String get suggestionPlaces => 'Lugares';
+
+  @override
+  String get suggestionToys => 'Juguetes';
 }
