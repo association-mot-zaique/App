@@ -26,7 +26,7 @@ class ArasaacApi {
 
     if (response.statusCode != 200) {
       throw ArasaacException(
-        'ARASAAC devolvio ${response.statusCode}. Intenta de nuevo.',
+        'ARASAAC returned ${response.statusCode}.',
       );
     }
 

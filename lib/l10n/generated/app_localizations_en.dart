@@ -369,6 +369,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageItalian => 'Italian';
 
   @override
+  String get languageAutomatic => 'Automatic (system language)';
+
+  @override
   String get legalSection => 'Legal';
 
   @override

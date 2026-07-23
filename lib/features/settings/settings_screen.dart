@@ -115,6 +115,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         animation: widget.settingsController,
         builder: (context, _) {
           final settings = widget.settingsController.settings;
+          // Language actually displayed: the manual choice, or the locale
+          // Flutter resolved from the system when set to automatic.
+          final effectiveLocaleCode = settings.isAutomaticLocale
+              ? Localizations.localeOf(context).languageCode
+              : settings.localeCode;
 
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
@@ -172,6 +177,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 DropdownButtonFormField<String>(
                   initialValue: settings.localeCode,
                   items: [
+                    DropdownMenuItem(
+                      value: '',
+                      child: Text(l10n.languageAutomatic),
+                    ),
                     DropdownMenuItem(
                       value: 'es',
                       child: Text(l10n.languageSpanish),
@@ -321,7 +330,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               builder: (_) => LegalTextScreen(
                                 title: l10n.termsOfUse,
                                 content: LegalContent.termsOfUse(
-                                  settings.localeCode,
+                                  effectiveLocaleCode,
                                 ),
                               ),
                             ),
@@ -339,7 +348,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               builder: (_) => LegalTextScreen(
                                 title: l10n.privacyPolicy,
                                 content: LegalContent.privacyPolicy(
-                                  settings.localeCode,
+                                  effectiveLocaleCode,
                                 ),
                               ),
                             ),

@@ -105,7 +105,7 @@ class ArasaacSearchService implements PictogramSearchService {
         );
       }
       throw const ArasaacException(
-        'No se pudo consultar ARASAAC ni encontrar resultados en cache.',
+        'Could not reach ARASAAC and no cached results were found.',
       );
     }
   }

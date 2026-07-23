@@ -44,11 +44,15 @@ class MotZaiqueApp extends StatelessWidget {
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          // Null when the user leaves the language on "automatic": Flutter then
+          // resolves the locale from the device's ordered language list.
           locale: settings.locale,
           onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+          // French is first so it is the ultimate fallback when none of the
+          // device languages are supported.
           supportedLocales: const [
-            Locale('es'),
             Locale('fr'),
+            Locale('es'),
             Locale('en'),
             Locale('de'),
             Locale('it'),

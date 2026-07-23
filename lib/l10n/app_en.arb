@@ -138,6 +138,7 @@
   "languageEnglish": "English",
   "languageGerman": "German",
   "languageItalian": "Italian",
+  "languageAutomatic": "Automatic (system language)",
   "legalSection": "Legal",
   "termsOfUse": "Terms of Use",
   "privacyPolicy": "Privacy Policy",

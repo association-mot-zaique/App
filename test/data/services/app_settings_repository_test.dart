@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mot_zaique/data/models/app_settings.dart';
 import 'package:mot_zaique/data/services/app_settings_repository.dart';
@@ -45,6 +47,45 @@ void main() {
       expect(restored.onlyAacPictograms, isFalse);
       expect(restored.onlySchematicPictograms, isTrue);
       expect(restored.minDownloads, 120);
+    });
+
+    test('defaults to automatic locale (follows the system)', () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final repository = AppSettingsRepository(preferences);
+
+      final settings = repository.read();
+
+      expect(settings.localeCode, '');
+      expect(settings.isAutomaticLocale, isTrue);
+      expect(settings.locale, isNull);
+    });
+
+    test('migrates legacy v1 "es" default to automatic', () async {
+      // Legacy prototype data: no schemaVersion, localeCode pinned to 'es'.
+      SharedPreferences.setMockInitialValues({
+        'app_settings_v1': '{"localeCode":"es","pictogramScale":1.0}',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final repository = AppSettingsRepository(preferences);
+
+      final settings = repository.read();
+
+      expect(settings.isAutomaticLocale, isTrue);
+      expect(settings.locale, isNull);
+    });
+
+    test('keeps a deliberate v2 Spanish choice', () async {
+      SharedPreferences.setMockInitialValues({
+        'app_settings_v1': '{"schemaVersion":2,"localeCode":"es"}',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final repository = AppSettingsRepository(preferences);
+
+      final settings = repository.read();
+
+      expect(settings.localeCode, 'es');
+      expect(settings.locale, const Locale('es'));
     });
   });
 }

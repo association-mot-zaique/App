@@ -806,6 +806,12 @@ abstract class AppLocalizations {
   /// **'Italian'**
   String get languageItalian;
 
+  /// No description provided for @languageAutomatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic (system language)'**
+  String get languageAutomatic;
+
   /// No description provided for @legalSection.
   ///
   /// In en, this message translates to:

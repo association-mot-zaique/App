@@ -61,18 +61,30 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
   @override
   void initState() {
     super.initState();
-    _lastLocaleCode = widget.settingsController.settings.localeCode;
     widget.settingsController.addListener(_onSettingsChanged);
 
-    final initialWord = _initialTermForLocale(_lastLocaleCode);
-    _searchController.text = initialWord;
-    _lastStandaloneQuery = initialWord;
-
+    // Resolve the effective language once the first frame is up, so an
+    // automatic locale can be read from the system via Localizations.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _search(initialWord);
+      if (!mounted) {
+        return;
       }
+      _lastLocaleCode = _effectiveLocaleCode();
+      final initialWord = _initialTermForLocale(_lastLocaleCode);
+      _searchController.text = initialWord;
+      _lastStandaloneQuery = initialWord;
+      _search(initialWord);
     });
+  }
+
+  /// The manual language choice, or the system-resolved language when the
+  /// user left the setting on automatic (empty [AppSettings.localeCode]).
+  String _effectiveLocaleCode() {
+    final code = widget.settingsController.settings.localeCode;
+    if (code.isNotEmpty) {
+      return code;
+    }
+    return Localizations.localeOf(context).languageCode;
   }
 
   @override
@@ -85,15 +97,14 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
   }
 
   void _onSettingsChanged() {
-    final newLocale = widget.settingsController.settings.localeCode;
+    if (!mounted) {
+      return;
+    }
+    final newLocale = _effectiveLocaleCode();
     if (newLocale == _lastLocaleCode) {
       return;
     }
     _lastLocaleCode = newLocale;
-
-    if (!mounted) {
-      return;
-    }
 
     final newInitial = _initialTermForLocale(newLocale);
     _searchController.text = newInitial;
@@ -151,7 +162,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     try {
       final result = await widget.searchService.search(
         clean,
-        language: settings.localeCode,
+        language: _effectiveLocaleCode(),
         offlineOnly: settings.offlineOnly,
         onlyAacPictograms: settings.onlyAacPictograms,
         onlySchematicPictograms: settings.onlySchematicPictograms,
@@ -176,13 +187,15 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
           ..addAll(result.pictograms);
         _info = infoMessage.isEmpty ? null : infoMessage;
       });
-    } on ArasaacException catch (exception) {
+    } on ArasaacException {
       if (!mounted) {
         return;
       }
       setState(() {
         _results.clear();
-        _error = exception.message;
+        // Never surface the raw exception text: it is developer-facing and
+        // not localized. Show the translated message instead.
+        _error = AppLocalizations.of(context).serviceUnavailable;
       });
     } catch (_) {
       if (!mounted) {
@@ -226,7 +239,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
       try {
         final result = await widget.searchService.search(
           cleanTerm,
-          language: settings.localeCode,
+          language: _effectiveLocaleCode(),
           offlineOnly: settings.offlineOnly,
           onlyAacPictograms: settings.onlyAacPictograms,
           onlySchematicPictograms: settings.onlySchematicPictograms,
@@ -323,7 +336,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
 
     await widget.speechService.speak(
       phraseText,
-      languageCode: widget.settingsController.settings.localeCode,
+      languageCode: _effectiveLocaleCode(),
     );
   }
 
