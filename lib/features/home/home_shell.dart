@@ -231,11 +231,48 @@ class _HomeShellState extends State<HomeShell> {
             label: l10n.favoritesNav,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.tune_rounded),
+            // Locked look while unselected (aidant locked); plain settings
+            // icon once selected, i.e. unlocked.
+            icon: const _LockBadgeIcon(Icons.tune_rounded),
+            selectedIcon: const Icon(Icons.tune_rounded),
             label: l10n.settingsNav,
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A base icon with a small lock badge, used to flag a PIN-protected tab.
+class _LockBadgeIcon extends StatelessWidget {
+  const _LockBadgeIcon(this.icon);
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Icon(icon),
+        Positioned(
+          right: -5,
+          bottom: -3,
+          child: Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              color: colors.surface,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.lock_rounded,
+              size: 11,
+              color: colors.onSurfaceVariant,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
