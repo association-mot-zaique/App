@@ -13,6 +13,7 @@ import '../../l10n/generated/app_localizations.dart';
 import '../../widgets/pictogram_card.dart';
 import '../../widgets/pictogram_image.dart';
 import 'phrase_book_controller.dart';
+import 'repeat_tap_guard.dart';
 
 class CommunicationScreen extends StatefulWidget {
   const CommunicationScreen({
@@ -327,8 +328,14 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     );
   }
 
-  Future<void> _addToPhrase(Pictogram pictogram) {
-    return widget.phraseBookController.addToCurrent(pictogram);
+  final RepeatTapGuard _tapGuard = RepeatTapGuard();
+
+  Future<void> _addToPhrase(Pictogram pictogram) async {
+    // Ignore an accidental fast repeat of the same pictogram (CDC 3.1).
+    if (!_tapGuard.accept(pictogram.id)) {
+      return;
+    }
+    await widget.phraseBookController.addToCurrent(pictogram);
   }
 
   Future<void> _removeLastPhraseItem() {

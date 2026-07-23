@@ -8,6 +8,7 @@ import '../../widgets/pictogram_image.dart';
 import '../classeur/local_classeur_controller.dart';
 import '../settings/settings_controller.dart';
 import 'phrase_book_controller.dart';
+import 'repeat_tap_guard.dart';
 
 /// Communication mode backed by the owned local classeur (US-1.01 → US-1.06):
 /// the end user browses their own categories and pictograms, entirely from
@@ -44,6 +45,8 @@ class _ClasseurCommunicationScreenState
   // the context (avoids the '_dependents.isEmpty' inherited-widget assertion).
   String _systemLocaleCode = 'fr';
 
+  final RepeatTapGuard _tapGuard = RepeatTapGuard();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -71,6 +74,10 @@ class _ClasseurCommunicationScreenState
   }
 
   Future<void> _onSelect(LocalPictogram picto) async {
+    // Ignore an accidental fast repeat of the same pictogram (CDC 3.1).
+    if (!_tapGuard.accept(_localIdOffset + picto.id)) {
+      return;
+    }
     final languageCode = _effectiveLocaleCode();
     final pictogram = _toPictogram(picto);
     await widget.phraseBookController.addToCurrent(pictogram);
