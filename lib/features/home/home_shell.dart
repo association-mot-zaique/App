@@ -227,6 +227,7 @@ class _HomeShellState extends State<HomeShell> {
           SettingsScreen(
             settingsController: widget.settingsController,
             classeurController: widget.classeurController,
+            searchService: widget.searchService,
             searchCacheRepository: widget.searchCacheRepository,
             localBackupService: widget.localBackupService,
             onBackupRestored: _refreshAfterBackupRestore,

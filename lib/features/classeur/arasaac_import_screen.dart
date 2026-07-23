@@ -3,23 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../data/models/pictogram.dart';
-import '../../data/services/arasaac_api.dart';
+import '../../data/services/pictogram_search_service.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../settings/settings_controller.dart';
 import 'local_classeur_controller.dart';
 
 /// Adds a pictogram to a category by importing it from ARASAAC: the picked
 /// image is downloaded and copied onto the device, so the resulting pictogram
 /// is owned locally and no longer depends on the network (US-1.04 source used
 /// to fulfil US-1.06 creation).
+///
+/// Search goes through [PictogramSearchService], so it benefits from the same
+/// quality filters and automatic cache fallback as the communication search.
 class ArasaacImportScreen extends StatefulWidget {
   const ArasaacImportScreen({
     required this.controller,
+    required this.searchService,
+    required this.settingsController,
     required this.categoryId,
     required this.languageCode,
     super.key,
   });
 
   final LocalClasseurController controller;
+  final PictogramSearchService searchService;
+  final SettingsController settingsController;
   final int categoryId;
   final String languageCode;
 
@@ -28,7 +36,6 @@ class ArasaacImportScreen extends StatefulWidget {
 }
 
 class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
-  final ArasaacApi _api = ArasaacApi();
   final TextEditingController _queryController = TextEditingController();
   final http.Client _httpClient = http.Client();
 
@@ -53,14 +60,22 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
       _isLoading = true;
       _error = null;
     });
+    final settings = widget.settingsController.settings;
+    final language = widget.languageCode.isEmpty ? 'fr' : widget.languageCode;
     try {
-      final language = widget.languageCode.isEmpty ? 'fr' : widget.languageCode;
-      final results = await _api.searchPictograms(query, language: language);
+      final result = await widget.searchService.search(
+        query,
+        language: language,
+        offlineOnly: settings.offlineOnly,
+        onlyAacPictograms: settings.onlyAacPictograms,
+        onlySchematicPictograms: settings.onlySchematicPictograms,
+        minDownloads: settings.minDownloads,
+      );
       if (!mounted) {
         return;
       }
       setState(() {
-        _results = results;
+        _results = result.pictograms;
         _isLoading = false;
       });
     } catch (_) {
@@ -85,7 +100,7 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
       final response =
           await _httpClient.get(Uri.parse(pictogram.imageUrl(size: 500)));
       if (response.statusCode != 200) {
-        throw const ArasaacException('image download failed');
+        throw Exception('image download failed');
       }
       await widget.controller.addPictogram(
         label: pictogram.label,

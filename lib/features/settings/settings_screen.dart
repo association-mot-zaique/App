@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../data/services/local_backup_service.dart';
+import '../../data/services/pictogram_search_service.dart';
 import '../../data/services/search_cache_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../classeur/classeur_management_screen.dart';
@@ -14,6 +15,7 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     required this.settingsController,
     required this.classeurController,
+    required this.searchService,
     required this.searchCacheRepository,
     required this.localBackupService,
     required this.onBackupRestored,
@@ -22,6 +24,7 @@ class SettingsScreen extends StatefulWidget {
 
   final SettingsController settingsController;
   final LocalClasseurController classeurController;
+  final PictogramSearchService searchService;
   final SearchCacheRepository searchCacheRepository;
   final LocalBackupService localBackupService;
   final Future<void> Function() onBackupRestored;
@@ -146,6 +149,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         MaterialPageRoute<void>(
                           builder: (_) => ClasseurManagementScreen(
                             controller: widget.classeurController,
+                            searchService: widget.searchService,
+                            settingsController: widget.settingsController,
                             languageCode: effectiveLocaleCode,
                           ),
                         ),

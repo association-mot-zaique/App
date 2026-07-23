@@ -19,7 +19,7 @@ _Réf : §6.3, §6.4 · dérive A-05→A-08 · **couche data livrée** (branche 
 - [x] Stockage des images sur le disque (répertoire privé de l'application) — `LocalClasseurRepository.storeImageBytes` + `path_provider`
 - [x] Persistance locale au-delà de `shared_preferences` (base locale) — manifeste JSON sur disque (`manifest.json`)
 - [x] Aucune dépendance à une URL distante pour l'affichage d'un picto possédé — `LocalPictogram` n'a aucun champ URL
-- [ ] Branchement dans l'app (fourniture du repository, chargement au démarrage) — avec US-1.05/1.06
+- [x] Branchement dans l'app (fourniture du repository, chargement au démarrage) — fait avec US-1.05/1.06
 
 ### US-1.02 · Source d'alimentation — import depuis les fichiers `Must`
 > **En tant qu'**aidant, **je veux** importer un pictogramme depuis les fichiers de l'appareil, **afin de** garnir le classeur avec mes propres images.
@@ -49,8 +49,8 @@ _Réf : A-04 · seule connexion sortante autorisée (§5.1) · ARASAAC à parit�
 - [x] Rechercher par mot-clé sur `api.arasaac.org`
 - [x] **Télécharger et copier l'image sur le disque** au moment de l'import (picto possédé, plus jamais re-sollicité en réseau)
 - [x] Import accessible **depuis le mode aidant uniquement** (entrée dans Réglages → Gérer le classeur)
-- [ ] Repli automatique sur le cache en cas d'échec réseau
-- [ ] Réutiliser le service de recherche existant (filtres qualité) plutôt qu'un `ArasaacApi` dédié
+- [x] Repli automatique sur le cache en cas d'échec réseau — l'import passe désormais par `PictogramSearchService`
+- [x] Réutiliser le service de recherche existant (filtres qualité) plutôt qu'un `ArasaacApi` dédié
 
 ### US-1.05 · Écran de gestion — catégories `Must`
 > **En tant qu'**aidant, **je veux** créer, renommer et supprimer des catégories, **afin d'**organiser le classeur.
@@ -70,7 +70,6 @@ _Réf : A-06 · **livré** — gestion par catégorie, création via ARASAAC (vo
 - [x] Supprimer un pictogramme (et l'image locale associée)
 - [x] Créer un pictogramme via ARASAAC (`ArasaacImportScreen`) — télécharge l'image sur le disque
 - [ ] Valider l'objectif **< 30 s** sur appareil réel (§3.2)
-- [ ] Sources fichier (US-1.02) et photo (US-1.03) — à venir (nouvelle dépendance à décider)
 
 ### US-1.07 · Extension du verrou PIN à tout le mode aidant `Must`
 > **En tant qu'**aidant, **je veux** que l'intégralité du mode aidant (Réglages compris) soit protégée par code PIN, **afin d'**empêcher l'utilisateur final d'y accéder accidentellement.

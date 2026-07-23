@@ -5,7 +5,9 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/local_category.dart';
 import '../../data/models/local_pictogram.dart';
+import '../../data/services/pictogram_search_service.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../settings/settings_controller.dart';
 import 'arasaac_import_screen.dart';
 import 'local_classeur_controller.dart';
 
@@ -14,11 +16,15 @@ import 'local_classeur_controller.dart';
 class ClasseurManagementScreen extends StatelessWidget {
   const ClasseurManagementScreen({
     required this.controller,
+    required this.searchService,
+    required this.settingsController,
     required this.languageCode,
     super.key,
   });
 
   final LocalClasseurController controller;
+  final PictogramSearchService searchService;
+  final SettingsController settingsController;
   final String languageCode;
 
   @override
@@ -69,6 +75,8 @@ class ClasseurManagementScreen extends StatelessWidget {
                     MaterialPageRoute<void>(
                       builder: (_) => _CategoryPictogramsScreen(
                         controller: controller,
+                        searchService: searchService,
+                        settingsController: settingsController,
                         categoryId: category.id,
                         languageCode: languageCode,
                       ),
@@ -126,11 +134,15 @@ class ClasseurManagementScreen extends StatelessWidget {
 class _CategoryPictogramsScreen extends StatelessWidget {
   const _CategoryPictogramsScreen({
     required this.controller,
+    required this.searchService,
+    required this.settingsController,
     required this.categoryId,
     required this.languageCode,
   });
 
   final LocalClasseurController controller;
+  final PictogramSearchService searchService;
+  final SettingsController settingsController;
   final int categoryId;
   final String languageCode;
 
@@ -231,6 +243,8 @@ class _CategoryPictogramsScreen extends StatelessWidget {
           MaterialPageRoute<void>(
             builder: (_) => ArasaacImportScreen(
               controller: controller,
+              searchService: searchService,
+              settingsController: settingsController,
               categoryId: categoryId,
               languageCode: languageCode,
             ),
