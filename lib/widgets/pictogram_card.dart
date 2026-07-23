@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../data/models/pictogram.dart';
+import 'pictogram_image.dart';
 
 class PictogramCard extends StatelessWidget {
   const PictogramCard({
@@ -64,17 +64,16 @@ class PictogramCard extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(8 * scale.clamp(0.9, 1.8)),
-                    child: CachedNetworkImage(
-                      imageUrl: pictogram.imageUrl(),
-                      fit: BoxFit.contain,
-                      placeholder: (_, _) => const Center(
+                    child: PictogramImage(
+                      pictogram: pictogram,
+                      placeholder: const Center(
                         child: SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         ),
                       ),
-                      errorWidget: (_, _, _) => Icon(
+                      errorWidget: Icon(
                         Icons.image_not_supported_outlined,
                         color: colorScheme.onSurface.withValues(alpha: 0.55),
                       ),

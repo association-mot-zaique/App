@@ -137,6 +137,17 @@ _Réf : §5.5, §7 (Lot 1)_
 - [ ] Pipeline GitHub Actions compilant l'APK à chaque modification
 - [ ] Build en échec bloquant (APK doit compiler sans erreur — critère §8.1)
 
+### US-1.14 · Mode communication alimenté par le classeur local `Must`
+> **En tant qu'**utilisateur final, **je veux** composer ma phrase à partir des pictogrammes **possédés** de mon classeur, **afin de** communiquer 100 % hors-ligne, sans dépendre d'ARASAAC.
+
+_Réf : §6.3, §6.4 (« le classeur local devient le cœur du lot 1 ») · **livré**_
+
+- [x] `Pictogram` porte une image locale optionnelle (`localImagePath`) ; rendu disque via `PictogramImage`
+- [x] `ClasseurCommunicationScreen` : catégories possédées → pictos du disque, bande-phrase partagée + TTS (C-06/C-07)
+- [x] L'onglet Communiquer affiche le classeur dès qu'il contient une catégorie ; sinon repli sur l'explorateur ARASAAC (amorçage)
+- [x] Aucune requête réseau pour parcourir/afficher le classeur possédé
+- [ ] À terme : retirer complètement l'explorateur ARASAAC du mode communication (décision de bascule à valider avec l'IME — Lot 2)
+
 ---
 
 ## Critères d'acceptation du lot (§8)

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/models/pictogram.dart';
@@ -12,6 +11,7 @@ import '../../features/favorites/favorites_controller.dart';
 import '../../features/settings/settings_controller.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../widgets/pictogram_card.dart';
+import '../../widgets/pictogram_image.dart';
 import 'phrase_book_controller.dart';
 
 class CommunicationScreen extends StatefulWidget {
@@ -1243,11 +1243,10 @@ class _PhraseComposer extends StatelessWidget {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                              imageUrl: pictogram.imageUrl(size: 100),
-                              fit: BoxFit.contain,
-                              placeholder: (_, _) => const SizedBox.shrink(),
-                              errorWidget: (_, _, _) => const Icon(
+                            child: PictogramImage(
+                              pictogram: pictogram,
+                              size: 100,
+                              errorWidget: const Icon(
                                 Icons.image_not_supported_outlined,
                                 size: 18,
                               ),

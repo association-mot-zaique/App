@@ -8,6 +8,7 @@ class Pictogram {
     this.aac = false,
     this.schematic = false,
     this.downloads = 0,
+    this.localImagePath,
   });
 
   final int id;
@@ -18,6 +19,14 @@ class Pictogram {
   final bool aac;
   final bool schematic;
   final int downloads;
+
+  /// Absolute path to an owned image on disk. When set, the pictogram is a
+  /// local classeur entry and must be rendered from the file, never the
+  /// network (CDC 6.3).
+  final String? localImagePath;
+
+  bool get isLocal =>
+      localImagePath != null && localImagePath!.isNotEmpty;
 
   factory Pictogram.fromArasaacJson(
     Map<String, dynamic> json, {
@@ -78,6 +87,7 @@ class Pictogram {
       aac: json['aac'] as bool? ?? false,
       schematic: json['schematic'] as bool? ?? false,
       downloads: _intFromJson(json['downloads']),
+      localImagePath: json['localImagePath'] as String?,
     );
   }
 
@@ -91,6 +101,7 @@ class Pictogram {
       'aac': aac,
       'schematic': schematic,
       'downloads': downloads,
+      if (localImagePath != null) 'localImagePath': localImagePath,
     };
   }
 

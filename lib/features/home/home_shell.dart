@@ -10,6 +10,7 @@ import '../../data/services/speech_service.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../widgets/logo_title.dart';
 import '../classeur/local_classeur_controller.dart';
+import '../communication/classeur_communication_screen.dart';
 import '../communication/communication_screen.dart';
 import '../communication/phrase_book_controller.dart';
 import '../favorites/favorites_controller.dart';
@@ -197,12 +198,27 @@ class _HomeShellState extends State<HomeShell> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          CommunicationScreen(
-            searchService: widget.searchService,
-            favoritesController: widget.favoritesController,
-            phraseBookController: widget.phraseBookController,
-            settingsController: widget.settingsController,
-            speechService: widget.speechService,
+          // Owned classeur when it has content, otherwise the ARASAAC
+          // explorer as a bootstrap fallback (CDC 6.3/6.4).
+          AnimatedBuilder(
+            animation: widget.classeurController,
+            builder: (context, _) {
+              if (widget.classeurController.classeur.categories.isEmpty) {
+                return CommunicationScreen(
+                  searchService: widget.searchService,
+                  favoritesController: widget.favoritesController,
+                  phraseBookController: widget.phraseBookController,
+                  settingsController: widget.settingsController,
+                  speechService: widget.speechService,
+                );
+              }
+              return ClasseurCommunicationScreen(
+                classeurController: widget.classeurController,
+                phraseBookController: widget.phraseBookController,
+                settingsController: widget.settingsController,
+                speechService: widget.speechService,
+              );
+            },
           ),
           FavoritesScreen(
             favoritesController: widget.favoritesController,

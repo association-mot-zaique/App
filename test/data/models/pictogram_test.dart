@@ -45,5 +45,26 @@ void main() {
       expect(restored.tags, original.tags);
       expect(restored.language, original.language);
     });
+
+    test('network pictogram is not local and omits localImagePath', () {
+      const pictogram = Pictogram(id: 9, label: 'hola');
+      expect(pictogram.isLocal, isFalse);
+      expect(pictogram.toJson().containsKey('localImagePath'), isFalse);
+    });
+
+    test('local pictogram round-trips its image path and is local', () {
+      const original = Pictogram(
+        id: 1000000005,
+        label: 'maison',
+        localImagePath: '/data/app/classeur/images/picto_5.png',
+      );
+
+      expect(original.isLocal, isTrue);
+
+      final restored = Pictogram.fromJson(original.toJson());
+      expect(restored.isLocal, isTrue);
+      expect(restored.localImagePath, original.localImagePath);
+      expect(restored.label, 'maison');
+    });
   });
 }
