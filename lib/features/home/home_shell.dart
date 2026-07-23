@@ -198,12 +198,14 @@ class _HomeShellState extends State<HomeShell> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          // Owned classeur when it has content, otherwise the ARASAAC
-          // explorer as a bootstrap fallback (CDC 6.3/6.4).
+          // Owned classeur once it holds at least one pictogram, otherwise the
+          // ARASAAC explorer as a bootstrap fallback (CDC 6.3/6.4). Guarding on
+          // pictograms (not categories) keeps the end user on a usable screen
+          // while the aidant is still filling empty starter categories.
           AnimatedBuilder(
             animation: widget.classeurController,
             builder: (context, _) {
-              if (widget.classeurController.classeur.categories.isEmpty) {
+              if (widget.classeurController.classeur.pictograms.isEmpty) {
                 return CommunicationScreen(
                   searchService: widget.searchService,
                   favoritesController: widget.favoritesController,

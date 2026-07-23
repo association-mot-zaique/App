@@ -494,4 +494,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get categoryExists => 'Diese Kategorie existiert bereits';
+
+  @override
+  String get addStarterCategories => 'Startkategorien hinzufuegen';
 }

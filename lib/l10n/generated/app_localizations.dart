@@ -1039,6 +1039,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This category already exists'**
   String get categoryExists;
+
+  /// No description provided for @addStarterCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Add starter categories'**
+  String get addStarterCategories;
 }
 
 class _AppLocalizationsDelegate

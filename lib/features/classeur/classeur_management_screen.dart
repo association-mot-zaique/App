@@ -44,7 +44,14 @@ class ClasseurManagementScreen extends StatelessWidget {
         builder: (context, _) {
           final categories = controller.classeur.categoriesSorted;
           if (categories.isEmpty) {
-            return _EmptyState(message: l10n.classeurEmpty);
+            return _EmptyState(
+              message: l10n.classeurEmpty,
+              action: FilledButton.tonalIcon(
+                onPressed: () => _addStarterCategories(context),
+                icon: const Icon(Icons.playlist_add_rounded),
+                label: Text(l10n.addStarterCategories),
+              ),
+            );
           }
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
@@ -151,6 +158,23 @@ class ClasseurManagementScreen extends StatelessWidget {
     final confirmed = await _confirmDelete(context, l10n.deleteCategoryConfirm);
     if (confirmed) {
       await controller.deleteCategory(category.id);
+    }
+  }
+
+  /// Seeds a few localized starter categories so the aidant does not face a
+  /// blank slate. Empty and fully editable — duplicates are skipped.
+  Future<void> _addStarterCategories(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final starters = <String>[
+      l10n.categoryNeeds,
+      l10n.categoryEmotions,
+      l10n.categoryHome,
+      l10n.categorySchool,
+      l10n.suggestionMeals,
+      l10n.categoryHealth,
+    ];
+    for (final name in starters) {
+      await controller.addCategory(name);
     }
   }
 }
@@ -519,16 +543,26 @@ class _AddCategoryDialogState extends State<_AddCategoryDialog> {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState({required this.message});
+  const _EmptyState({required this.message, this.action});
 
   final String message;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
-        child: Text(message, textAlign: TextAlign.center),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(message, textAlign: TextAlign.center),
+            if (action != null) ...[
+              const SizedBox(height: 16),
+              action!,
+            ],
+          ],
+        ),
       ),
     );
   }

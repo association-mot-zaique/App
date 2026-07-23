@@ -176,5 +176,6 @@
   "suggestionActivities": "Aktivitaeten",
   "suggestionPlaces": "Orte",
   "suggestionToys": "Spielzeug",
-  "categoryExists": "Diese Kategorie existiert bereits"
+  "categoryExists": "Diese Kategorie existiert bereits",
+  "addStarterCategories": "Startkategorien hinzufuegen"
 }
