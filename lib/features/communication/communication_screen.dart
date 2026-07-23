@@ -578,8 +578,6 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     required double height,
   }) {
     final columns = _columnsForWidth(width);
-    final gridHeight = (height * 0.42).clamp(220.0, 520.0);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -598,57 +596,52 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
           showSavePhrase: settings.savedPhrasesEnabled,
         ),
         const SizedBox(height: 8),
+        _buildCategoriesRow(l10n, categories),
+        if (_showSearch) ...[
+          const SizedBox(height: 8),
+          _buildSearchRow(l10n),
+        ],
+        const SizedBox(height: 8),
+        if (settings.offlineOnly)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Chip(
+              avatar: const Icon(Icons.wifi_off_rounded, size: 18),
+              label: Text(l10n.offlineModeChip),
+            ),
+          ),
+        _buildKeywordChipsRow(selectedCategory),
+        if (_info != null) ...[
+          const SizedBox(height: 8),
+          _InfoBanner(message: _info!),
+        ],
+        if (_error != null) ...[
+          const SizedBox(height: 8),
+          _ErrorBanner(message: _error!),
+        ],
+        const SizedBox(height: 10),
+        // Fills the remaining height instead of a fixed slice, so tall
+        // screens don't show a large empty area below the grid.
         Expanded(
-          child: ListView(
-            children: [
-              _buildCategoriesRow(l10n, categories),
-              if (_showSearch) ...[
-                const SizedBox(height: 8),
-                _buildSearchRow(l10n),
-              ],
-              const SizedBox(height: 8),
-              if (settings.offlineOnly)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Chip(
-                    avatar: const Icon(Icons.wifi_off_rounded, size: 18),
-                    label: Text(l10n.offlineModeChip),
-                  ),
-                ),
-              _buildKeywordChipsRow(selectedCategory),
-              if (_info != null) ...[
-                const SizedBox(height: 8),
-                _InfoBanner(message: _info!),
-              ],
-              if (_error != null) ...[
-                const SizedBox(height: 8),
-                _ErrorBanner(message: _error!),
-              ],
-              const SizedBox(height: 10),
-              SizedBox(
-                height: gridHeight,
-                child: _buildResultsArea(
-                  l10n: l10n,
-                  settings: settings,
-                  columns: columns,
-                  selectedCategory: selectedCategory,
-                ),
-              ),
-              if (settings.savedPhrasesEnabled) ...[
-                const SizedBox(height: 8),
-                _SavedPhrasesStrip(
-                  title: l10n.savedPhrasesTitle,
-                  emptyMessage: l10n.savedPhrasesEmpty,
-                  loadLabel: l10n.loadPhrase,
-                  deleteLabel: l10n.deletePhrase,
-                  phrases: widget.phraseBookController.savedPhrases,
-                  onLoad: _loadSavedPhrase,
-                  onDelete: _deleteSavedPhrase,
-                ),
-              ],
-            ],
+          child: _buildResultsArea(
+            l10n: l10n,
+            settings: settings,
+            columns: columns,
+            selectedCategory: selectedCategory,
           ),
         ),
+        if (settings.savedPhrasesEnabled) ...[
+          const SizedBox(height: 8),
+          _SavedPhrasesStrip(
+            title: l10n.savedPhrasesTitle,
+            emptyMessage: l10n.savedPhrasesEmpty,
+            loadLabel: l10n.loadPhrase,
+            deleteLabel: l10n.deletePhrase,
+            phrases: widget.phraseBookController.savedPhrases,
+            onLoad: _loadSavedPhrase,
+            onDelete: _deleteSavedPhrase,
+          ),
+        ],
       ],
     );
   }
