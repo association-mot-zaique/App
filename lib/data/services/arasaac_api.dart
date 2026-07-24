@@ -22,7 +22,10 @@ class ArasaacApi {
 
     final encodedQuery = Uri.encodeComponent(cleanQuery);
     final uri = Uri.parse('$_baseUrl/$language/search/$encodedQuery');
-    final response = await _client.get(uri);
+    // Bounded wait: without a timeout, an unreachable/slow network makes the
+    // request (and the loading spinner) hang forever. On timeout it throws and
+    // the caller falls back to the cache or shows an error.
+    final response = await _client.get(uri).timeout(const Duration(seconds: 8));
 
     if (response.statusCode != 200) {
       throw ArasaacException(statusCode: response.statusCode);

@@ -189,8 +189,9 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
     setState(() => _isImporting = true);
     final l10n = AppLocalizations.of(context);
     try {
-      final response =
-          await _httpClient.get(Uri.parse(pictogram.imageUrl(size: 500)));
+      final response = await _httpClient
+          .get(Uri.parse(pictogram.imageUrl(size: 500)))
+          .timeout(const Duration(seconds: 10));
       if (response.statusCode != 200) {
         throw ArasaacException(statusCode: response.statusCode);
       }
