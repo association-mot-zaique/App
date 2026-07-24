@@ -342,7 +342,15 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     if (!_tapGuard.accept(pictogram.id)) {
       return;
     }
+    final languageCode = _effectiveLocaleCode();
+    final rate = widget.settingsController.settings.speechRate;
     await widget.phraseBookController.addToCurrent(pictogram);
+    // C-07: speak the pictogram at the moment it is added.
+    await widget.speechService.speak(
+      pictogram.label,
+      languageCode: languageCode,
+      rate: rate,
+    );
   }
 
   Future<void> _removeLastPhraseItem() {

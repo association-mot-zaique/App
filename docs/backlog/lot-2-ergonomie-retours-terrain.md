@@ -21,11 +21,13 @@ _Réf : §7 (Lot 2)_
 ### US-2.02 · Restitution vocale — au picto et lecture globale `Must`
 > **En tant qu'**utilisateur final, **je veux** entendre chaque picto au moment de l'ajout et faire lire toute la bande-phrase d'un geste, **afin de** communiquer.
 
-_Réf : C-06, C-07 (arbitrés en Must le 22/07/2026) · socle TTS existant (§6.2)_
+_Réf : C-06, C-07 (arbitrés en Must le 22/07/2026) · socle TTS existant (§6.2) · **livré** (anticipé depuis le Lot 1)_
 
-- [ ] C-07 : restitution vocale du picto au moment de son ajout à la bande-phrase
-- [ ] C-06 : lecture vocale de la bande-phrase complète via un bouton dédié (TTS local)
-- [ ] Un seul geste pour la lecture complète
+- [x] C-07 : restitution vocale du picto au moment de son ajout à la bande-phrase — sur **les deux** écrans (classeur + explorateur ARASAAC)
+- [x] C-06 : lecture vocale de la bande-phrase complète via un bouton dédié (TTS local)
+- [x] Un seul geste pour la lecture complète — bouton « Lire la phrase »
+- [x] TTS vérifié sur appareil (utterances `started`/`completed`, audio émis)
+- [ ] Valider le confort d'écoute avec l'IME (vitesse, voix, langue)
 
 ### US-2.03 · Arbitrage prioritaire — stabilité spatiale des repères `Must`
 > **En tant qu'**éducateur IME, **je veux** trancher si l'accès aux pictos par recherche est utilisable ou si une disposition fixe est indispensable, **afin de** respecter les utilisateurs qui mémorisent l'emplacement plutôt que l'image.
