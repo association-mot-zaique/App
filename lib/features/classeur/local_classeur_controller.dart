@@ -123,6 +123,24 @@ class LocalClasseurController extends ChangeNotifier {
     await _persist();
   }
 
+  /// Marks or unmarks a pictogram as favorite (US-R.02). Returns the new
+  /// state, so the caller can tell the aidant what happened.
+  Future<bool> togglePictogramFavorite(int id) async {
+    final matches = _classeur.pictograms.where((p) => p.id == id).toList();
+    if (matches.isEmpty) {
+      return false;
+    }
+
+    final isFavorite = !matches.first.isFavorite;
+    _classeur = _classeur.copyWith(
+      pictograms: _classeur.pictograms
+          .map((p) => p.id == id ? p.copyWith(isFavorite: isFavorite) : p)
+          .toList(),
+    );
+    await _persist();
+    return isFavorite;
+  }
+
   /// Deletes the pictogram and its image file.
   Future<void> deletePictogram(int id) async {
     final imagePaths = _classeur.pictograms

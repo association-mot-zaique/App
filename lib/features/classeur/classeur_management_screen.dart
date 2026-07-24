@@ -479,11 +479,37 @@ class _PictogramTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Image.file(
-              File(controller.absoluteImagePath(pictogram.imagePath)),
-              fit: BoxFit.contain,
-              errorBuilder: (_, _, _) =>
-                  const Icon(Icons.broken_image_outlined),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.file(
+                    File(controller.absoluteImagePath(pictogram.imagePath)),
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) =>
+                        const Icon(Icons.broken_image_outlined),
+                  ),
+                ),
+                // Over the image, not in the label row: a one-tap target that
+                // does not eat the width the label needs (US-R.02).
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    tooltip: pictogram.isFavorite
+                        ? l10n.removeFavoriteTooltip
+                        : l10n.saveFavorite,
+                    onPressed: () => _toggleFavorite(context),
+                    icon: Icon(
+                      pictogram.isFavorite
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_border_rounded,
+                      color: pictogram.isFavorite
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Row(
@@ -534,6 +560,17 @@ class _PictogramTile extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _toggleFavorite(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final isFavorite = await controller.togglePictogramFavorite(pictogram.id);
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(isFavorite ? l10n.favoriteSaved : l10n.favoriteRemoved),
       ),
     );
   }

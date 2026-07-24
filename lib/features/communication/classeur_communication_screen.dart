@@ -119,11 +119,20 @@ class _ClasseurCommunicationScreenState
           if (categories.isEmpty) {
             return const SizedBox.shrink();
           }
-          final index = _selectedCategoryIndex.clamp(0, categories.length - 1);
-          final selectedCategory = categories[index];
-          final pictograms = widget.classeurController.classeur.pictogramsIn(
-            selectedCategory.id,
-          );
+          // The favorites view is a chip pinned in first position (US-R.03).
+          // It only exists once the aidant marked a favorite, so the category
+          // slots never move while the end user is browsing (CDC 3.1).
+          final favorites = widget.classeurController.classeur.favorites;
+          final hasFavorites = favorites.isNotEmpty;
+          final tabCount = categories.length + (hasFavorites ? 1 : 0);
+
+          final index = _selectedCategoryIndex.clamp(0, tabCount - 1);
+          final isFavoritesTab = hasFavorites && index == 0;
+          final pictograms = isFavoritesTab
+              ? favorites
+              : widget.classeurController.classeur.pictogramsIn(
+                  categories[hasFavorites ? index - 1 : index].id,
+                );
 
           return Padding(
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
@@ -145,10 +154,19 @@ class _ClasseurCommunicationScreenState
                   height: 44,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
+                    itemCount: tabCount,
                     separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, i) {
-                      final category = categories[i];
+                      if (hasFavorites && i == 0) {
+                        return ChoiceChip(
+                          avatar: const Icon(Icons.favorite_rounded, size: 18),
+                          label: Text(l10n.favoritesNav),
+                          selected: i == index,
+                          onSelected: (_) =>
+                              setState(() => _selectedCategoryIndex = i),
+                        );
+                      }
+                      final category = categories[hasFavorites ? i - 1 : i];
                       return ChoiceChip(
                         label: Text(category.name),
                         selected: i == index,

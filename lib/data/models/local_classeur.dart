@@ -52,9 +52,23 @@ class LocalClasseur {
     return items;
   }
 
-  /// Cross-cutting favorites view (CDC 4.1).
-  List<LocalPictogram> get favorites =>
-      pictograms.where((picto) => picto.isFavorite).toList();
+  /// Cross-cutting favorites view (CDC 4.1 / US-R.02, US-R.03).
+  ///
+  /// Ordered by category, then by position inside the category, so a favorite
+  /// keeps the same slot from one session to the next (CDC 3.1).
+  List<LocalPictogram> get favorites {
+    final categoryOrder = {
+      for (final category in categories) category.id: category.sortOrder,
+    };
+    final items = pictograms.where((picto) => picto.isFavorite).toList();
+    items.sort((a, b) {
+      final byCategory = (categoryOrder[a.categoryId] ?? 0).compareTo(
+        categoryOrder[b.categoryId] ?? 0,
+      );
+      return byCategory != 0 ? byCategory : a.sortOrder.compareTo(b.sortOrder);
+    });
+    return items;
+  }
 
   int _nextSortOrder(Iterable<int> orders) {
     var max = -1;

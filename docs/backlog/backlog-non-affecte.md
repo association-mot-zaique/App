@@ -21,16 +21,17 @@ _Réf : C-08_
 
 _Réf : C-09 · favoris = catégorie transversale, subsiste une fois le classeur local en place (§4.1) → à planifier après Lot 1_
 
-- [ ] Marquer / démarquer un pictogramme comme favori
-- [ ] Persistance du statut favori dans le classeur local
+- [x] Marquer / démarquer un pictogramme comme favori — cœur en surimpression sur la tuile, dans la gestion du classeur (mode aidant), avec retour par snackbar
+- [x] Persistance du statut favori dans le classeur local — champ `isFavorite` du `manifest.json`, donc emporté par l'export / import (US-3.01/3.02)
 
 ### US-R.03 · Accès direct à la liste des favoris `Should`
 > **En tant qu'**utilisateur final, **je veux** accéder directement à mes favoris, **afin de** retrouver rapidement le vocabulaire fréquent.
 
 _Réf : C-10 · dépend de US-R.02_
 
-- [ ] Catégorie / vue transversale « Favoris » accessible depuis le mode communication
-- [ ] Position stable de l'accès aux favoris (§3.1)
+- [x] Catégorie / vue transversale « Favoris » accessible depuis le mode communication — pastille en tête de la barre de catégories, affichant les favoris de toutes les catégories
+- [x] Position stable de l'accès aux favoris (§3.1) — toujours en première position ; la pastille n'apparaît qu'une fois un favori marqué, donc les catégories ne bougent pas pendant l'usage
+- [ ] Valider l'usage des favoris avec l'IME (pertinence du regroupement transversal)
 
 ### US-R.04 · Masquage temporaire d'un pictogramme `Could`
 > **En tant qu'**aidant, **je veux** masquer temporairement un pictogramme, **afin de** le retirer de l'affichage sans le supprimer du classeur.

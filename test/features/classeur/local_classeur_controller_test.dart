@@ -214,4 +214,70 @@ void main() {
       expect(controller.classeur.pictograms.single.label, 'manger');
     });
   });
+
+  group('LocalClasseurController favorites (US-R.02 / US-R.03)', () {
+    Future<int> addPictogram(String label, int categoryId) async {
+      await controller.addPictogram(
+        label: label,
+        categoryId: categoryId,
+        imageBytes: [1],
+        extension: 'png',
+      );
+      return controller.classeur.pictograms.last.id;
+    }
+
+    test('toggling marks then unmarks a favorite, and persists', () async {
+      await controller.addCategory('Besoins');
+      final categoryId = controller.classeur.categories.single.id;
+      final id = await addPictogram('manger', categoryId);
+
+      expect(await controller.togglePictogramFavorite(id), isTrue);
+      expect(controller.classeur.favorites.single.label, 'manger');
+
+      await controller.load();
+      expect(controller.classeur.favorites.single.label, 'manger');
+
+      expect(await controller.togglePictogramFavorite(id), isFalse);
+      expect(controller.classeur.favorites, isEmpty);
+    });
+
+    test('toggling an unknown pictogram changes nothing', () async {
+      expect(await controller.togglePictogramFavorite(999), isFalse);
+      expect(controller.classeur.favorites, isEmpty);
+    });
+
+    test('favorites keep a stable order across categories', () async {
+      await controller.addCategory('Besoins');
+      await controller.addCategory('Ecole');
+      final besoins = controller.classeur.categoriesSorted.first.id;
+      final ecole = controller.classeur.categoriesSorted.last.id;
+
+      // Marked out of order: Ecole first, then the second then the first
+      // pictogram of Besoins.
+      final lire = await addPictogram('lire', ecole);
+      final boire = await addPictogram('boire', besoins);
+      final manger = await addPictogram('manger', besoins);
+
+      await controller.togglePictogramFavorite(lire);
+      await controller.togglePictogramFavorite(manger);
+      await controller.togglePictogramFavorite(boire);
+
+      // Category order first, then position inside the category (CDC 3.1).
+      expect(controller.classeur.favorites.map((p) => p.label).toList(), [
+        'boire',
+        'manger',
+        'lire',
+      ]);
+    });
+
+    test('deleting a pictogram removes it from the favorites', () async {
+      await controller.addCategory('Besoins');
+      final categoryId = controller.classeur.categories.single.id;
+      final id = await addPictogram('manger', categoryId);
+      await controller.togglePictogramFavorite(id);
+
+      await controller.deletePictogram(id);
+      expect(controller.classeur.favorites, isEmpty);
+    });
+  });
 }
