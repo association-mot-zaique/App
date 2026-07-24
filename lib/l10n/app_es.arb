@@ -190,5 +190,10 @@
   "classeurImportFailed": "Archivo de cuaderno no valido",
   "moveToCategory": "Mover a...",
   "moveUpAction": "Subir",
-  "moveDownAction": "Bajar"
+  "moveDownAction": "Bajar",
+  "profilesSection": "Perfiles",
+  "addProfile": "Anadir perfil",
+  "profileNameLabel": "Nombre del perfil",
+  "profileExists": "Este perfil ya existe",
+  "deleteProfileConfirm": "Eliminar este perfil y su cuaderno? Accion irreversible."
 }

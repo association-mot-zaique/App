@@ -190,5 +190,10 @@
   "classeurImportFailed": "File del raccoglitore non valido",
   "moveToCategory": "Sposta in...",
   "moveUpAction": "Sposta su",
-  "moveDownAction": "Sposta giu"
+  "moveDownAction": "Sposta giu",
+  "profilesSection": "Profili",
+  "addProfile": "Aggiungi profilo",
+  "profileNameLabel": "Nome del profilo",
+  "profileExists": "Questo profilo esiste gia",
+  "deleteProfileConfirm": "Eliminare questo profilo e il suo raccoglitore? Azione irreversibile."
 }

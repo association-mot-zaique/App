@@ -6,6 +6,7 @@ import '../../data/services/search_cache_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../classeur/classeur_management_screen.dart';
 import '../classeur/local_classeur_controller.dart';
+import '../profiles/profile_controller.dart';
 import 'credits_screen.dart';
 import 'legal_content.dart';
 import 'legal_text_screen.dart';
@@ -15,6 +16,7 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     required this.settingsController,
     required this.classeurController,
+    required this.profileController,
     required this.searchService,
     required this.searchCacheRepository,
     required this.localBackupService,
@@ -24,6 +26,7 @@ class SettingsScreen extends StatefulWidget {
 
   final SettingsController settingsController;
   final LocalClasseurController classeurController;
+  final ProfileController profileController;
   final PictogramSearchService searchService;
   final SearchCacheRepository searchCacheRepository;
   final LocalBackupService localBackupService;
@@ -158,6 +161,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 14),
+                _ProfilesSection(controller: widget.profileController),
                 const SizedBox(height: 14),
                 Text(
                   l10n.pictogramSize,
@@ -460,6 +465,212 @@ class _SettingsScreenState extends State<SettingsScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+/// Profiles (A-11 / US-3.03): switch, add, rename, delete. Each profile owns
+/// its classeur and its settings; only the aidant reaches this screen.
+class _ProfilesSection extends StatelessWidget {
+  const _ProfilesSection({required this.controller});
+
+  final ProfileController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                  child: Text(
+                    l10n.profilesSection,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                RadioGroup<String>(
+                  groupValue: controller.activeId,
+                  onChanged: (id) {
+                    if (id != null) {
+                      controller.switchTo(id);
+                    }
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (final profile in controller.profiles)
+                        RadioListTile<String>(
+                          value: profile.id,
+                          title: Text(profile.name),
+                          secondary: PopupMenuButton<String>(
+                            onSelected: (value) {
+                              if (value == 'rename') {
+                                _rename(context, profile.id, profile.name);
+                              } else if (value == 'delete') {
+                                _delete(context, profile.id);
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                value: 'rename',
+                                child: Text(l10n.renameAction),
+                              ),
+                              if (controller.profiles.length > 1)
+                                PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text(l10n.deleteAction),
+                                ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      onPressed: () => _add(context),
+                      icon: const Icon(Icons.person_add_alt_1_outlined),
+                      label: Text(l10n.addProfile),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _add(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final name = await _promptProfileName(context, title: l10n.addProfile);
+    if (name == null) {
+      return;
+    }
+    final added = await controller.addProfile(name);
+    if (context.mounted && !added) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.profileExists)));
+    }
+  }
+
+  Future<void> _rename(BuildContext context, String id, String current) async {
+    final l10n = AppLocalizations.of(context);
+    final name = await _promptProfileName(
+      context,
+      title: l10n.renameAction,
+      initialValue: current,
+    );
+    if (name == null) {
+      return;
+    }
+    final renamed = await controller.renameProfile(id, name);
+    if (context.mounted && !renamed) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.profileExists)));
+    }
+  }
+
+  Future<void> _delete(BuildContext context, String id) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed =
+        await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Text(l10n.deleteProfileConfirm),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(l10n.cancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(l10n.deleteAction),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+    if (confirmed) {
+      await controller.deleteProfile(id);
+    }
+  }
+}
+
+/// Small text dialog owning its controller (disposed with the route).
+Future<String?> _promptProfileName(
+  BuildContext context, {
+  required String title,
+  String initialValue = '',
+}) async {
+  final result = await showDialog<String>(
+    context: context,
+    builder: (_) => _ProfileNameDialog(title: title, initialValue: initialValue),
+  );
+  if (result == null || result.isEmpty) {
+    return null;
+  }
+  return result;
+}
+
+class _ProfileNameDialog extends StatefulWidget {
+  const _ProfileNameDialog({required this.title, required this.initialValue});
+
+  final String title;
+  final String initialValue;
+
+  @override
+  State<_ProfileNameDialog> createState() => _ProfileNameDialogState();
+}
+
+class _ProfileNameDialogState extends State<_ProfileNameDialog> {
+  late final TextEditingController _controller =
+      TextEditingController(text: widget.initialValue);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return AlertDialog(
+      title: Text(widget.title),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(labelText: l10n.profileNameLabel),
+        onSubmitted: (value) => Navigator.of(context).pop(value.trim()),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_controller.text.trim()),
+          child: Text(l10n.save),
+        ),
+      ],
     );
   }
 }

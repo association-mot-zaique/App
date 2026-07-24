@@ -190,5 +190,10 @@
   "classeurImportFailed": "Invalid classeur file",
   "moveToCategory": "Move to...",
   "moveUpAction": "Move up",
-  "moveDownAction": "Move down"
+  "moveDownAction": "Move down",
+  "profilesSection": "Profiles",
+  "addProfile": "Add profile",
+  "profileNameLabel": "Profile name",
+  "profileExists": "This profile already exists",
+  "deleteProfileConfirm": "Delete this profile and its classeur? This cannot be undone."
 }

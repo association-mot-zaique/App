@@ -190,5 +190,10 @@
   "classeurImportFailed": "Ungueltige Ordner-Datei",
   "moveToCategory": "Verschieben nach...",
   "moveUpAction": "Nach oben",
-  "moveDownAction": "Nach unten"
+  "moveDownAction": "Nach unten",
+  "profilesSection": "Profile",
+  "addProfile": "Profil hinzufuegen",
+  "profileNameLabel": "Profilname",
+  "profileExists": "Dieses Profil existiert bereits",
+  "deleteProfileConfirm": "Dieses Profil und seinen Ordner loeschen? Nicht rueckgaengig zu machen."
 }

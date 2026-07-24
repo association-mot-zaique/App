@@ -533,4 +533,20 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get moveDownAction => 'Sposta giu';
+
+  @override
+  String get profilesSection => 'Profili';
+
+  @override
+  String get addProfile => 'Aggiungi profilo';
+
+  @override
+  String get profileNameLabel => 'Nome del profilo';
+
+  @override
+  String get profileExists => 'Questo profilo esiste gia';
+
+  @override
+  String get deleteProfileConfirm =>
+      'Eliminare questo profilo e il suo raccoglitore? Azione irreversibile.';
 }

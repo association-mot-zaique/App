@@ -31,9 +31,10 @@ _Réf : A-10, §3.2 (aucune reconstruction en cas de changement d'appareil)_
 
 _Réf : A-11 · l'onglet est protégé par le PIN existant (§6.2)_
 
-- [ ] Créer / renommer / supprimer un profil
-- [ ] Classeur et réglages propres à chaque profil
-- [ ] Bascule entre profils depuis le mode aidant
+- [x] Créer / renommer / supprimer un profil — section « Profils » dans les Réglages (doublons refusés, dernier profil non supprimable)
+- [x] Classeur et réglages propres à chaque profil — classeur dans `profiles/<id>/classeur`, réglages sous une clé par profil ; le profil historique **garde ses emplacements existants** (aucune migration)
+- [x] Bascule entre profils depuis le mode aidant — la bascule re-cible les dépôts et recharge classeur + réglages
+- [ ] Valider le partage d'un appareil entre plusieurs personnes sur le terrain
 
 ### US-3.04 · Déplacement d'un pictogramme entre catégories `Should`
 > **En tant qu'**aidant, **je veux** déplacer un pictogramme d'une catégorie à une autre, **afin de** réorganiser le classeur.

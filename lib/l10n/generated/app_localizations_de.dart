@@ -537,4 +537,20 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get moveDownAction => 'Nach unten';
+
+  @override
+  String get profilesSection => 'Profile';
+
+  @override
+  String get addProfile => 'Profil hinzufuegen';
+
+  @override
+  String get profileNameLabel => 'Profilname';
+
+  @override
+  String get profileExists => 'Dieses Profil existiert bereits';
+
+  @override
+  String get deleteProfileConfirm =>
+      'Dieses Profil und seinen Ordner loeschen? Nicht rueckgaengig zu machen.';
 }

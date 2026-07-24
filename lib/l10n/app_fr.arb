@@ -190,5 +190,10 @@
   "classeurImportFailed": "Fichier de classeur invalide",
   "moveToCategory": "Deplacer vers...",
   "moveUpAction": "Monter",
-  "moveDownAction": "Descendre"
+  "moveDownAction": "Descendre",
+  "profilesSection": "Profils",
+  "addProfile": "Ajouter un profil",
+  "profileNameLabel": "Nom du profil",
+  "profileExists": "Ce profil existe deja",
+  "deleteProfileConfirm": "Supprimer ce profil et son classeur ? Action irreversible."
 }

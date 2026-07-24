@@ -7,8 +7,14 @@ import '../models/app_settings.dart';
 class AppSettingsRepository {
   AppSettingsRepository(this._preferences);
 
-  static const String _settingsKey = 'app_settings_v1';
+  static const String _baseKey = 'app_settings_v1';
   final SharedPreferences _preferences;
+
+  /// Suffix identifying the active profile (A-11). Empty for the historical
+  /// profile, so its existing settings are kept untouched.
+  String profileSuffix = '';
+
+  String get _settingsKey => '$_baseKey$profileSuffix';
 
   AppSettings read() {
     final rawJson = _preferences.getString(_settingsKey);

@@ -23,7 +23,9 @@ class LocalClasseurRepository {
     return LocalClasseurRepository(root);
   }
 
-  final Directory rootDir;
+  /// Root of the *active* profile's classeur. Mutable so switching profile
+  /// (A-11) re-points the same repository instead of rebuilding the graph.
+  Directory rootDir;
 
   File get _manifestFile => File('${rootDir.path}/manifest.json');
   Directory get _imagesDir => Directory('${rootDir.path}/images');

@@ -1123,6 +1123,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Move down'**
   String get moveDownAction;
+
+  /// No description provided for @profilesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Profiles'**
+  String get profilesSection;
+
+  /// No description provided for @addProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Add profile'**
+  String get addProfile;
+
+  /// No description provided for @profileNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile name'**
+  String get profileNameLabel;
+
+  /// No description provided for @profileExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This profile already exists'**
+  String get profileExists;
+
+  /// No description provided for @deleteProfileConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this profile and its classeur? This cannot be undone.'**
+  String get deleteProfileConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -532,4 +532,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moveDownAction => 'Move down';
+
+  @override
+  String get profilesSection => 'Profiles';
+
+  @override
+  String get addProfile => 'Add profile';
+
+  @override
+  String get profileNameLabel => 'Profile name';
+
+  @override
+  String get profileExists => 'This profile already exists';
+
+  @override
+  String get deleteProfileConfirm =>
+      'Delete this profile and its classeur? This cannot be undone.';
 }

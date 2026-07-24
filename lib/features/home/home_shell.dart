@@ -15,6 +15,7 @@ import '../communication/communication_screen.dart';
 import '../communication/phrase_book_controller.dart';
 import '../favorites/favorites_controller.dart';
 import '../favorites/favorites_screen.dart';
+import '../profiles/profile_controller.dart';
 import '../settings/settings_controller.dart';
 import '../settings/settings_screen.dart';
 
@@ -26,6 +27,7 @@ class HomeShell extends StatefulWidget {
     required this.phraseBookController,
     required this.settingsController,
     required this.classeurController,
+    required this.profileController,
     required this.pinRepository,
     required this.speechService,
     required this.localBackupService,
@@ -38,6 +40,7 @@ class HomeShell extends StatefulWidget {
   final PhraseBookController phraseBookController;
   final SettingsController settingsController;
   final LocalClasseurController classeurController;
+  final ProfileController profileController;
   final PinRepository pinRepository;
   final SpeechService speechService;
   final LocalBackupService localBackupService;
@@ -229,6 +232,7 @@ class _HomeShellState extends State<HomeShell> {
           SettingsScreen(
             settingsController: widget.settingsController,
             classeurController: widget.classeurController,
+            profileController: widget.profileController,
             searchService: widget.searchService,
             searchCacheRepository: widget.searchCacheRepository,
             localBackupService: widget.localBackupService,
