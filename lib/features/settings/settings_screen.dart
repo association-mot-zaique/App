@@ -211,10 +211,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Text(l10n.automaticOption),
                     ),
                     for (final count in const [2, 3, 4, 5, 6])
-                      DropdownMenuItem(
-                        value: count,
-                        child: Text('$count'),
-                      ),
+                      DropdownMenuItem(value: count, child: Text('$count')),
                   ],
                   onChanged: (value) {
                     if (value != null) {
@@ -227,8 +224,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.showPictogramLabel),
                   value: settings.showPictogramLabel,
-                  onChanged:
-                      widget.settingsController.updateShowPictogramLabel,
+                  onChanged: widget.settingsController.updateShowPictogramLabel,
                 ),
                 SwitchListTile.adaptive(
                   contentPadding: EdgeInsets.zero,
@@ -621,7 +617,8 @@ Future<String?> _promptProfileName(
 }) async {
   final result = await showDialog<String>(
     context: context,
-    builder: (_) => _ProfileNameDialog(title: title, initialValue: initialValue),
+    builder: (_) =>
+        _ProfileNameDialog(title: title, initialValue: initialValue),
   );
   if (result == null || result.isEmpty) {
     return null;
@@ -640,8 +637,9 @@ class _ProfileNameDialog extends StatefulWidget {
 }
 
 class _ProfileNameDialogState extends State<_ProfileNameDialog> {
-  late final TextEditingController _controller =
-      TextEditingController(text: widget.initialValue);
+  late final TextEditingController _controller = TextEditingController(
+    text: widget.initialValue,
+  );
 
   @override
   void dispose() {

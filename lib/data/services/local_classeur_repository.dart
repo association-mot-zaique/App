@@ -129,8 +129,9 @@ class LocalClasseurRepository {
     }
 
     // Validate before touching anything on disk.
-    final manifestEntries =
-        archive.files.where((f) => f.name == 'manifest.json').toList();
+    final manifestEntries = archive.files
+        .where((f) => f.name == 'manifest.json')
+        .toList();
     if (manifestEntries.isEmpty) {
       return false;
     }

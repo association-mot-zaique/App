@@ -105,9 +105,9 @@ class PictogramCard extends StatelessWidget {
                       (tint != null
                               ? FilledButton.styleFrom(
                                   backgroundColor: tint.withValues(alpha: 0.2),
-                                  foregroundColor: HSLColor.fromColor(tint)
-                                      .withLightness(0.25)
-                                      .toColor(),
+                                  foregroundColor: HSLColor.fromColor(
+                                    tint,
+                                  ).withLightness(0.25).toColor(),
                                 )
                               : FilledButton.styleFrom())
                           .copyWith(
@@ -137,10 +137,7 @@ class PictogramCard extends StatelessWidget {
                               : FilledButton.tonalIcon(
                                   onPressed: onSelect,
                                   style: addButtonStyle,
-                                  icon: const Icon(
-                                    Icons.add_rounded,
-                                    size: 18,
-                                  ),
+                                  icon: const Icon(Icons.add_rounded, size: 18),
                                   label: Text(
                                     phraseActionLabel,
                                     maxLines: 1,

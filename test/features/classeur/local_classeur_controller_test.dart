@@ -10,8 +10,9 @@ void main() {
 
   setUp(() async {
     tempDir = Directory.systemTemp.createTempSync('classeur_ctrl_test');
-    final repository =
-        LocalClasseurRepository(Directory('${tempDir.path}/classeur'));
+    final repository = LocalClasseurRepository(
+      Directory('${tempDir.path}/classeur'),
+    );
     controller = LocalClasseurController(repository);
     await controller.load();
   });
@@ -81,8 +82,10 @@ void main() {
       final picto = controller.classeur.pictograms.single;
       expect(picto.label, 'manger');
       expect(picto.categoryId, categoryId);
-      expect(File(controller.absoluteImagePath(picto.imagePath)).existsSync(),
-          isTrue);
+      expect(
+        File(controller.absoluteImagePath(picto.imagePath)).existsSync(),
+        isTrue,
+      );
     });
 
     test('rename a pictogram', () async {
@@ -127,8 +130,9 @@ void main() {
         imageBytes: [1],
         extension: 'png',
       );
-      final imagePath =
-          controller.absoluteImagePath(controller.classeur.pictograms.single.imagePath);
+      final imagePath = controller.absoluteImagePath(
+        controller.classeur.pictograms.single.imagePath,
+      );
 
       await controller.deleteCategory(categoryId);
       expect(controller.classeur.pictograms, isEmpty);
@@ -173,10 +177,11 @@ void main() {
 
       await controller.movePictogramBy(third, -1); // c remonte d'un cran
 
-      expect(
-        controller.classeur.pictogramsIn(categoryId).map((p) => p.label),
-        ['a', 'c', 'b'],
-      );
+      expect(controller.classeur.pictogramsIn(categoryId).map((p) => p.label), [
+        'a',
+        'c',
+        'b',
+      ]);
     });
 
     test('reorder categories (US-3.05)', () async {
@@ -186,10 +191,11 @@ void main() {
 
       await controller.reorderCategories(2, 0); // C passe en tete
 
-      expect(
-        controller.classeur.categoriesSorted.map((c) => c.name),
-        ['C', 'A', 'B'],
-      );
+      expect(controller.classeur.categoriesSorted.map((c) => c.name), [
+        'C',
+        'A',
+        'B',
+      ]);
     });
 
     test('changes persist across a reload', () async {

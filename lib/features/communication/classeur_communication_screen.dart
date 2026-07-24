@@ -68,8 +68,9 @@ class _ClasseurCommunicationScreenState
     return Pictogram(
       id: _localIdOffset + picto.id,
       label: picto.label,
-      localImagePath:
-          widget.classeurController.absoluteImagePath(picto.imagePath),
+      localImagePath: widget.classeurController.absoluteImagePath(
+        picto.imagePath,
+      ),
     );
   }
 
@@ -107,19 +108,22 @@ class _ClasseurCommunicationScreenState
 
     return SafeArea(
       child: AnimatedBuilder(
-        animation: Listenable.merge(
-          [widget.classeurController, widget.phraseBookController],
-        ),
+        animation: Listenable.merge([
+          widget.classeurController,
+          widget.phraseBookController,
+        ]),
         builder: (context, _) {
           final settings = widget.settingsController.settings;
-          final categories = widget.classeurController.classeur.categoriesSorted;
+          final categories =
+              widget.classeurController.classeur.categoriesSorted;
           if (categories.isEmpty) {
             return const SizedBox.shrink();
           }
           final index = _selectedCategoryIndex.clamp(0, categories.length - 1);
           final selectedCategory = categories[index];
-          final pictograms =
-              widget.classeurController.classeur.pictogramsIn(selectedCategory.id);
+          final pictograms = widget.classeurController.classeur.pictogramsIn(
+            selectedCategory.id,
+          );
 
           return Padding(
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
@@ -236,10 +240,9 @@ class _OwnedPictogramCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
                 ),
               ],
             ],

@@ -96,7 +96,9 @@ class LocalClasseur {
       label: label,
       imagePath: imagePath,
       categoryId: categoryId,
-      sortOrder: _nextSortOrder(pictogramsIn(categoryId).map((p) => p.sortOrder)),
+      sortOrder: _nextSortOrder(
+        pictogramsIn(categoryId).map((p) => p.sortOrder),
+      ),
       isFavorite: isFavorite,
     );
     return (
@@ -143,7 +145,9 @@ class LocalClasseur {
         if (item is Map<String, dynamic>) {
           categories.add(LocalCategory.fromJson(item));
         } else if (item is Map) {
-          categories.add(LocalCategory.fromJson(Map<String, dynamic>.from(item)));
+          categories.add(
+            LocalCategory.fromJson(Map<String, dynamic>.from(item)),
+          );
         }
       }
     }
@@ -154,7 +158,9 @@ class LocalClasseur {
         if (item is Map<String, dynamic>) {
           pictograms.add(LocalPictogram.fromJson(item));
         } else if (item is Map) {
-          pictograms.add(LocalPictogram.fromJson(Map<String, dynamic>.from(item)));
+          pictograms.add(
+            LocalPictogram.fromJson(Map<String, dynamic>.from(item)),
+          );
         }
       }
     }

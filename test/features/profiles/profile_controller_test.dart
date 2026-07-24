@@ -23,8 +23,9 @@ void main() {
     final preferences = await SharedPreferences.getInstance();
     tempDir = Directory.systemTemp.createTempSync('profiles_test');
 
-    final classeurRepository =
-        LocalClasseurRepository(Directory('${tempDir.path}/placeholder'));
+    final classeurRepository = LocalClasseurRepository(
+      Directory('${tempDir.path}/placeholder'),
+    );
     final settingsRepository = AppSettingsRepository(preferences);
     classeurController = LocalClasseurController(classeurRepository);
     settingsController = SettingsController(settingsRepository);
@@ -82,10 +83,7 @@ void main() {
       final id = profiles.activeId;
 
       expect(await profiles.renameProfile(id, 'Leonie'), isTrue);
-      expect(
-        profiles.profiles.firstWhere((p) => p.id == id).name,
-        'Leonie',
-      );
+      expect(profiles.profiles.firstWhere((p) => p.id == id).name, 'Leonie');
     });
 
     test('deleting the active profile falls back to another one', () async {

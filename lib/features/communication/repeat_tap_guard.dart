@@ -15,9 +15,7 @@ class RepeatTapGuard {
   /// fast repeat of the same [id]. A different pictogram is always accepted.
   bool accept(int id, {DateTime? now}) {
     final at = now ?? DateTime.now();
-    if (_lastId == id &&
-        _lastAt != null &&
-        at.difference(_lastAt!) < window) {
+    if (_lastId == id && _lastAt != null && at.difference(_lastAt!) < window) {
       return false;
     }
     _lastId = id;

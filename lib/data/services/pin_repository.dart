@@ -312,9 +312,7 @@ class PinRepository {
         ..[2] = (block >> 8) & 0xff
         ..[3] = block & 0xff;
 
-      var previous = hmac
-          .convert(<int>[...salt, ...blockIndexBytes])
-          .bytes;
+      var previous = hmac.convert(<int>[...salt, ...blockIndexBytes]).bytes;
       final accumulated = Uint8List.fromList(previous);
 
       for (var iteration = 1; iteration < iterations; iteration++) {
@@ -324,11 +322,7 @@ class PinRepository {
         }
       }
 
-      result.setRange(
-        (block - 1) * blockSize,
-        block * blockSize,
-        accumulated,
-      );
+      result.setRange((block - 1) * blockSize, block * blockSize, accumulated);
     }
 
     return Uint8List.sublistView(result, 0, keyLength);

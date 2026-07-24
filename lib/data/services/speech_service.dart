@@ -1,11 +1,7 @@
 import 'package:flutter_tts/flutter_tts.dart';
 
 abstract class SpeechService {
-  Future<void> speak(
-    String text, {
-    required String languageCode,
-    double rate,
-  });
+  Future<void> speak(String text, {required String languageCode, double rate});
   Future<void> stop();
 }
 

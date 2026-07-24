@@ -221,9 +221,9 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
         return;
       }
       setState(() => _isImporting = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.serviceUnavailable)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.serviceUnavailable)));
     }
   }
 
@@ -303,8 +303,9 @@ class _ArasaacImportScreenState extends State<ArasaacImportScreen> {
                           child: CachedNetworkImage(
                             imageUrl: pictogram.imageUrl(size: 300),
                             fit: BoxFit.contain,
-                            placeholder: (_, _) =>
-                                const Center(child: CircularProgressIndicator()),
+                            placeholder: (_, _) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                             errorWidget: (_, _, _) =>
                                 const Icon(Icons.broken_image_outlined),
                           ),

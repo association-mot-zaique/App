@@ -255,7 +255,8 @@ Per qualsiasi domanda: contact@motzaique.fr''';
 
   // ── Privacy Policy ────────────────────────────────────────────
 
-  static const _privacyPolicyFr = '''Politique de confidentialit\u00e9 \u2013 MOT-ZAIQUE
+  static const _privacyPolicyFr =
+      '''Politique de confidentialit\u00e9 \u2013 MOT-ZAIQUE
 
 Derni\u00e8re mise \u00e0 jour : mars 2026
 
@@ -367,7 +368,8 @@ Contact
 
 For any questions regarding this privacy policy: contact@motzaique.fr''';
 
-  static const _privacyPolicyEs = '''Pol\u00edtica de privacidad \u2013 MOT-ZAIQUE
+  static const _privacyPolicyEs =
+      '''Pol\u00edtica de privacidad \u2013 MOT-ZAIQUE
 
 \u00daltima actualizaci\u00f3n: marzo de 2026
 

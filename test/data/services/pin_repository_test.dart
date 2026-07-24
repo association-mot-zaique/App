@@ -77,14 +77,8 @@ void main() {
         expect(valid.status, PinValidationStatus.success);
 
         expect(preferences.getString('favorites_pin_hash_v2'), isNull);
-        expect(
-          preferences.getString('favorites_pin_hash_v3'),
-          isNot(isEmpty),
-        );
-        expect(
-          preferences.getString('favorites_pin_salt_v3'),
-          isNot(isEmpty),
-        );
+        expect(preferences.getString('favorites_pin_hash_v3'), isNot(isEmpty));
+        expect(preferences.getString('favorites_pin_salt_v3'), isNot(isEmpty));
 
         final secondCheck = await repository.verifyPin('4321');
         expect(secondCheck.status, PinValidationStatus.success);

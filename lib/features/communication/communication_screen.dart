@@ -401,8 +401,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                 child: Text(l10n.cancel),
               ),
               FilledButton(
-                onPressed: () =>
-                    Navigator.of(context).pop(nameController.text),
+                onPressed: () => Navigator.of(context).pop(nameController.text),
                 child: Text(l10n.save),
               ),
             ],
@@ -641,10 +640,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
         ),
         const SizedBox(height: 8),
         _buildCategoriesRow(l10n, categories),
-        if (_showSearch) ...[
-          const SizedBox(height: 8),
-          _buildSearchRow(l10n),
-        ],
+        if (_showSearch) ...[const SizedBox(height: 8), _buildSearchRow(l10n)],
         const SizedBox(height: 8),
         if (settings.offlineOnly)
           Padding(

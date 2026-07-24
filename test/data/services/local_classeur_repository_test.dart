@@ -43,19 +43,21 @@ void main() {
       expect(restored.pictograms.single.label, 'manger');
     });
 
-    test('storeImageBytes writes the file and returns a relative path',
-        () async {
-      final relativePath = await repository.storeImageBytes(
-        [1, 2, 3, 4],
-        pictogramId: 3,
-        extension: 'png',
-      );
+    test(
+      'storeImageBytes writes the file and returns a relative path',
+      () async {
+        final relativePath = await repository.storeImageBytes(
+          [1, 2, 3, 4],
+          pictogramId: 3,
+          extension: 'png',
+        );
 
-      expect(relativePath, 'images/picto_3.png');
-      final file = File(repository.absoluteImagePath(relativePath));
-      expect(await file.exists(), isTrue);
-      expect(await file.readAsBytes(), [1, 2, 3, 4]);
-    });
+        expect(relativePath, 'images/picto_3.png');
+        final file = File(repository.absoluteImagePath(relativePath));
+        expect(await file.exists(), isTrue);
+        expect(await file.readAsBytes(), [1, 2, 3, 4]);
+      },
+    );
 
     test('storeImageBytes normalizes the extension', () async {
       final relativePath = await repository.storeImageBytes(
@@ -73,62 +75,70 @@ void main() {
         extension: 'png',
       );
       await repository.deleteImage(relativePath);
-      expect(File(repository.absoluteImagePath(relativePath)).existsSync(),
-          isFalse);
+      expect(
+        File(repository.absoluteImagePath(relativePath)).existsSync(),
+        isFalse,
+      );
 
       // Should not throw on a missing file.
       await repository.deleteImage('images/does_not_exist.png');
     });
 
-    test('export then import round-trips categories, pictos and images',
-        () async {
-      // Build a classeur with one category, one pictogram and its image.
-      var classeur = LocalClasseur.empty();
-      final category = classeur.addCategory('Maison');
-      classeur = category.classeur;
-      final imagePath = await repository.storeImageBytes(
-        [1, 2, 3, 4],
-        pictogramId: classeur.nextPictogramId,
-        extension: 'png',
-      );
-      classeur = classeur
-          .addPictogram(
-            label: 'porte',
-            imagePath: imagePath,
-            categoryId: category.category.id,
-          )
-          .classeur;
-      await repository.save(classeur);
+    test(
+      'export then import round-trips categories, pictos and images',
+      () async {
+        // Build a classeur with one category, one pictogram and its image.
+        var classeur = LocalClasseur.empty();
+        final category = classeur.addCategory('Maison');
+        classeur = category.classeur;
+        final imagePath = await repository.storeImageBytes(
+          [1, 2, 3, 4],
+          pictogramId: classeur.nextPictogramId,
+          extension: 'png',
+        );
+        classeur = classeur
+            .addPictogram(
+              label: 'porte',
+              imagePath: imagePath,
+              categoryId: category.category.id,
+            )
+            .classeur;
+        await repository.save(classeur);
 
-      final archive = await repository.exportToZipBytes();
-      expect(archive, isNotEmpty);
+        final archive = await repository.exportToZipBytes();
+        expect(archive, isNotEmpty);
 
-      // Import into a *different* root, as if on another device.
-      final otherRoot = Directory('${tempDir.path}/other');
-      final other = LocalClasseurRepository(otherRoot);
-      final imported = await other.importFromZipBytes(archive);
-      expect(imported, isTrue);
+        // Import into a *different* root, as if on another device.
+        final otherRoot = Directory('${tempDir.path}/other');
+        final other = LocalClasseurRepository(otherRoot);
+        final imported = await other.importFromZipBytes(archive);
+        expect(imported, isTrue);
 
-      final restored = await other.load();
-      expect(restored.categories.single.name, 'Maison');
-      final picto = restored.pictograms.single;
-      expect(picto.label, 'porte');
-      // The image travelled with the archive.
-      final restoredImage = File(other.absoluteImagePath(picto.imagePath));
-      expect(restoredImage.existsSync(), isTrue);
-      expect(await restoredImage.readAsBytes(), [1, 2, 3, 4]);
-    });
+        final restored = await other.load();
+        expect(restored.categories.single.name, 'Maison');
+        final picto = restored.pictograms.single;
+        expect(picto.label, 'porte');
+        // The image travelled with the archive.
+        final restoredImage = File(other.absoluteImagePath(picto.imagePath));
+        expect(restoredImage.existsSync(), isTrue);
+        expect(await restoredImage.readAsBytes(), [1, 2, 3, 4]);
+      },
+    );
 
-    test('importing a non-classeur archive is refused and changes nothing',
-        () async {
-      await repository.save(LocalClasseur.empty().addCategory('Garde').classeur);
+    test(
+      'importing a non-classeur archive is refused and changes nothing',
+      () async {
+        await repository.save(
+          LocalClasseur.empty().addCategory('Garde').classeur,
+        );
 
-      final refused = await repository.importFromZipBytes([0, 1, 2, 3]);
+        final refused = await repository.importFromZipBytes([0, 1, 2, 3]);
 
-      expect(refused, isFalse);
-      final untouched = await repository.load();
-      expect(untouched.categories.single.name, 'Garde');
-    });
+        expect(refused, isFalse);
+        final untouched = await repository.load();
+        expect(untouched.categories.single.name, 'Garde');
+      },
+    );
 
     test('load recovers from a corrupted manifest', () async {
       final manifest = File('${repository.rootDir.path}/manifest.json');

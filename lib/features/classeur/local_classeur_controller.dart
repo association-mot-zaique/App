@@ -69,8 +69,9 @@ class LocalClasseurController extends ChangeNotifier {
 
     _classeur = _classeur.copyWith(
       categories: _classeur.categories.where((c) => c.id != id).toList(),
-      pictograms:
-          _classeur.pictograms.where((p) => p.categoryId != id).toList(),
+      pictograms: _classeur.pictograms
+          .where((p) => p.categoryId != id)
+          .toList(),
     );
     await _persist();
 
@@ -100,7 +101,11 @@ class LocalClasseurController extends ChangeNotifier {
       extension: extension,
     );
     _classeur = _classeur
-        .addPictogram(label: trimmed, imagePath: imagePath, categoryId: categoryId)
+        .addPictogram(
+          label: trimmed,
+          imagePath: imagePath,
+          categoryId: categoryId,
+        )
         .classeur;
     await _persist();
   }

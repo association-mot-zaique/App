@@ -25,8 +25,7 @@ class Pictogram {
   /// network (CDC 6.3).
   final String? localImagePath;
 
-  bool get isLocal =>
-      localImagePath != null && localImagePath!.isNotEmpty;
+  bool get isLocal => localImagePath != null && localImagePath!.isNotEmpty;
 
   factory Pictogram.fromArasaacJson(
     Map<String, dynamic> json, {

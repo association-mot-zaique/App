@@ -67,10 +67,7 @@ class FavoritesScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Chip(
-                          avatar: const Icon(
-                            Icons.wifi_off_rounded,
-                            size: 18,
-                          ),
+                          avatar: const Icon(Icons.wifi_off_rounded, size: 18),
                           label: Text(l10n.offlineModeChip),
                         ),
                       ),

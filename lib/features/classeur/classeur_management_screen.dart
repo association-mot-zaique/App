@@ -77,8 +77,9 @@ class ClasseurManagementScreen extends StatelessWidget {
             onReorderItem: controller.reorderCategories,
             itemBuilder: (context, index) {
               final category = categories[index];
-              final count =
-                  controller.classeur.pictogramsIn(category.id).length;
+              final count = controller.classeur
+                  .pictogramsIn(category.id)
+                  .length;
               return ListTile(
                 key: ValueKey(category.id),
                 leading: const Icon(Icons.folder_outlined),
@@ -93,8 +94,14 @@ class ClasseurManagementScreen extends StatelessWidget {
                     }
                   },
                   itemBuilder: (context) => [
-                    PopupMenuItem(value: 'rename', child: Text(l10n.renameAction)),
-                    PopupMenuItem(value: 'delete', child: Text(l10n.deleteAction)),
+                    PopupMenuItem(
+                      value: 'rename',
+                      child: Text(l10n.renameAction),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Text(l10n.deleteAction),
+                    ),
                   ],
                 ),
                 onTap: () {
@@ -141,9 +148,9 @@ class ClasseurManagementScreen extends StatelessWidget {
     if (name != null && name.isNotEmpty) {
       final added = await controller.addCategory(name);
       if (context.mounted && !added) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.categoryExists)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.categoryExists)));
       }
     }
   }
@@ -162,9 +169,9 @@ class ClasseurManagementScreen extends StatelessWidget {
     if (name != null) {
       final renamed = await controller.renameCategory(category.id, name);
       if (context.mounted && !renamed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.categoryExists)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.categoryExists)));
       }
     }
   }
@@ -196,9 +203,9 @@ class ClasseurManagementScreen extends StatelessWidget {
     if (!context.mounted || path == null) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.classeurExported)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.classeurExported)));
   }
 
   /// Imports a classeur zip, replacing the current one after confirmation
@@ -296,11 +303,11 @@ class _CategoryPictogramsScreen extends StatelessWidget {
                   sliver: SliverGrid(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 160,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.8,
-                    ),
+                          maxCrossAxisExtent: 160,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 0.8,
+                        ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => _PictogramTile(
                         controller: controller,
@@ -402,7 +409,9 @@ class _CategoryPictogramsScreen extends StatelessWidget {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context).pictogramAddedNotice)),
+      SnackBar(
+        content: Text(AppLocalizations.of(context).pictogramAddedNotice),
+      ),
     );
   }
 
@@ -434,9 +443,9 @@ class _CategoryPictogramsScreen extends StatelessWidget {
     if (!context.mounted) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.pictogramAddedNotice)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.pictogramAddedNotice)));
   }
 
   static String _extensionOf(String name) {
@@ -504,10 +513,22 @@ class _PictogramTile extends StatelessWidget {
                 },
                 itemBuilder: (context) => [
                   PopupMenuItem(value: 'up', child: Text(l10n.moveUpAction)),
-                  PopupMenuItem(value: 'down', child: Text(l10n.moveDownAction)),
-                  PopupMenuItem(value: 'move', child: Text(l10n.moveToCategory)),
-                  PopupMenuItem(value: 'rename', child: Text(l10n.renameAction)),
-                  PopupMenuItem(value: 'delete', child: Text(l10n.deleteAction)),
+                  PopupMenuItem(
+                    value: 'down',
+                    child: Text(l10n.moveDownAction),
+                  ),
+                  PopupMenuItem(
+                    value: 'move',
+                    child: Text(l10n.moveToCategory),
+                  ),
+                  PopupMenuItem(
+                    value: 'rename',
+                    child: Text(l10n.renameAction),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Text(l10n.deleteAction),
+                  ),
                 ],
               ),
             ],
@@ -532,7 +553,10 @@ class _PictogramTile extends StatelessWidget {
 
   Future<void> _delete(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    final confirmed = await _confirmDelete(context, l10n.deletePictogramConfirm);
+    final confirmed = await _confirmDelete(
+      context,
+      l10n.deletePictogramConfirm,
+    );
     if (confirmed) {
       await controller.deletePictogram(pictogram.id);
     }
@@ -590,8 +614,7 @@ class _AddCategoryDialogState extends State<_AddCategoryDialog> {
   void _pick(String value) {
     setState(() {
       _controller.text = value;
-      _controller.selection =
-          TextSelection.collapsed(offset: value.length);
+      _controller.selection = TextSelection.collapsed(offset: value.length);
     });
   }
 
@@ -611,8 +634,7 @@ class _AddCategoryDialogState extends State<_AddCategoryDialog> {
               autofocus: true,
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(labelText: l10n.categoryNameLabel),
-              onSubmitted: (value) =>
-                  Navigator.of(context).pop(value.trim()),
+              onSubmitted: (value) => Navigator.of(context).pop(value.trim()),
             ),
             const SizedBox(height: 14),
             Text(
@@ -663,10 +685,7 @@ class _EmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(message, textAlign: TextAlign.center),
-            if (action != null) ...[
-              const SizedBox(height: 16),
-              action!,
-            ],
+            if (action != null) ...[const SizedBox(height: 16), action!],
           ],
         ),
       ),
@@ -714,8 +733,9 @@ class _TextPromptDialog extends StatefulWidget {
 }
 
 class _TextPromptDialogState extends State<_TextPromptDialog> {
-  late final TextEditingController _controller =
-      TextEditingController(text: widget.initialValue);
+  late final TextEditingController _controller = TextEditingController(
+    text: widget.initialValue,
+  );
 
   @override
   void dispose() {
