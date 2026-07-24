@@ -41,6 +41,13 @@ class AppSettings {
   final String localeCode;
   final bool onlyAacPictograms;
   final bool onlySchematicPictograms;
+
+  /// Minimum download count. **Always 0 in practice**: the ARASAAC search
+  /// endpoint reports `downloads: 0` for every pictogram, so any positive
+  /// threshold discards *all* results and blanks the communication screen. The
+  /// setting is therefore no longer exposed, and stored values are reset by the
+  /// schema v3 migration. Kept in the model so the filter can come back if
+  /// ARASAAC ever serves real counts.
   final int minDownloads;
 
   /// Saved sentences (C-11..C-13) are hidden from the communication interface
@@ -103,8 +110,9 @@ class AppSettings {
 
   /// Bumped when the persisted shape changes so old data can be migrated.
   /// v2 introduced the "automatic" locale (empty [localeCode]); v1 defaulted
-  /// to Spanish and had no automatic option.
-  static const int schemaVersion = 2;
+  /// to Spanish and had no automatic option. v3 resets [minDownloads], which
+  /// could only ever blank the communication screen.
+  static const int schemaVersion = 3;
 
   Map<String, dynamic> toJson() {
     return {
@@ -133,6 +141,16 @@ class AppSettings {
     if (storedVersion < 2 && localeCode == 'es') {
       localeCode = '';
     }
+
+    // Migration v2 -> v3: a positive minDownloads discarded every ARASAAC
+    // result (the API always reports 0 downloads), leaving the communication
+    // screen empty with no explanation. Reset it so an affected install
+    // recovers on its own.
+    var minDownloads = json['minDownloads'] as int? ?? 0;
+    if (storedVersion < 3) {
+      minDownloads = 0;
+    }
+
     return AppSettings(
       pictogramScale: (json['pictogramScale'] as num?)?.toDouble() ?? 1.0,
       highContrast: json['highContrast'] as bool? ?? false,
@@ -142,7 +160,7 @@ class AppSettings {
       onlyAacPictograms: json['onlyAacPictograms'] as bool? ?? false,
       onlySchematicPictograms:
           json['onlySchematicPictograms'] as bool? ?? false,
-      minDownloads: json['minDownloads'] as int? ?? 0,
+      minDownloads: minDownloads,
       savedPhrasesEnabled: json['savedPhrasesEnabled'] as bool? ?? false,
       speechRate: (json['speechRate'] as num?)?.toDouble() ?? 0.42,
       gridColumns: (json['gridColumns'] as num?)?.toInt() ?? 0,

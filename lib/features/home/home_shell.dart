@@ -155,6 +155,28 @@ class _HomeShellState extends State<HomeShell> {
     ).showSnackBar(SnackBar(content: Text(l10n.pinChanged)));
   }
 
+  /// Opens the ARASAAC explorer over the classeur. It shares the bande-phrase,
+  /// so a pictogram picked here lands in the same sentence. Kept reachable
+  /// until the IME arbitrates its removal (US-1.14 / US-2.03).
+  void _openArasaacExplorer() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context).exploreArasaac),
+          ),
+          body: CommunicationScreen(
+            searchService: widget.searchService,
+            favoritesController: widget.favoritesController,
+            phraseBookController: widget.phraseBookController,
+            settingsController: widget.settingsController,
+            speechService: widget.speechService,
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _refreshAfterBackupRestore() async {
     // A backup carries the profile list, so reload through the profile
     // controller: it re-points every per-user repository, then reloads
@@ -221,6 +243,7 @@ class _HomeShellState extends State<HomeShell> {
                 phraseBookController: widget.phraseBookController,
                 settingsController: widget.settingsController,
                 speechService: widget.speechService,
+                onOpenExplorer: _openArasaacExplorer,
               );
             },
           ),

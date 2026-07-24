@@ -26,3 +26,4 @@
 - [x] Vérifier la suite de tests (31 tests au vert)
 - [x] Identifier l'écart de conception structurant (§6.3 — explorateur ARASAAC vs classeur possédé)
 - [x] Rédiger la note d'audit (sections 6.1 à 6.4 du CDC)
+- [x] Filtre « téléchargements minimum » retiré — l'API ARASAAC renvoie `downloads: 0` pour **tous** les pictogrammes, donc toute valeur positive vidait l'écran de communication sans aucun message. Curseur supprimé des Réglages + migration de schéma v3 qui remet la valeur à 0 sur les installations touchées

@@ -94,5 +94,27 @@ void main() {
       expect(settings.localeCode, 'es');
       expect(settings.locale, const Locale('es'));
     });
+
+    test('migrates v2 minDownloads back to 0', () async {
+      // A positive threshold discarded every ARASAAC result (the API always
+      // reports 0 downloads), leaving an empty communication screen.
+      SharedPreferences.setMockInitialValues({
+        'app_settings_v1': '{"schemaVersion":2,"minDownloads":250}',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final repository = AppSettingsRepository(preferences);
+
+      expect(repository.read().minDownloads, 0);
+    });
+
+    test('keeps minDownloads once the data is on v3', () async {
+      SharedPreferences.setMockInitialValues({
+        'app_settings_v1': '{"schemaVersion":3,"minDownloads":250}',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final repository = AppSettingsRepository(preferences);
+
+      expect(repository.read().minDownloads, 250);
+    });
   });
 }

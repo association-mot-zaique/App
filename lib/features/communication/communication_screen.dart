@@ -883,6 +883,10 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     }
 
     if (_results.isEmpty) {
+      // A search that ran and found nothing is not the same as no search yet:
+      // saying "search a word" hides the fact that a filter may be to blame.
+      final hasSearched =
+          _lastCategoryPreset != null || _lastStandaloneQuery.isNotEmpty;
       return RefreshIndicator(
         onRefresh: _refreshCurrent,
         child: ListView(
@@ -890,7 +894,11 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
           children: [
             SizedBox(
               height: 220,
-              child: _EmptySearchView(title: l10n.searchEmptyTitle),
+              child: _EmptySearchView(
+                title: hasSearched
+                    ? l10n.searchNoResultTitle
+                    : l10n.searchEmptyTitle,
+              ),
             ),
           ],
         ),

@@ -146,8 +146,10 @@ _Réf : §6.3, §6.4 (« le classeur local devient le cœur du lot 1 ») · **li
 
 - [x] `Pictogram` porte une image locale optionnelle (`localImagePath`) ; rendu disque via `PictogramImage`
 - [x] `ClasseurCommunicationScreen` : catégories possédées → pictos du disque, bande-phrase partagée + TTS (C-06/C-07)
-- [x] L'onglet Communiquer affiche le classeur dès qu'il contient une catégorie ; sinon repli sur l'explorateur ARASAAC (amorçage)
+- [x] L'onglet Communiquer affiche le classeur dès qu'il contient un pictogramme ; sinon repli sur l'explorateur ARASAAC (amorçage)
 - [x] Aucune requête réseau pour parcourir/afficher le classeur possédé
+- [x] L'explorateur ARASAAC reste atteignable depuis le classeur — pastille « Explorer » en fin de barre de catégories, bande-phrase partagée. La bascule ne doit rien retirer avant l'arbitrage IME (voir point suivant)
+- [x] Les catégories vides ne sont plus affichées en mode communication — elles menaient à un écran vide, lu comme une app cassée
 - [ ] À terme : retirer complètement l'explorateur ARASAAC du mode communication (décision de bascule à valider avec l'IME — Lot 2)
 
 ---

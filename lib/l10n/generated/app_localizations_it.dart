@@ -35,6 +35,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nessun risultato in cache per questa parola.';
 
   @override
+  String get searchNoResultTitle =>
+      'Nessun pittogramma per questa ricerca. Prova un\'altra parola o controlla i filtri nelle impostazioni.';
+
+  @override
   String get searchEmptyTitle => 'Cerca una parola per caricare i pittogrammi';
 
   @override
@@ -444,6 +448,9 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get categoryEmptyPictograms =>
       'Nessun pittogramma in questa categoria.';
+
+  @override
+  String get exploreArasaac => 'Esplora';
 
   @override
   String get importFromArasaac => 'Aggiungi da ARASAAC';

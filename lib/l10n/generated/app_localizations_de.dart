@@ -35,6 +35,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Keine zwischengespeicherten Ergebnisse fuer dieses Wort.';
 
   @override
+  String get searchNoResultTitle =>
+      'Kein Piktogramm fur diese Suche. Versuchen Sie ein anderes Wort oder prufen Sie die Filter in den Einstellungen.';
+
+  @override
   String get searchEmptyTitle => 'Suchen Sie ein Wort, um Piktogramme zu laden';
 
   @override
@@ -448,6 +452,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get categoryEmptyPictograms =>
       'Noch keine Piktogramme in dieser Kategorie.';
+
+  @override
+  String get exploreArasaac => 'Entdecken';
 
   @override
   String get importFromArasaac => 'Aus ARASAAC hinzufuegen';

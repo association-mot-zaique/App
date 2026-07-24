@@ -313,21 +313,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onChanged:
                       widget.settingsController.updateOnlySchematicPictograms,
                 ),
-                Text(
-                  '${l10n.minDownloadsFilter}: ${settings.minDownloads}',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                Slider(
-                  min: 0,
-                  max: 300,
-                  divisions: 12,
-                  value: settings.minDownloads.toDouble(),
-                  label: settings.minDownloads.toString(),
-                  onChanged: (value) => widget.settingsController
-                      .updateMinDownloads(value.toInt()),
-                ),
+                // The "minimum downloads" slider used to sit here. It is gone:
+                // ARASAAC reports 0 downloads for every pictogram, so any
+                // positive value silently emptied the whole communication
+                // screen. See AppSettings.minDownloads.
                 const SizedBox(height: 14),
                 Card(
                   child: Padding(

@@ -34,6 +34,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get offlineNoCacheNotice => 'Aucun resultat en cache pour ce mot.';
 
   @override
+  String get searchNoResultTitle =>
+      'Aucun pictogramme pour cette recherche. Essayez un autre mot, ou verifiez les filtres dans les Reglages.';
+
+  @override
   String get searchEmptyTitle =>
       'Recherchez un mot pour charger des pictogrammes';
 
@@ -446,6 +450,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get categoryEmptyPictograms =>
       'Aucun pictogramme dans cette categorie.';
+
+  @override
+  String get exploreArasaac => 'Explorer';
 
   @override
   String get importFromArasaac => 'Ajouter depuis ARASAAC';

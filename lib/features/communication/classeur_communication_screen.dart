@@ -21,6 +21,7 @@ class ClasseurCommunicationScreen extends StatefulWidget {
     required this.phraseBookController,
     required this.settingsController,
     required this.speechService,
+    required this.onOpenExplorer,
     super.key,
   });
 
@@ -28,6 +29,11 @@ class ClasseurCommunicationScreen extends StatefulWidget {
   final PhraseBookController phraseBookController;
   final SettingsController settingsController;
   final SpeechService speechService;
+
+  /// Opens the ARASAAC explorer. The classeur is the heart of the app
+  /// (CDC 6.3), but the explorer stays reachable until the IME arbitrates
+  /// whether it should disappear for good (US-1.14 / US-2.03).
+  final VoidCallback onOpenExplorer;
 
   @override
   State<ClasseurCommunicationScreen> createState() =>
@@ -114,8 +120,15 @@ class _ClasseurCommunicationScreenState
         ]),
         builder: (context, _) {
           final settings = widget.settingsController.settings;
-          final categories =
-              widget.classeurController.classeur.categoriesSorted;
+          // Empty categories are hidden: an end user tapping one would land on
+          // a blank screen, which reads as a broken app (CDC 3.1).
+          final categories = widget.classeurController.classeur.categoriesSorted
+              .where(
+                (category) => widget.classeurController.classeur
+                    .pictogramsIn(category.id)
+                    .isNotEmpty,
+              )
+              .toList();
           if (categories.isEmpty) {
             return const SizedBox.shrink();
           }
@@ -154,9 +167,18 @@ class _ClasseurCommunicationScreenState
                   height: 44,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: tabCount,
+                    // One extra slot for the explorer, kept last so the
+                    // category positions never move (CDC 3.1).
+                    itemCount: tabCount + 1,
                     separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, i) {
+                      if (i == tabCount) {
+                        return ActionChip(
+                          avatar: const Icon(Icons.travel_explore, size: 18),
+                          label: Text(l10n.exploreArasaac),
+                          onPressed: widget.onOpenExplorer,
+                        );
+                      }
                       if (hasFavorites && i == 0) {
                         return ChoiceChip(
                           avatar: const Icon(Icons.favorite_rounded, size: 18),

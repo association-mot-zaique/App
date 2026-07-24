@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'No cached results for this word.'**
   String get offlineNoCacheNotice;
 
+  /// No description provided for @searchNoResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No pictogram for this search. Try another word, or check the filters in the settings.'**
+  String get searchNoResultTitle;
+
   /// No description provided for @searchEmptyTitle.
   ///
   /// In en, this message translates to:
@@ -949,6 +955,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No pictogram in this category yet.'**
   String get categoryEmptyPictograms;
+
+  /// No description provided for @exploreArasaac.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get exploreArasaac;
 
   /// No description provided for @importFromArasaac.
   ///
