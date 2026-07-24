@@ -49,8 +49,10 @@ _Réf : A-04 · seule connexion sortante autorisée (§5.1) · ARASAAC à parit�
 - [x] Rechercher par mot-clé sur `api.arasaac.org`
 - [x] **Télécharger et copier l'image sur le disque** au moment de l'import (picto possédé, plus jamais re-sollicité en réseau)
 - [x] Import accessible **depuis le mode aidant uniquement** (entrée dans Réglages → Gérer le classeur)
-- [x] Repli automatique sur le cache en cas d'échec réseau — l'import passe désormais par `PictogramSearchService`
+- [x] Repli automatique sur le cache en cas d'échec réseau — l'import passe désormais par `PictogramSearchService` (+ timeout 5 s, disjoncteur réseau)
 - [x] Réutiliser le service de recherche existant (filtres qualité) plutôt qu'un `ArasaacApi` dédié
+
+> **Symptôme ARASAAC de l'audit caractérisé (§6.2 « à rejouer sur appareil »).** Sur **Android < 7.1.1** (testé sur un 7.0), les requêtes ARASAAC échouent : le certificat d'`api.arasaac.org` est **Let's Encrypt → ISRG Root X1**, absent du magasin d'Android 7.0 (ajouté en 7.1.1 ; secours DST Root X3 expiré le 30/09/2021). Le navigateur marche (magasin propre), l'app non (magasin système). **Résolu par `minSdk = 26`** (Android 8.0, minimum CDC §5.3) : l'app ne s'installe plus sur ces appareils, et sur 8.0+ ARASAAC fonctionne.
 
 ### US-1.05 · Écran de gestion — catégories `Must`
 > **En tant qu'**aidant, **je veux** créer, renommer et supprimer des catégories, **afin d'**organiser le classeur.

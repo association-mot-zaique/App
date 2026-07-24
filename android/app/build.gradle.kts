@@ -24,7 +24,10 @@ android {
         applicationId = "fr.motzaique.mot_zaique"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // Android 8.0 (API 26) minimum (CDC 5.3, confirme par l'association).
+        // Ecarte notamment Android 7.0, dont le magasin de certificats ne
+        // connait pas ISRG Root X1 (Let's Encrypt) -> ARASAAC y echoue.
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
