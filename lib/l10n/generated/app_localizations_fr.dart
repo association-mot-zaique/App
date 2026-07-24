@@ -507,4 +507,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get automaticOption => 'Automatique';
+
+  @override
+  String get exportClasseur => 'Exporter le classeur';
+
+  @override
+  String get importClasseur => 'Importer un classeur';
+
+  @override
+  String get classeurExported => 'Classeur exporte';
+
+  @override
+  String get classeurImported => 'Classeur importe';
+
+  @override
+  String get importClasseurConfirm =>
+      'Remplacer le classeur actuel par celui importe ? L\'actuel sera perdu.';
+
+  @override
+  String get classeurImportFailed => 'Fichier de classeur invalide';
 }

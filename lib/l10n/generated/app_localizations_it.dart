@@ -505,4 +505,23 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get automaticOption => 'Automatico';
+
+  @override
+  String get exportClasseur => 'Esporta il raccoglitore';
+
+  @override
+  String get importClasseur => 'Importa un raccoglitore';
+
+  @override
+  String get classeurExported => 'Raccoglitore esportato';
+
+  @override
+  String get classeurImported => 'Raccoglitore importato';
+
+  @override
+  String get importClasseurConfirm =>
+      'Sostituire il raccoglitore attuale con quello importato? Quello attuale andra perso.';
+
+  @override
+  String get classeurImportFailed => 'File del raccoglitore non valido';
 }

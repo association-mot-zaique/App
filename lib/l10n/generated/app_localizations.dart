@@ -1069,6 +1069,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Automatic'**
   String get automaticOption;
+
+  /// No description provided for @exportClasseur.
+  ///
+  /// In en, this message translates to:
+  /// **'Export classeur'**
+  String get exportClasseur;
+
+  /// No description provided for @importClasseur.
+  ///
+  /// In en, this message translates to:
+  /// **'Import classeur'**
+  String get importClasseur;
+
+  /// No description provided for @classeurExported.
+  ///
+  /// In en, this message translates to:
+  /// **'Classeur exported'**
+  String get classeurExported;
+
+  /// No description provided for @classeurImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Classeur imported'**
+  String get classeurImported;
+
+  /// No description provided for @importClasseurConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace the current classeur with the imported one? The current one will be lost.'**
+  String get importClasseurConfirm;
+
+  /// No description provided for @classeurImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid classeur file'**
+  String get classeurImportFailed;
 }
 
 class _AppLocalizationsDelegate

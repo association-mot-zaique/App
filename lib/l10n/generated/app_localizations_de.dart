@@ -509,4 +509,23 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get automaticOption => 'Automatisch';
+
+  @override
+  String get exportClasseur => 'Ordner exportieren';
+
+  @override
+  String get importClasseur => 'Ordner importieren';
+
+  @override
+  String get classeurExported => 'Ordner exportiert';
+
+  @override
+  String get classeurImported => 'Ordner importiert';
+
+  @override
+  String get importClasseurConfirm =>
+      'Den aktuellen Ordner durch den importierten ersetzen? Der aktuelle geht verloren.';
+
+  @override
+  String get classeurImportFailed => 'Ungueltige Ordner-Datei';
 }

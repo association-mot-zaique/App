@@ -12,18 +12,19 @@
 
 _Réf : A-09 · le service existant écrit dans le répertoire privé, non récupérable (§6.2) — objectif non atteint_
 
-- [ ] Exporter le classeur (catégories, pictos, **images incluses**) vers un fichier
-- [ ] Écrire dans un emplacement récupérable par l'aidant (hors répertoire privé)
-- [ ] Fichier autonome, réimportable sur un autre appareil
+- [x] Exporter le classeur (catégories, pictos, **images incluses**) vers un fichier — **archive zip** (`manifest.json` + `images/`)
+- [x] Écrire dans un emplacement récupérable par l'aidant (hors répertoire privé) — sélecteur système (`FilePicker.saveFile`), sans permission
+- [x] Fichier autonome, réimportable sur un autre appareil — vérifié par test (export → import dans une autre racine)
+- [ ] Valider un export/import entre **deux appareils réels**
 
 ### US-3.02 · Import d'un classeur depuis un fichier `Must`
 > **En tant qu'**aidant, **je veux** importer un classeur depuis un fichier, **afin de** restaurer le classeur sur un nouvel appareil sans reconstruction.
 
 _Réf : A-10, §3.2 (aucune reconstruction en cas de changement d'appareil)_
 
-- [ ] Importer un fichier de classeur exporté
-- [ ] Restaurer catégories, pictogrammes et images sur le disque local
-- [ ] Gérer les conflits / le remplacement du classeur courant
+- [x] Importer un fichier de classeur exporté — sélecteur système (`FilePicker.pickFiles`)
+- [x] Restaurer catégories, pictogrammes et images sur le disque local
+- [x] Gérer les conflits / le remplacement du classeur courant — **confirmation explicite** avant remplacement ; archive invalide **refusée sans rien modifier**
 
 ### US-3.03 · Gestion de profils multiples `Should`
 > **En tant qu'**aidant, **je veux** gérer plusieurs profils, **afin de** partager un même appareil entre plusieurs utilisateurs.

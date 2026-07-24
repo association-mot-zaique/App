@@ -181,5 +181,11 @@
   "speechRate": "Vitesse d'elocution",
   "pictogramsPerScreen": "Pictogrammes par ecran",
   "showPictogramLabel": "Afficher le texte sous le pictogramme",
-  "automaticOption": "Automatique"
+  "automaticOption": "Automatique",
+  "exportClasseur": "Exporter le classeur",
+  "importClasseur": "Importer un classeur",
+  "classeurExported": "Classeur exporte",
+  "classeurImported": "Classeur importe",
+  "importClasseurConfirm": "Remplacer le classeur actuel par celui importe ? L'actuel sera perdu.",
+  "classeurImportFailed": "Fichier de classeur invalide"
 }

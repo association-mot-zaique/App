@@ -181,5 +181,11 @@
   "speechRate": "Sprechgeschwindigkeit",
   "pictogramsPerScreen": "Piktogramme pro Bildschirm",
   "showPictogramLabel": "Text unter dem Piktogramm anzeigen",
-  "automaticOption": "Automatisch"
+  "automaticOption": "Automatisch",
+  "exportClasseur": "Ordner exportieren",
+  "importClasseur": "Ordner importieren",
+  "classeurExported": "Ordner exportiert",
+  "classeurImported": "Ordner importiert",
+  "importClasseurConfirm": "Den aktuellen Ordner durch den importierten ersetzen? Der aktuelle geht verloren.",
+  "classeurImportFailed": "Ungueltige Ordner-Datei"
 }

@@ -181,5 +181,11 @@
   "speechRate": "Velocita della voce",
   "pictogramsPerScreen": "Pittogrammi per schermata",
   "showPictogramLabel": "Mostra il testo sotto il pittogramma",
-  "automaticOption": "Automatico"
+  "automaticOption": "Automatico",
+  "exportClasseur": "Esporta il raccoglitore",
+  "importClasseur": "Importa un raccoglitore",
+  "classeurExported": "Raccoglitore esportato",
+  "classeurImported": "Raccoglitore importato",
+  "importClasseurConfirm": "Sostituire il raccoglitore attuale con quello importato? Quello attuale andra perso.",
+  "classeurImportFailed": "File del raccoglitore non valido"
 }

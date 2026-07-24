@@ -181,5 +181,11 @@
   "speechRate": "Velocidad de voz",
   "pictogramsPerScreen": "Pictogramas por pantalla",
   "showPictogramLabel": "Mostrar el texto bajo el pictograma",
-  "automaticOption": "Automatico"
+  "automaticOption": "Automatico",
+  "exportClasseur": "Exportar el cuaderno",
+  "importClasseur": "Importar un cuaderno",
+  "classeurExported": "Cuaderno exportado",
+  "classeurImported": "Cuaderno importado",
+  "importClasseurConfirm": "Reemplazar el cuaderno actual por el importado? Se perdera el actual.",
+  "classeurImportFailed": "Archivo de cuaderno no valido"
 }

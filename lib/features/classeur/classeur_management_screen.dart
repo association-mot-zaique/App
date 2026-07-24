@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,7 +35,21 @@ class ClasseurManagementScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.classeurManageTitle)),
+      appBar: AppBar(
+        title: Text(l10n.classeurManageTitle),
+        actions: [
+          IconButton(
+            tooltip: l10n.exportClasseur,
+            onPressed: () => _exportClasseur(context),
+            icon: const Icon(Icons.upload_file_outlined),
+          ),
+          IconButton(
+            tooltip: l10n.importClasseur,
+            onPressed: () => _importClasseur(context),
+            icon: const Icon(Icons.download_outlined),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _addCategory(context),
         icon: const Icon(Icons.create_new_folder_outlined),
@@ -159,6 +175,56 @@ class ClasseurManagementScreen extends StatelessWidget {
     if (confirmed) {
       await controller.deleteCategory(category.id);
     }
+  }
+
+  /// Exports the classeur as a self-contained zip and lets the aidant choose
+  /// where to save it, outside the app (A-09 / US-3.01).
+  Future<void> _exportClasseur(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final bytes = await controller.exportArchive();
+    if (!context.mounted) {
+      return;
+    }
+    final path = await FilePicker.saveFile(
+      dialogTitle: l10n.exportClasseur,
+      fileName: 'classeur-mot-zaique.zip',
+      bytes: Uint8List.fromList(bytes),
+    );
+    if (!context.mounted || path == null) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.classeurExported)),
+    );
+  }
+
+  /// Imports a classeur zip, replacing the current one after confirmation
+  /// (A-10 / US-3.02).
+  Future<void> _importClasseur(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final picked = await FilePicker.pickFiles(withData: true);
+    if (!context.mounted || picked == null || picked.files.isEmpty) {
+      return;
+    }
+    final bytes = picked.files.first.bytes;
+    if (bytes == null) {
+      return;
+    }
+    final confirmed = await _confirmDelete(context, l10n.importClasseurConfirm);
+    if (!context.mounted || !confirmed) {
+      return;
+    }
+    final imported = await controller.importArchive(bytes);
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          imported ? l10n.classeurImported : l10n.classeurImportFailed,
+        ),
+      ),
+    );
   }
 
   /// Seeds a few localized starter categories so the aidant does not face a

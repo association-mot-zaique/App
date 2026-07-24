@@ -181,5 +181,11 @@
   "speechRate": "Speech rate",
   "pictogramsPerScreen": "Pictograms per screen",
   "showPictogramLabel": "Show text under pictogram",
-  "automaticOption": "Automatic"
+  "automaticOption": "Automatic",
+  "exportClasseur": "Export classeur",
+  "importClasseur": "Import classeur",
+  "classeurExported": "Classeur exported",
+  "classeurImported": "Classeur imported",
+  "importClasseurConfirm": "Replace the current classeur with the imported one? The current one will be lost.",
+  "classeurImportFailed": "Invalid classeur file"
 }

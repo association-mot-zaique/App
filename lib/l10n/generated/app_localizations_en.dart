@@ -504,4 +504,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get automaticOption => 'Automatic';
+
+  @override
+  String get exportClasseur => 'Export classeur';
+
+  @override
+  String get importClasseur => 'Import classeur';
+
+  @override
+  String get classeurExported => 'Classeur exported';
+
+  @override
+  String get classeurImported => 'Classeur imported';
+
+  @override
+  String get importClasseurConfirm =>
+      'Replace the current classeur with the imported one? The current one will be lost.';
+
+  @override
+  String get classeurImportFailed => 'Invalid classeur file';
 }

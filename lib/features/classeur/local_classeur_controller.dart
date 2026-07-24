@@ -135,6 +135,22 @@ class LocalClasseurController extends ChangeNotifier {
     }
   }
 
+  // ── Transfert du classeur (US-3.01 / US-3.02) ───────────────────────
+
+  /// Zip autonome du classeur (manifeste + images), a enregistrer hors de
+  /// l'app pour changer d'appareil (A-09).
+  Future<List<int>> exportArchive() => _repository.exportToZipBytes();
+
+  /// Remplace le classeur courant par celui de l'archive (A-10).
+  /// Retourne false si le fichier n'est pas un classeur valide.
+  Future<bool> importArchive(List<int> bytes) async {
+    final imported = await _repository.importFromZipBytes(bytes);
+    if (imported) {
+      await load();
+    }
+    return imported;
+  }
+
   Future<void> _persist() async {
     await _repository.save(_classeur);
     notifyListeners();

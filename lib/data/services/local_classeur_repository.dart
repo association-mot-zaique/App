@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/local_classeur.dart';
@@ -85,6 +86,90 @@ class LocalClasseurRepository {
     if (await file.exists()) {
       await file.delete();
     }
+  }
+
+  /// Packs the whole classeur (manifest + every image) into a self-contained
+  /// zip so it can be moved to another device (A-09).
+  Future<List<int>> exportToZipBytes() async {
+    final archive = Archive();
+
+    final manifest = _manifestFile;
+    if (await manifest.exists()) {
+      archive.addFile(
+        ArchiveFile.bytes('manifest.json', await manifest.readAsBytes()),
+      );
+    }
+
+    final images = _imagesDir;
+    if (await images.exists()) {
+      await for (final entity in images.list()) {
+        if (entity is File) {
+          final name = entity.uri.pathSegments.last;
+          archive.addFile(
+            ArchiveFile.bytes('images/$name', await entity.readAsBytes()),
+          );
+        }
+      }
+    }
+
+    return ZipEncoder().encode(archive);
+  }
+
+  /// Restores a classeur exported with [exportToZipBytes], **replacing** the
+  /// current one (A-10). Returns false when the archive is not a valid
+  /// classeur, in which case nothing is modified.
+  Future<bool> importFromZipBytes(List<int> bytes) async {
+    final Archive archive;
+    try {
+      archive = ZipDecoder().decodeBytes(bytes);
+    } catch (_) {
+      return false;
+    }
+
+    // Validate before touching anything on disk.
+    final manifestEntries =
+        archive.files.where((f) => f.name == 'manifest.json').toList();
+    if (manifestEntries.isEmpty) {
+      return false;
+    }
+    final manifestBytes = manifestEntries.first.readBytes();
+    if (manifestBytes == null) {
+      return false;
+    }
+    try {
+      final decoded = jsonDecode(utf8.decode(manifestBytes));
+      if (decoded is! Map) {
+        return false;
+      }
+      LocalClasseur.fromJson(Map<String, dynamic>.from(decoded));
+    } catch (_) {
+      return false;
+    }
+
+    if (await rootDir.exists()) {
+      await rootDir.delete(recursive: true);
+    }
+    await rootDir.create(recursive: true);
+
+    for (final entry in archive.files) {
+      if (!entry.isFile) {
+        continue;
+      }
+      final name = entry.name;
+      // Only accept the expected layout, and never escape the root dir.
+      final allowed = name == 'manifest.json' || name.startsWith('images/');
+      if (!allowed || name.contains('..')) {
+        continue;
+      }
+      final content = entry.readBytes();
+      if (content == null) {
+        continue;
+      }
+      final out = File('${rootDir.path}/$name');
+      await out.parent.create(recursive: true);
+      await out.writeAsBytes(content, flush: true);
+    }
+    return true;
   }
 
   static String _sanitizeExtension(String extension) {

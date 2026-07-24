@@ -506,4 +506,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get automaticOption => 'Automatico';
+
+  @override
+  String get exportClasseur => 'Exportar el cuaderno';
+
+  @override
+  String get importClasseur => 'Importar un cuaderno';
+
+  @override
+  String get classeurExported => 'Cuaderno exportado';
+
+  @override
+  String get classeurImported => 'Cuaderno importado';
+
+  @override
+  String get importClasseurConfirm =>
+      'Reemplazar el cuaderno actual por el importado? Se perdera el actual.';
+
+  @override
+  String get classeurImportFailed => 'Archivo de cuaderno no valido';
 }
