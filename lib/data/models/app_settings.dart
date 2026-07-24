@@ -12,6 +12,8 @@ class AppSettings {
     required this.minDownloads,
     required this.savedPhrasesEnabled,
     required this.speechRate,
+    required this.gridColumns,
+    required this.showPictogramLabel,
   });
 
   static const AppSettings defaults = AppSettings(
@@ -28,6 +30,8 @@ class AppSettings {
     minDownloads: 0,
     savedPhrasesEnabled: false,
     speechRate: 0.42,
+    gridColumns: 0,
+    showPictogramLabel: true,
   );
 
   final double pictogramScale;
@@ -49,6 +53,17 @@ class AppSettings {
   /// fixed value, now the default.
   final double speechRate;
 
+  /// Pictograms per screen (A-12). `0` = automatic (derived from the screen
+  /// width); 2..6 forces that many columns, so the aidant can trade choice for
+  /// bigger touch targets depending on the profile.
+  final int gridColumns;
+
+  /// Show the label under the pictogram image (A-14): some users read it,
+  /// others are distracted by it.
+  final bool showPictogramLabel;
+
+  bool get isAutomaticGridColumns => gridColumns <= 0;
+
   /// Empty [localeCode] means "automatic": follow the system language.
   /// Returning `null` lets [MaterialApp] resolve the locale from the device.
   bool get isAutomaticLocale => localeCode.isEmpty;
@@ -66,6 +81,8 @@ class AppSettings {
     int? minDownloads,
     bool? savedPhrasesEnabled,
     double? speechRate,
+    int? gridColumns,
+    bool? showPictogramLabel,
   }) {
     return AppSettings(
       pictogramScale: pictogramScale ?? this.pictogramScale,
@@ -79,6 +96,8 @@ class AppSettings {
       minDownloads: minDownloads ?? this.minDownloads,
       savedPhrasesEnabled: savedPhrasesEnabled ?? this.savedPhrasesEnabled,
       speechRate: speechRate ?? this.speechRate,
+      gridColumns: gridColumns ?? this.gridColumns,
+      showPictogramLabel: showPictogramLabel ?? this.showPictogramLabel,
     );
   }
 
@@ -100,6 +119,8 @@ class AppSettings {
       'minDownloads': minDownloads,
       'savedPhrasesEnabled': savedPhrasesEnabled,
       'speechRate': speechRate,
+      'gridColumns': gridColumns,
+      'showPictogramLabel': showPictogramLabel,
     };
   }
 
@@ -124,6 +145,8 @@ class AppSettings {
       minDownloads: json['minDownloads'] as int? ?? 0,
       savedPhrasesEnabled: json['savedPhrasesEnabled'] as bool? ?? false,
       speechRate: (json['speechRate'] as num?)?.toDouble() ?? 0.42,
+      gridColumns: (json['gridColumns'] as num?)?.toInt() ?? 0,
+      showPictogramLabel: json['showPictogramLabel'] as bool? ?? true,
     );
   }
 }

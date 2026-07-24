@@ -16,6 +16,7 @@ class PictogramCard extends StatelessWidget {
     required this.removeFavoriteTooltip,
     this.accentColor,
     this.highContrast = false,
+    this.showLabel = true,
     super.key,
   });
 
@@ -30,6 +31,9 @@ class PictogramCard extends StatelessWidget {
   final String removeFavoriteTooltip;
   final Color? accentColor;
   final bool highContrast;
+
+  /// Text under the image can be hidden (A-14).
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -81,16 +85,18 @@ class PictogramCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                pictogram.label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14 * scale.clamp(0.9, 1.4),
+              if (showLabel) ...[
+                const SizedBox(height: 8),
+                Text(
+                  pictogram.label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 14 * scale.clamp(0.9, 1.4),
+                  ),
                 ),
-              ),
+              ],
               const SizedBox(height: 6),
               LayoutBuilder(
                 builder: (context, constraints) {

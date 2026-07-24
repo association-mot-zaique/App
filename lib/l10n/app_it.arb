@@ -178,5 +178,8 @@
   "suggestionToys": "Giochi",
   "categoryExists": "Questa categoria esiste gia",
   "addStarterCategories": "Aggiungi categorie iniziali",
-  "speechRate": "Velocita della voce"
+  "speechRate": "Velocita della voce",
+  "pictogramsPerScreen": "Pittogrammi per schermata",
+  "showPictogramLabel": "Mostra il testo sotto il pittogramma",
+  "automaticOption": "Automatico"
 }

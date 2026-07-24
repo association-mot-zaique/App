@@ -191,6 +191,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       widget.settingsController.updateSpeechRate(value),
                 ),
                 const SizedBox(height: 6),
+                Text(
+                  l10n.pictogramsPerScreen,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                DropdownButtonFormField<int>(
+                  initialValue: settings.gridColumns,
+                  items: [
+                    DropdownMenuItem(
+                      value: 0,
+                      child: Text(l10n.automaticOption),
+                    ),
+                    for (final count in const [2, 3, 4, 5, 6])
+                      DropdownMenuItem(
+                        value: count,
+                        child: Text('$count'),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      widget.settingsController.updateGridColumns(value);
+                    }
+                  },
+                ),
+                const SizedBox(height: 6),
+                SwitchListTile.adaptive(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.showPictogramLabel),
+                  value: settings.showPictogramLabel,
+                  onChanged:
+                      widget.settingsController.updateShowPictogramLabel,
+                ),
                 SwitchListTile.adaptive(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.highContrast),

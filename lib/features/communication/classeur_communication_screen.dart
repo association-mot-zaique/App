@@ -111,6 +111,7 @@ class _ClasseurCommunicationScreenState
           [widget.classeurController, widget.phraseBookController],
         ),
         builder: (context, _) {
+          final settings = widget.settingsController.settings;
           final categories = widget.classeurController.classeur.categoriesSorted;
           if (categories.isEmpty) {
             return const SizedBox.shrink();
@@ -158,17 +159,26 @@ class _ClasseurCommunicationScreenState
                   child: pictograms.isEmpty
                       ? Center(child: Text(l10n.categoryEmptyPictograms))
                       : GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 160,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 0.82,
-                          ),
+                          // Explicit column count when the aidant set one
+                          // (A-12), otherwise size-based automatic layout.
+                          gridDelegate: settings.isAutomaticGridColumns
+                              ? const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 160,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.82,
+                                )
+                              : SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: settings.gridColumns,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.82,
+                                ),
                           itemCount: pictograms.length,
                           itemBuilder: (context, i) => _OwnedPictogramCard(
                             pictogram: _toPictogram(pictograms[i]),
                             label: pictograms[i].label,
+                            showLabel: settings.showPictogramLabel,
                             onTap: () => _onSelect(pictograms[i]),
                           ),
                         ),
@@ -187,11 +197,15 @@ class _OwnedPictogramCard extends StatelessWidget {
     required this.pictogram,
     required this.label,
     required this.onTap,
+    this.showLabel = true,
   });
 
   final Pictogram pictogram;
   final String label;
   final VoidCallback onTap;
+
+  /// Text under the image can be hidden (A-14).
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -215,17 +229,19 @@ class _OwnedPictogramCard extends StatelessWidget {
                   child: PictogramImage(pictogram: pictogram),
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w800),
-              ),
+              if (showLabel) ...[
+                const SizedBox(height: 6),
+                Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ],
             ],
           ),
         ),

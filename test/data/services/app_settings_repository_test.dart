@@ -36,6 +36,8 @@ void main() {
         minDownloads: 120,
         savedPhrasesEnabled: true,
         speechRate: 0.6,
+        gridColumns: 4,
+        showPictogramLabel: false,
       );
 
       await repository.save(settings);
@@ -49,6 +51,9 @@ void main() {
       expect(restored.onlyAacPictograms, isFalse);
       expect(restored.onlySchematicPictograms, isTrue);
       expect(restored.minDownloads, 120);
+      expect(restored.speechRate, 0.6);
+      expect(restored.gridColumns, 4);
+      expect(restored.showPictogramLabel, isFalse);
     });
 
     test('defaults to automatic locale (follows the system)', () async {

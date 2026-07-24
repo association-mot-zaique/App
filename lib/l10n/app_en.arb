@@ -178,5 +178,8 @@
   "suggestionToys": "Toys",
   "categoryExists": "This category already exists",
   "addStarterCategories": "Add starter categories",
-  "speechRate": "Speech rate"
+  "speechRate": "Speech rate",
+  "pictogramsPerScreen": "Pictograms per screen",
+  "showPictogramLabel": "Show text under pictogram",
+  "automaticOption": "Automatic"
 }

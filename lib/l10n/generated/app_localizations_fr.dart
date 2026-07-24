@@ -498,4 +498,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get speechRate => 'Vitesse d\'elocution';
+
+  @override
+  String get pictogramsPerScreen => 'Pictogrammes par ecran';
+
+  @override
+  String get showPictogramLabel => 'Afficher le texte sous le pictogramme';
+
+  @override
+  String get automaticOption => 'Automatique';
 }

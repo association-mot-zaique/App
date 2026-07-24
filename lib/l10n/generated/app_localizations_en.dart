@@ -495,4 +495,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get speechRate => 'Speech rate';
+
+  @override
+  String get pictogramsPerScreen => 'Pictograms per screen';
+
+  @override
+  String get showPictogramLabel => 'Show text under pictogram';
+
+  @override
+  String get automaticOption => 'Automatic';
 }

@@ -1051,6 +1051,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Speech rate'**
   String get speechRate;
+
+  /// No description provided for @pictogramsPerScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Pictograms per screen'**
+  String get pictogramsPerScreen;
+
+  /// No description provided for @showPictogramLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Show text under pictogram'**
+  String get showPictogramLabel;
+
+  /// No description provided for @automaticOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get automaticOption;
 }
 
 class _AppLocalizationsDelegate

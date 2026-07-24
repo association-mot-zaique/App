@@ -49,11 +49,11 @@ _Réf : C-11→C-13, §4.1, §11 (question 2) · **décideur : éducateurs IME**
 ### US-2.05 · Réglage de la taille et du nombre de pictogrammes par écran `Should`
 > **En tant qu'**aidant, **je veux** régler la taille et le nombre de pictogrammes affichés par écran, **afin d'**adapter l'affichage aux profils hétérogènes.
 
-_Réf : A-12, §11 (question 3, nombre par défaut à statuer par l'IME)_
+_Réf : A-12, §11 (question 3, nombre par défaut à statuer par l'IME) · **livré**_
 
-- [ ] Régler le nombre de pictogrammes par écran
-- [ ] Régler la taille des pictogrammes (zones tactiles larges)
-- [ ] Statuer sur le nombre par défaut (retour IME)
+- [x] Régler le nombre de pictogrammes par écran — `AppSettings.gridColumns` (0 = Automatique, 2→6) + menu dans les Réglages, appliqué aux **deux** écrans de communication
+- [x] Régler la taille des pictogrammes (zones tactiles larges) — curseur « Taille des pictogrammes » existant
+- [ ] Statuer sur le nombre par défaut (retour IME) — défaut actuel : **Automatique** (selon la largeur d'écran)
 
 ### US-2.06 · Réglage de la vitesse d'élocution `Must`
 > **En tant qu'**aidant, **je veux** régler la vitesse d'élocution, **afin de** garantir l'intelligibilité pour l'utilisateur final.
@@ -67,10 +67,10 @@ _Réf : A-13 (reclassé en Must) · vitesse figée à 0,42 dans le code (§6.2) 
 ### US-2.07 · Affichage optionnel du texte sous l'image `Should`
 > **En tant qu'**aidant, **je veux** activer ou masquer le texte sous le pictogramme, **afin d'**adapter l'affichage au profil de la personne.
 
-_Réf : A-14_
+_Réf : A-14 · **livré**_
 
-- [ ] Option d'affichage/masquage du libellé sous l'image
-- [ ] Réglage disponible dans le mode aidant
+- [x] Option d'affichage/masquage du libellé sous l'image — `AppSettings.showPictogramLabel` (défaut : affiché), appliqué aux **deux** écrans de communication
+- [x] Réglage disponible dans le mode aidant — interrupteur « Afficher le texte sous le pictogramme » dans les Réglages (protégés par PIN)
 
 ---
 

@@ -178,5 +178,8 @@
   "suggestionToys": "Spielzeug",
   "categoryExists": "Diese Kategorie existiert bereits",
   "addStarterCategories": "Startkategorien hinzufuegen",
-  "speechRate": "Sprechgeschwindigkeit"
+  "speechRate": "Sprechgeschwindigkeit",
+  "pictogramsPerScreen": "Piktogramme pro Bildschirm",
+  "showPictogramLabel": "Text unter dem Piktogramm anzeigen",
+  "automaticOption": "Automatisch"
 }

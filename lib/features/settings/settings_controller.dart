@@ -56,6 +56,14 @@ class SettingsController extends ChangeNotifier {
     return _update(_settings.copyWith(speechRate: value));
   }
 
+  Future<void> updateGridColumns(int value) {
+    return _update(_settings.copyWith(gridColumns: value));
+  }
+
+  Future<void> updateShowPictogramLabel(bool value) {
+    return _update(_settings.copyWith(showPictogramLabel: value));
+  }
+
   Future<void> _update(AppSettings newSettings) async {
     _settings = newSettings;
     await _repository.save(newSettings);

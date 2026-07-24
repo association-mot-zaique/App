@@ -500,4 +500,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get speechRate => 'Sprechgeschwindigkeit';
+
+  @override
+  String get pictogramsPerScreen => 'Piktogramme pro Bildschirm';
+
+  @override
+  String get showPictogramLabel => 'Text unter dem Piktogramm anzeigen';
+
+  @override
+  String get automaticOption => 'Automatisch';
 }

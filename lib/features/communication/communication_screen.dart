@@ -448,6 +448,16 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     _searchCategory(categories[index]);
   }
 
+  /// Columns to display: the aidant's explicit choice (A-12) when set,
+  /// otherwise derived from the screen width.
+  int _columns(double width) {
+    final chosen = widget.settingsController.settings.gridColumns;
+    if (chosen > 0) {
+      return chosen;
+    }
+    return _columnsForWidth(width);
+  }
+
   int _columnsForWidth(double width) {
     if (width >= 1200) {
       return 6;
@@ -611,7 +621,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     required double width,
     required double height,
   }) {
-    final columns = _columnsForWidth(width);
+    final columns = _columns(width);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -689,7 +699,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     required double width,
     required double height,
   }) {
-    final columns = _columnsForWidth(width);
+    final columns = _columns(width);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -916,6 +926,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
             saveFavoriteTooltip: l10n.saveFavorite,
             removeFavoriteTooltip: l10n.removeFavoriteTooltip,
             accentColor: selectedCategory.color,
+            showLabel: settings.showPictogramLabel,
           );
         },
       ),
