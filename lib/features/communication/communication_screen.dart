@@ -242,39 +242,46 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     var usedNetwork = false;
     var usedCache = false;
 
-    for (final term in category.terms) {
-      final cleanTerm = term.trim();
-      if (cleanTerm.isEmpty) {
+    // Run all keyword searches in parallel: sequentially they would each wait
+    // the full network timeout, so a category change could hang for many
+    // seconds when the network is down.
+    final languageCode = _effectiveLocaleCode();
+    final results = await Future.wait(
+      category.terms
+          .map((term) => term.trim())
+          .where((term) => term.isNotEmpty)
+          .map((term) async {
+            try {
+              return await widget.searchService.search(
+                term,
+                language: languageCode,
+                offlineOnly: settings.offlineOnly,
+                onlyAacPictograms: settings.onlyAacPictograms,
+                onlySchematicPictograms: settings.onlySchematicPictograms,
+                minDownloads: settings.minDownloads,
+              );
+            } catch (_) {
+              // Skip a failing keyword, keep the others.
+              return null;
+            }
+          }),
+    );
+
+    for (final result in results) {
+      if (result == null) {
         continue;
       }
-
-      try {
-        final result = await widget.searchService.search(
-          cleanTerm,
-          language: _effectiveLocaleCode(),
-          offlineOnly: settings.offlineOnly,
-          onlyAacPictograms: settings.onlyAacPictograms,
-          onlySchematicPictograms: settings.onlySchematicPictograms,
-          minDownloads: settings.minDownloads,
-        );
-
-        if (result.fromCache) {
-          usedCache = true;
-        } else {
-          usedNetwork = true;
+      if (result.fromCache) {
+        usedCache = true;
+      } else {
+        usedNetwork = true;
+      }
+      for (final pictogram in result.pictograms) {
+        final existing = merged[pictogram.semanticKey];
+        if (existing == null ||
+            pictogram.qualityScore > existing.qualityScore) {
+          merged[pictogram.semanticKey] = pictogram;
         }
-
-        for (final pictogram in result.pictograms) {
-          final existing = merged[pictogram.semanticKey];
-          if (existing == null ||
-              pictogram.qualityScore > existing.qualityScore) {
-            merged[pictogram.semanticKey] = pictogram;
-          }
-        }
-      } on ArasaacException {
-        // Continues with remaining keywords to maximize category coverage.
-      } catch (_) {
-        // Continues with remaining keywords to maximize category coverage.
       }
     }
 

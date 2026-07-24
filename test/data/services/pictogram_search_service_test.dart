@@ -164,5 +164,45 @@ void main() {
       expect(result.pictograms, hasLength(1));
       expect(result.pictograms.first.id, 24);
     });
+
+    test('circuit breaker skips network for a cooldown after a failure',
+        () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final cache = SearchCacheRepository(preferences);
+      await cache.write('a', const [], language: 'en');
+      await cache.write('b', const [], language: 'en');
+
+      var calls = 0;
+      final client = MockClient((_) async {
+        calls++;
+        return http.Response('x', 500);
+      });
+      var now = DateTime(2026, 1, 1, 12);
+      final service = ArasaacSearchService(
+        api: ArasaacApi(client: client),
+        cache: cache,
+        clock: () => now,
+      );
+
+      Future<void> doSearch(String q) => service.search(
+            q,
+            language: 'en',
+            offlineOnly: false,
+            onlyAacPictograms: false,
+            onlySchematicPictograms: false,
+            minDownloads: 0,
+          );
+
+      await doSearch('a');
+      expect(calls, 1); // first search hits the network (and fails)
+
+      await doSearch('b');
+      expect(calls, 1); // within cooldown -> cache only, no network call
+
+      now = now.add(const Duration(seconds: 21));
+      await doSearch('a');
+      expect(calls, 2); // cooldown elapsed -> network tried again
+    });
   });
 }

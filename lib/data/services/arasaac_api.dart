@@ -25,7 +25,7 @@ class ArasaacApi {
     // Bounded wait: without a timeout, an unreachable/slow network makes the
     // request (and the loading spinner) hang forever. On timeout it throws and
     // the caller falls back to the cache or shows an error.
-    final response = await _client.get(uri).timeout(const Duration(seconds: 8));
+    final response = await _client.get(uri).timeout(const Duration(seconds: 5));
 
     if (response.statusCode != 200) {
       throw ArasaacException(statusCode: response.statusCode);

@@ -18,11 +18,24 @@ class ArasaacSearchService implements PictogramSearchService {
   ArasaacSearchService({
     required ArasaacApi api,
     required SearchCacheRepository cache,
+    DateTime Function()? clock,
   }) : _api = api,
-       _cache = cache;
+       _cache = cache,
+       _clock = clock ?? DateTime.now;
 
   final ArasaacApi _api;
   final SearchCacheRepository _cache;
+  final DateTime Function() _clock;
+
+  /// Circuit breaker: after a network failure, serve the cache directly for a
+  /// short cooldown instead of waiting the full timeout on every keyword. This
+  /// is what keeps a category change from hanging (7 keywords x timeout) when
+  /// the network is down.
+  static const Duration _networkCooldown = Duration(seconds: 20);
+  DateTime? _networkDownUntil;
+
+  bool get _networkRecentlyFailed =>
+      _networkDownUntil != null && _clock().isBefore(_networkDownUntil!);
 
   @override
   Future<PictogramSearchResult> search(
@@ -42,7 +55,9 @@ class ArasaacSearchService implements PictogramSearchService {
       );
     }
 
-    if (offlineOnly) {
+    // Serve the cache directly when offline, or when the network failed very
+    // recently (avoids re-waiting the timeout on each keyword after a failure).
+    if (offlineOnly || _networkRecentlyFailed) {
       final cached = _process(
         _cache.read(cleanQuery, language: language) ?? const [],
         onlyAacPictograms: onlyAacPictograms,
@@ -52,7 +67,7 @@ class ArasaacSearchService implements PictogramSearchService {
       return PictogramSearchResult(
         pictograms: cached,
         source: SearchResultSource.cache,
-        offlineOnly: true,
+        offlineOnly: offlineOnly,
       );
     }
 
@@ -61,6 +76,7 @@ class ArasaacSearchService implements PictogramSearchService {
         cleanQuery,
         language: language,
       );
+      _networkDownUntil = null; // network recovered
       await _cache.write(cleanQuery, networkResults, language: language);
       final processed = _process(
         networkResults,
@@ -74,6 +90,7 @@ class ArasaacSearchService implements PictogramSearchService {
         offlineOnly: false,
       );
     } on ArasaacException {
+      _networkDownUntil = _clock().add(_networkCooldown);
       final cached = _cache.read(cleanQuery, language: language);
       if (cached != null) {
         final processed = _process(
@@ -90,6 +107,7 @@ class ArasaacSearchService implements PictogramSearchService {
       }
       rethrow;
     } catch (_) {
+      _networkDownUntil = _clock().add(_networkCooldown);
       final cached = _cache.read(cleanQuery, language: language);
       if (cached != null) {
         final processed = _process(
