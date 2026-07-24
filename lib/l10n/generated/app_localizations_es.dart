@@ -525,4 +525,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get classeurImportFailed => 'Archivo de cuaderno no valido';
+
+  @override
+  String get moveToCategory => 'Mover a...';
+
+  @override
+  String get moveUpAction => 'Subir';
+
+  @override
+  String get moveDownAction => 'Bajar';
 }

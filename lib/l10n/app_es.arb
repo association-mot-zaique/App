@@ -187,5 +187,8 @@
   "classeurExported": "Cuaderno exportado",
   "classeurImported": "Cuaderno importado",
   "importClasseurConfirm": "Reemplazar el cuaderno actual por el importado? Se perdera el actual.",
-  "classeurImportFailed": "Archivo de cuaderno no valido"
+  "classeurImportFailed": "Archivo de cuaderno no valido",
+  "moveToCategory": "Mover a...",
+  "moveUpAction": "Subir",
+  "moveDownAction": "Bajar"
 }

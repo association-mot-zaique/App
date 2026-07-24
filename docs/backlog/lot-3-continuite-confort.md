@@ -40,16 +40,16 @@ _Réf : A-11 · l'onglet est protégé par le PIN existant (§6.2)_
 
 _Réf : A-07_
 
-- [ ] Déplacer un pictogramme vers une autre catégorie
+- [x] Déplacer un pictogramme vers une autre catégorie — menu « Déplacer vers… » sur le pictogramme (placé en fin de la catégorie cible)
 
 ### US-3.05 · Réorganisation de l'ordre d'affichage `Should`
 > **En tant qu'**aidant, **je veux** réorganiser l'ordre d'affichage des pictogrammes et catégories, **afin de** préserver une disposition stable et pertinente.
 
 _Réf : A-08 · attention à la stabilité spatiale (§3.1) : réorganisation réservée au mode aidant_
 
-- [ ] Réordonner les pictogrammes au sein d'une catégorie
-- [ ] Réordonner les catégories
-- [ ] Réorganisation possible **uniquement** depuis le mode aidant (position stable côté utilisateur final)
+- [x] Réordonner les pictogrammes au sein d'une catégorie — actions « Monter » / « Descendre »
+- [x] Réordonner les catégories — glisser-déposer (`ReorderableListView`)
+- [x] Réorganisation possible **uniquement** depuis le mode aidant (position stable côté utilisateur final, CDC §3.1)
 
 ---
 

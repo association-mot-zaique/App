@@ -187,5 +187,8 @@
   "classeurExported": "Raccoglitore esportato",
   "classeurImported": "Raccoglitore importato",
   "importClasseurConfirm": "Sostituire il raccoglitore attuale con quello importato? Quello attuale andra perso.",
-  "classeurImportFailed": "File del raccoglitore non valido"
+  "classeurImportFailed": "File del raccoglitore non valido",
+  "moveToCategory": "Sposta in...",
+  "moveUpAction": "Sposta su",
+  "moveDownAction": "Sposta giu"
 }

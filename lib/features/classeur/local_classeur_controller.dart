@@ -135,6 +135,80 @@ class LocalClasseurController extends ChangeNotifier {
     }
   }
 
+  // ── Organisation (US-3.04 / US-3.05) ────────────────────────────────
+
+  /// Moves a pictogram to another category, placing it at the end (A-07).
+  Future<void> movePictogramToCategory(int id, int categoryId) async {
+    final matches = _classeur.pictograms.where((p) => p.id == id).toList();
+    if (matches.isEmpty || matches.first.categoryId == categoryId) {
+      return;
+    }
+    final target = _classeur.pictogramsIn(categoryId);
+    final nextOrder = target.isEmpty ? 0 : target.last.sortOrder + 1;
+    _classeur = _classeur.copyWith(
+      pictograms: _classeur.pictograms
+          .map(
+            (p) => p.id == id
+                ? p.copyWith(categoryId: categoryId, sortOrder: nextOrder)
+                : p,
+          )
+          .toList(),
+    );
+    await _persist();
+  }
+
+  /// Moves a pictogram one slot up (-1) or down (+1) inside its category
+  /// (A-08). Positions stay stable for the end user: only the aidant reorders.
+  Future<void> movePictogramBy(int id, int delta) async {
+    final matches = _classeur.pictograms.where((p) => p.id == id).toList();
+    if (matches.isEmpty) {
+      return;
+    }
+    final siblings = _classeur.pictogramsIn(matches.first.categoryId);
+    final index = siblings.indexWhere((p) => p.id == id);
+    final target = index + delta;
+    if (index < 0 || target < 0 || target >= siblings.length) {
+      return;
+    }
+    final reordered = [...siblings];
+    reordered.insert(target, reordered.removeAt(index));
+
+    final orderById = <int, int>{
+      for (var i = 0; i < reordered.length; i++) reordered[i].id: i,
+    };
+    _classeur = _classeur.copyWith(
+      pictograms: _classeur.pictograms
+          .map(
+            (p) => orderById.containsKey(p.id)
+                ? p.copyWith(sortOrder: orderById[p.id])
+                : p,
+          )
+          .toList(),
+    );
+    await _persist();
+  }
+
+  /// Reorders categories (A-08), renumbering their display order.
+  /// [newIndex] is the destination index **after** the item was removed
+  /// (the `onReorderItem` convention).
+  Future<void> reorderCategories(int oldIndex, int newIndex) async {
+    final sorted = [..._classeur.categoriesSorted];
+    if (oldIndex < 0 || oldIndex >= sorted.length) {
+      return;
+    }
+    if (newIndex < 0 || newIndex >= sorted.length || newIndex == oldIndex) {
+      return;
+    }
+    sorted.insert(newIndex, sorted.removeAt(oldIndex));
+    _classeur = _classeur.copyWith(
+      categories: [
+        for (var i = 0; i < sorted.length; i++)
+          sorted[i].copyWith(sortOrder: i),
+      ],
+    );
+    await _persist();
+  }
+
   // ── Transfert du classeur (US-3.01 / US-3.02) ───────────────────────
 
   /// Zip autonome du classeur (manifeste + images), a enregistrer hors de

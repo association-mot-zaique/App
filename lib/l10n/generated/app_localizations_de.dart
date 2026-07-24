@@ -528,4 +528,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get classeurImportFailed => 'Ungueltige Ordner-Datei';
+
+  @override
+  String get moveToCategory => 'Verschieben nach...';
+
+  @override
+  String get moveUpAction => 'Nach oben';
+
+  @override
+  String get moveDownAction => 'Nach unten';
 }

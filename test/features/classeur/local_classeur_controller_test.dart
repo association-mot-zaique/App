@@ -135,6 +135,63 @@ void main() {
       expect(File(imagePath).existsSync(), isFalse);
     });
 
+    test('move a pictogram to another category (US-3.04)', () async {
+      await controller.addCategory('Maison');
+      await controller.addCategory('Ecole');
+      final maison = controller.classeur.categories
+          .firstWhere((c) => c.name == 'Maison')
+          .id;
+      final ecole = controller.classeur.categories
+          .firstWhere((c) => c.name == 'Ecole')
+          .id;
+      await controller.addPictogram(
+        label: 'porte',
+        categoryId: maison,
+        imageBytes: [1],
+        extension: 'png',
+      );
+      final pictoId = controller.classeur.pictograms.single.id;
+
+      await controller.movePictogramToCategory(pictoId, ecole);
+
+      expect(controller.classeur.pictogramsIn(maison), isEmpty);
+      expect(controller.classeur.pictogramsIn(ecole).single.id, pictoId);
+    });
+
+    test('reorder pictograms inside a category (US-3.05)', () async {
+      await controller.addCategory('Maison');
+      final categoryId = controller.classeur.categories.single.id;
+      for (final label in ['a', 'b', 'c']) {
+        await controller.addPictogram(
+          label: label,
+          categoryId: categoryId,
+          imageBytes: [1],
+          extension: 'png',
+        );
+      }
+      final third = controller.classeur.pictogramsIn(categoryId)[2].id;
+
+      await controller.movePictogramBy(third, -1); // c remonte d'un cran
+
+      expect(
+        controller.classeur.pictogramsIn(categoryId).map((p) => p.label),
+        ['a', 'c', 'b'],
+      );
+    });
+
+    test('reorder categories (US-3.05)', () async {
+      for (final name in ['A', 'B', 'C']) {
+        await controller.addCategory(name);
+      }
+
+      await controller.reorderCategories(2, 0); // C passe en tete
+
+      expect(
+        controller.classeur.categoriesSorted.map((c) => c.name),
+        ['C', 'A', 'B'],
+      );
+    });
+
     test('changes persist across a reload', () async {
       await controller.addCategory('Besoins');
       final categoryId = controller.classeur.categories.single.id;

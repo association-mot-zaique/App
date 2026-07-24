@@ -1105,6 +1105,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid classeur file'**
   String get classeurImportFailed;
+
+  /// No description provided for @moveToCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to...'**
+  String get moveToCategory;
+
+  /// No description provided for @moveUpAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Move up'**
+  String get moveUpAction;
+
+  /// No description provided for @moveDownAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Move down'**
+  String get moveDownAction;
 }
 
 class _AppLocalizationsDelegate

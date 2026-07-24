@@ -187,5 +187,8 @@
   "classeurExported": "Ordner exportiert",
   "classeurImported": "Ordner importiert",
   "importClasseurConfirm": "Den aktuellen Ordner durch den importierten ersetzen? Der aktuelle geht verloren.",
-  "classeurImportFailed": "Ungueltige Ordner-Datei"
+  "classeurImportFailed": "Ungueltige Ordner-Datei",
+  "moveToCategory": "Verschieben nach...",
+  "moveUpAction": "Nach oben",
+  "moveDownAction": "Nach unten"
 }

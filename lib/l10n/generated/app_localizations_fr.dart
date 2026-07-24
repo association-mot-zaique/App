@@ -526,4 +526,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get classeurImportFailed => 'Fichier de classeur invalide';
+
+  @override
+  String get moveToCategory => 'Deplacer vers...';
+
+  @override
+  String get moveUpAction => 'Monter';
+
+  @override
+  String get moveDownAction => 'Descendre';
 }

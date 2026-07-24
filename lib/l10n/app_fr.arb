@@ -187,5 +187,8 @@
   "classeurExported": "Classeur exporte",
   "classeurImported": "Classeur importe",
   "importClasseurConfirm": "Remplacer le classeur actuel par celui importe ? L'actuel sera perdu.",
-  "classeurImportFailed": "Fichier de classeur invalide"
+  "classeurImportFailed": "Fichier de classeur invalide",
+  "moveToCategory": "Deplacer vers...",
+  "moveUpAction": "Monter",
+  "moveDownAction": "Descendre"
 }

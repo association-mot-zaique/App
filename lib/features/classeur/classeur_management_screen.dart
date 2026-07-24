@@ -69,15 +69,18 @@ class ClasseurManagementScreen extends StatelessWidget {
               ),
             );
           }
-          return ListView.separated(
+          // Reorderable: only the aidant changes the order, so the end user
+          // keeps stable positions (CDC 3.1 / A-08).
+          return ReorderableListView.builder(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
             itemCount: categories.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
+            onReorderItem: controller.reorderCategories,
             itemBuilder: (context, index) {
               final category = categories[index];
               final count =
                   controller.classeur.pictogramsIn(category.id).length;
               return ListTile(
+                key: ValueKey(category.id),
                 leading: const Icon(Icons.folder_outlined),
                 title: Text(category.name),
                 subtitle: Text('$count ${l10n.pictogramsWord}'),
@@ -486,13 +489,23 @@ class _PictogramTile extends StatelessWidget {
               ),
               PopupMenuButton<String>(
                 onSelected: (value) {
-                  if (value == 'rename') {
-                    _rename(context);
-                  } else if (value == 'delete') {
-                    _delete(context);
+                  switch (value) {
+                    case 'rename':
+                      _rename(context);
+                    case 'delete':
+                      _delete(context);
+                    case 'move':
+                      _moveToCategory(context);
+                    case 'up':
+                      controller.movePictogramBy(pictogram.id, -1);
+                    case 'down':
+                      controller.movePictogramBy(pictogram.id, 1);
                   }
                 },
                 itemBuilder: (context) => [
+                  PopupMenuItem(value: 'up', child: Text(l10n.moveUpAction)),
+                  PopupMenuItem(value: 'down', child: Text(l10n.moveDownAction)),
+                  PopupMenuItem(value: 'move', child: Text(l10n.moveToCategory)),
                   PopupMenuItem(value: 'rename', child: Text(l10n.renameAction)),
                   PopupMenuItem(value: 'delete', child: Text(l10n.deleteAction)),
                 ],
@@ -522,6 +535,33 @@ class _PictogramTile extends StatelessWidget {
     final confirmed = await _confirmDelete(context, l10n.deletePictogramConfirm);
     if (confirmed) {
       await controller.deletePictogram(pictogram.id);
+    }
+  }
+
+  /// Moves the pictogram to another category (A-07 / US-3.04).
+  Future<void> _moveToCategory(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final others = controller.classeur.categoriesSorted
+        .where((c) => c.id != pictogram.categoryId)
+        .toList();
+    if (others.isEmpty) {
+      return;
+    }
+    final targetId = await showDialog<int>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l10n.moveToCategory),
+        children: [
+          for (final category in others)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(context).pop(category.id),
+              child: Text(category.name),
+            ),
+        ],
+      ),
+    );
+    if (targetId != null) {
+      await controller.movePictogramToCategory(pictogram.id, targetId);
     }
   }
 }

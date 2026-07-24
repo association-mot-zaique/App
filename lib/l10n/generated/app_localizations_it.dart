@@ -524,4 +524,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get classeurImportFailed => 'File del raccoglitore non valido';
+
+  @override
+  String get moveToCategory => 'Sposta in...';
+
+  @override
+  String get moveUpAction => 'Sposta su';
+
+  @override
+  String get moveDownAction => 'Sposta giu';
 }
