@@ -216,7 +216,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Guarda este codigo en un lugar seguro. Lo necesitaras si olvidas el PIN.';
 
   @override
-  String get unlockFavoritesTitle => 'Desbloquear favoritos';
+  String get unlockAidantTitle => 'Desbloquear el modo asistente';
 
   @override
   String get pinLabel => 'PIN';

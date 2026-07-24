@@ -556,7 +556,9 @@ class _ValidatePinDialogState extends State<_ValidatePinDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: Text(l10n.unlockFavoritesTitle),
+      // The same PIN gates Favoris and Reglages: the title must name the aidant
+      // mode, not one of the two tabs (CDC US-1.07).
+      title: Text(l10n.unlockAidantTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

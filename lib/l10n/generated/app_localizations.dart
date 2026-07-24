@@ -506,11 +506,11 @@ abstract class AppLocalizations {
   /// **'Store this code in a safe place. It is required if you forget your PIN.'**
   String get recoveryCodeMessage;
 
-  /// No description provided for @unlockFavoritesTitle.
+  /// No description provided for @unlockAidantTitle.
   ///
   /// In en, this message translates to:
-  /// **'Unlock favorites'**
-  String get unlockFavoritesTitle;
+  /// **'Unlock aidant mode'**
+  String get unlockAidantTitle;
 
   /// No description provided for @pinLabel.
   ///

@@ -74,7 +74,7 @@
   "pinCreated": "PIN erfolgreich erstellt",
   "recoveryCodeTitle": "Wiederherstellungscode",
   "recoveryCodeMessage": "Bewahren Sie diesen Code sicher auf. Er wird benoetigt, wenn Sie den PIN vergessen.",
-  "unlockFavoritesTitle": "Favoriten entsperren",
+  "unlockAidantTitle": "Betreuer-Modus entsperren",
   "pinLabel": "PIN",
   "pinIncorrect": "Falscher PIN",
   "pinLockedSeconds": "Zu viele Versuche. Bitte in {seconds}s erneut versuchen.",

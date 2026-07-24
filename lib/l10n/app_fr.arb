@@ -74,7 +74,7 @@
   "pinCreated": "PIN cree avec succes",
   "recoveryCodeTitle": "Code de recuperation",
   "recoveryCodeMessage": "Conservez ce code en lieu sur. Il est requis si vous oubliez le PIN.",
-  "unlockFavoritesTitle": "Debloquer les favoris",
+  "unlockAidantTitle": "Debloquer le mode aidant",
   "pinLabel": "PIN",
   "pinIncorrect": "PIN incorrect",
   "pinLockedSeconds": "Trop de tentatives. Reessayez dans {seconds}s.",

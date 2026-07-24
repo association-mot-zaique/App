@@ -217,7 +217,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Conservez ce code en lieu sur. Il est requis si vous oubliez le PIN.';
 
   @override
-  String get unlockFavoritesTitle => 'Debloquer les favoris';
+  String get unlockAidantTitle => 'Debloquer le mode aidant';
 
   @override
   String get pinLabel => 'PIN';

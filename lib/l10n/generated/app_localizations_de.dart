@@ -218,7 +218,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Bewahren Sie diesen Code sicher auf. Er wird benoetigt, wenn Sie den PIN vergessen.';
 
   @override
-  String get unlockFavoritesTitle => 'Favoriten entsperren';
+  String get unlockAidantTitle => 'Betreuer-Modus entsperren';
 
   @override
   String get pinLabel => 'PIN';
