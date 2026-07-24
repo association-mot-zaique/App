@@ -1,14 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mot_zaique/data/models/pictogram.dart';
 import 'package:mot_zaique/data/models/profile.dart';
 import 'package:mot_zaique/data/services/app_settings_repository.dart';
+import 'package:mot_zaique/data/services/favorites_repository.dart';
 import 'package:mot_zaique/data/services/local_classeur_repository.dart';
+import 'package:mot_zaique/data/services/phrase_book_repository.dart';
 import 'package:mot_zaique/data/services/profile_repository.dart';
 import 'package:mot_zaique/features/classeur/local_classeur_controller.dart';
+import 'package:mot_zaique/features/communication/phrase_book_controller.dart';
+import 'package:mot_zaique/features/favorites/favorites_controller.dart';
 import 'package:mot_zaique/features/profiles/profile_controller.dart';
 import 'package:mot_zaique/features/settings/settings_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+Pictogram _pictogram(int id, String label) =>
+    Pictogram(id: id, label: label, language: 'fr');
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +24,8 @@ void main() {
   late Directory tempDir;
   late LocalClasseurController classeurController;
   late SettingsController settingsController;
+  late FavoritesController favoritesController;
+  late PhraseBookController phraseBookController;
   late ProfileController profiles;
 
   setUp(() async {
@@ -27,15 +37,23 @@ void main() {
       Directory('${tempDir.path}/placeholder'),
     );
     final settingsRepository = AppSettingsRepository(preferences);
+    final favoritesRepository = FavoritesRepository(preferences);
+    final phraseBookRepository = PhraseBookRepository(preferences);
     classeurController = LocalClasseurController(classeurRepository);
     settingsController = SettingsController(settingsRepository);
+    favoritesController = FavoritesController(favoritesRepository);
+    phraseBookController = PhraseBookController(phraseBookRepository);
 
     profiles = ProfileController(
       repository: ProfileRepository(preferences),
       classeurRepository: classeurRepository,
       settingsRepository: settingsRepository,
+      favoritesRepository: favoritesRepository,
+      phraseBookRepository: phraseBookRepository,
       classeurController: classeurController,
       settingsController: settingsController,
+      favoritesController: favoritesController,
+      phraseBookController: phraseBookController,
       documentsDir: tempDir,
       defaultProfileName: 'Profil 1',
     );
@@ -70,6 +88,53 @@ void main() {
       // ...and switching back restores the first profile's classeur.
       await profiles.switchTo(Profile.defaultId);
       expect(classeurController.classeur.categories.single.name, 'Maison');
+    });
+
+    test('each profile owns its favorites', () async {
+      await favoritesController.toggleFavorite(_pictogram(1, 'manger'));
+      expect(favoritesController.favorites, hasLength(1));
+
+      await profiles.addProfile('Leo');
+      expect(favoritesController.favorites, isEmpty);
+
+      await favoritesController.toggleFavorite(_pictogram(2, 'jouer'));
+      expect(favoritesController.favorites.single.label, 'jouer');
+
+      await profiles.switchTo(Profile.defaultId);
+      expect(favoritesController.favorites.single.label, 'manger');
+    });
+
+    test('each profile owns its phrase band and saved phrases', () async {
+      await phraseBookController.addToCurrent(_pictogram(1, 'je veux'));
+      await phraseBookController.saveCurrentAsPhrase(customName: 'Demande');
+      expect(phraseBookController.currentPhrase, hasLength(1));
+      expect(phraseBookController.savedPhrases, hasLength(1));
+
+      await profiles.addProfile('Leo');
+      expect(phraseBookController.currentPhrase, isEmpty);
+      expect(phraseBookController.savedPhrases, isEmpty);
+
+      await phraseBookController.addToCurrent(_pictogram(2, 'dormir'));
+
+      await profiles.switchTo(Profile.defaultId);
+      expect(phraseBookController.currentPhrase.single.label, 'je veux');
+      expect(phraseBookController.savedPhrases.single.name, 'Demande');
+    });
+
+    test('deleting a profile drops its favorites and phrases', () async {
+      await profiles.addProfile('Leo');
+      final leoId = profiles.activeId;
+      await favoritesController.toggleFavorite(_pictogram(3, 'boire'));
+      await phraseBookController.addToCurrent(_pictogram(3, 'boire'));
+
+      expect(await profiles.deleteProfile(leoId), isTrue);
+      expect(profiles.activeId, Profile.defaultId);
+
+      // Recreating a profile reuses the id: its storage must come back empty.
+      await profiles.addProfile('Leo');
+      expect(profiles.activeId, leoId);
+      expect(favoritesController.favorites, isEmpty);
+      expect(phraseBookController.currentPhrase, isEmpty);
     });
 
     test('refuses a duplicate profile name', () async {

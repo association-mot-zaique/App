@@ -4,16 +4,20 @@ import 'package:flutter/foundation.dart';
 
 import '../../data/models/profile.dart';
 import '../../data/services/app_settings_repository.dart';
+import '../../data/services/favorites_repository.dart';
 import '../../data/services/local_classeur_repository.dart';
+import '../../data/services/phrase_book_repository.dart';
 import '../../data/services/profile_repository.dart';
 import '../classeur/local_classeur_controller.dart';
+import '../communication/phrase_book_controller.dart';
+import '../favorites/favorites_controller.dart';
 import '../settings/settings_controller.dart';
 
 /// Owns the profile list and the active profile (A-11 / US-3.03).
 ///
-/// Switching profile re-points the classeur and settings repositories, then
-/// reloads their controllers — so each profile really has **its own** classeur
-/// and settings.
+/// Switching profile re-points every per-user repository — classeur, settings,
+/// favoris and bande-phrase — then reloads their controllers, so a shared
+/// tablet never shows one user's content to another.
 ///
 /// The historical profile ([Profile.defaultId]) keeps the legacy storage
 /// locations, so an existing installation is preserved without any migration.
@@ -22,23 +26,35 @@ class ProfileController extends ChangeNotifier {
     required ProfileRepository repository,
     required LocalClasseurRepository classeurRepository,
     required AppSettingsRepository settingsRepository,
+    required FavoritesRepository favoritesRepository,
+    required PhraseBookRepository phraseBookRepository,
     required LocalClasseurController classeurController,
     required SettingsController settingsController,
+    required FavoritesController favoritesController,
+    required PhraseBookController phraseBookController,
     required Directory documentsDir,
     required String defaultProfileName,
   }) : _repository = repository,
        _classeurRepository = classeurRepository,
        _settingsRepository = settingsRepository,
+       _favoritesRepository = favoritesRepository,
+       _phraseBookRepository = phraseBookRepository,
        _classeurController = classeurController,
        _settingsController = settingsController,
+       _favoritesController = favoritesController,
+       _phraseBookController = phraseBookController,
        _documentsDir = documentsDir,
        _defaultProfileName = defaultProfileName;
 
   final ProfileRepository _repository;
   final LocalClasseurRepository _classeurRepository;
   final AppSettingsRepository _settingsRepository;
+  final FavoritesRepository _favoritesRepository;
+  final PhraseBookRepository _phraseBookRepository;
   final LocalClasseurController _classeurController;
   final SettingsController _settingsController;
+  final FavoritesController _favoritesController;
+  final PhraseBookController _phraseBookController;
   final Directory _documentsDir;
   final String _defaultProfileName;
 
@@ -54,7 +70,8 @@ class ProfileController extends ChangeNotifier {
   );
 
   /// Reads the profiles, then points the repositories at the active one and
-  /// loads its data. Call once at startup, before the controllers' own load.
+  /// loads its data — including favoris and bande-phrase, so those controllers
+  /// must not be loaded separately at startup. Call once, at startup.
   Future<void> load() async {
     _profiles = _repository.readProfiles(defaultName: _defaultProfileName);
     final storedActive = _repository.readActiveId();
@@ -72,14 +89,22 @@ class ProfileController extends ChangeNotifier {
     return Directory('${_documentsDir.path}/profiles/$profileId/classeur');
   }
 
-  String _settingsSuffixFor(String profileId) =>
+  /// Suffix appended to every per-profile preferences key. Empty for the
+  /// historical profile so its existing keys stay valid (no migration).
+  String _storageSuffixFor(String profileId) =>
       profileId == Profile.defaultId ? '' : '_$profileId';
 
   Future<void> _applyActive() async {
+    final suffix = _storageSuffixFor(_activeId);
     _classeurRepository.rootDir = _classeurRootFor(_activeId);
-    _settingsRepository.profileSuffix = _settingsSuffixFor(_activeId);
+    _settingsRepository.profileSuffix = suffix;
+    _favoritesRepository.profileSuffix = suffix;
+    _phraseBookRepository.profileSuffix = suffix;
+
     await _settingsController.load();
     await _classeurController.load();
+    await _favoritesController.load();
+    await _phraseBookController.load();
     notifyListeners();
   }
 
@@ -120,7 +145,8 @@ class ProfileController extends ChangeNotifier {
     return true;
   }
 
-  /// Deletes a profile and its classeur. The last profile cannot be removed.
+  /// Deletes a profile and all of its data — classeur, réglages, favoris et
+  /// phrases. The last profile cannot be removed.
   Future<bool> deleteProfile(String id) async {
     if (_profiles.length <= 1 || !_profiles.any((p) => p.id == id)) {
       return false;
@@ -128,8 +154,14 @@ class ProfileController extends ChangeNotifier {
     _profiles = _profiles.where((p) => p.id != id).toList();
     await _repository.saveProfiles(_profiles);
 
-    // Drop that profile's data (non-default profiles own their directory).
+    // Drop that profile's data. The historical profile is never deleted from
+    // its legacy locations, so only non-default profiles are cleaned up.
     if (id != Profile.defaultId) {
+      final suffix = _storageSuffixFor(id);
+      await _settingsRepository.deleteFor(suffix);
+      await _favoritesRepository.deleteFor(suffix);
+      await _phraseBookRepository.deleteFor(suffix);
+
       final dir = Directory('${_documentsDir.path}/profiles/$id');
       if (await dir.exists()) {
         await dir.delete(recursive: true);

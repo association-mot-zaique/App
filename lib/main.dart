@@ -32,12 +32,10 @@ Future<void> main() async {
     cache: searchCacheRepository,
   );
 
-  final favoritesController = FavoritesController(
-    FavoritesRepository(preferences),
-  );
-  final phraseBookController = PhraseBookController(
-    PhraseBookRepository(preferences),
-  );
+  final favoritesRepository = FavoritesRepository(preferences);
+  final phraseBookRepository = PhraseBookRepository(preferences);
+  final favoritesController = FavoritesController(favoritesRepository);
+  final phraseBookController = PhraseBookController(phraseBookRepository);
   final settingsRepository = AppSettingsRepository(preferences);
   final settingsController = SettingsController(settingsRepository);
   final localBackupService = LocalBackupService(preferences);
@@ -45,24 +43,26 @@ Future<void> main() async {
   final classeurRepository = await LocalClasseurRepository.create();
   final classeurController = LocalClasseurController(classeurRepository);
 
-  // Profiles (A-11) : points the classeur/settings repositories at the active
-  // profile, then loads its data. Must run before using those controllers.
+  // Profiles (A-11) : points every per-user repository at the active profile,
+  // then loads its data. It also loads the favoris and phrase controllers, so
+  // they must not be loaded separately — their storage key depends on the
+  // profile resolved here.
   final documentsDir = await getApplicationDocumentsDirectory();
   final profileController = ProfileController(
     repository: ProfileRepository(preferences),
     classeurRepository: classeurRepository,
     settingsRepository: settingsRepository,
+    favoritesRepository: favoritesRepository,
+    phraseBookRepository: phraseBookRepository,
     classeurController: classeurController,
     settingsController: settingsController,
+    favoritesController: favoritesController,
+    phraseBookController: phraseBookController,
     documentsDir: documentsDir,
     defaultProfileName: 'Profil 1',
   );
 
-  await Future.wait([
-    favoritesController.load(),
-    phraseBookController.load(),
-    profileController.load(),
-  ]);
+  await profileController.load();
 
   runApp(
     MotZaiqueApp(

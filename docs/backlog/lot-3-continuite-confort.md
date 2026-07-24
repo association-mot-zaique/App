@@ -34,7 +34,8 @@ _Réf : A-11 · l'onglet est protégé par le PIN existant (§6.2)_
 - [x] Créer / renommer / supprimer un profil — section « Profils » dans les Réglages (doublons refusés, dernier profil non supprimable)
 - [x] Classeur et réglages propres à chaque profil — classeur dans `profiles/<id>/classeur`, réglages sous une clé par profil ; le profil historique **garde ses emplacements existants** (aucune migration)
 - [x] Bascule entre profils depuis le mode aidant — la bascule re-cible les dépôts et recharge classeur + réglages
-- [ ] Rendre les **favoris** et la **bande-phrase courante** propres au profil — aujourd'hui encore partagés (clés `favorites_*` / `current_phrase_v1` sans suffixe de profil) ; décision produit à trancher
+- [x] **Favoris**, **bande-phrase courante** et **phrases enregistrées** propres au profil — clés suffixées par profil ; le profil historique garde ses clés sans suffixe (aucune migration) ; la suppression d'un profil efface aussi ses réglages, favoris et phrases
+- [x] Sauvegarde locale multi-profils — l'export couvre **tous** les profils (liste des profils, profil actif, clés suffixées) et la restauration remplace l'état complet
 - [ ] Valider le partage d'un appareil entre plusieurs personnes sur le terrain
 
 ### US-3.04 · Déplacement d'un pictogramme entre catégories `Should`

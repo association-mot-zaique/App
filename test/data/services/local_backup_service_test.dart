@@ -57,6 +57,41 @@ void main() {
     expect(prefs.getInt('favorites_pin_failed_attempts_v1'), 3);
   });
 
+  test('covers every profile, not only the active one', () async {
+    SharedPreferences.setMockInitialValues({
+      'profiles_v1': [
+        '{"id":"default","name":"Profil 1"}',
+        '{"id":"p1","name":"Leo"}',
+      ],
+      'active_profile_v1': 'p1',
+      'app_settings_v1': '{"localeCode":"fr"}',
+      'app_settings_v1_p1': '{"localeCode":"it"}',
+      'favorite_pictograms_v1_p1': [
+        '{"id":7,"label":"jouer","tags":[],"categories":[],"language":"fr","aac":true,"schematic":false,"downloads":0}',
+      ],
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    final backupService = LocalBackupService(prefs);
+    await backupService.exportBackup();
+
+    // Simulate a device wipe plus a profile created after the backup.
+    await prefs.remove('app_settings_v1_p1');
+    await prefs.remove('favorite_pictograms_v1_p1');
+    await prefs.setString('app_settings_v1_p2', '{"localeCode":"de"}');
+
+    expect(await backupService.restoreBackup(), isTrue);
+    expect(
+      prefs.getString('app_settings_v1_p1'),
+      contains('"localeCode":"it"'),
+    );
+    expect(prefs.getStringList('favorite_pictograms_v1_p1'), isNotEmpty);
+    expect(prefs.getString('active_profile_v1'), 'p1');
+    expect(prefs.getStringList('profiles_v1'), hasLength(2));
+    // The profile absent from the backup does not survive the restore.
+    expect(prefs.getString('app_settings_v1_p2'), isNull);
+  });
+
   test('returns false when no backup file exists', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();

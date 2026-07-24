@@ -16,6 +16,10 @@ class AppSettingsRepository {
 
   String get _settingsKey => '$_baseKey$profileSuffix';
 
+  /// Drops the settings of a deleted profile.
+  Future<void> deleteFor(String suffix) =>
+      _preferences.remove('$_baseKey$suffix');
+
   AppSettings read() {
     final rawJson = _preferences.getString(_settingsKey);
     if (rawJson == null || rawJson.isEmpty) {

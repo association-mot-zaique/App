@@ -8,11 +8,24 @@ import '../models/saved_phrase.dart';
 class PhraseBookRepository {
   PhraseBookRepository(this._preferences);
 
-  static const String _currentPhraseKey = 'current_phrase_v1';
-  static const String _savedPhrasesKey = 'saved_phrases_v1';
+  static const String _currentPhraseBaseKey = 'current_phrase_v1';
+  static const String _savedPhrasesBaseKey = 'saved_phrases_v1';
   static const int _maxSavedPhrases = 80;
 
   final SharedPreferences _preferences;
+
+  /// Suffix identifying the active profile (A-11). Empty for the historical
+  /// profile, so its existing phrases are kept untouched.
+  String profileSuffix = '';
+
+  String get _currentPhraseKey => '$_currentPhraseBaseKey$profileSuffix';
+  String get _savedPhrasesKey => '$_savedPhrasesBaseKey$profileSuffix';
+
+  /// Drops the phrases of a deleted profile.
+  Future<void> deleteFor(String suffix) async {
+    await _preferences.remove('$_currentPhraseBaseKey$suffix');
+    await _preferences.remove('$_savedPhrasesBaseKey$suffix');
+  }
 
   List<Pictogram> readCurrentPhrase() {
     final raw = _preferences.getStringList(_currentPhraseKey) ?? const [];

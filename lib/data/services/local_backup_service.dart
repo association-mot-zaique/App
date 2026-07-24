@@ -11,14 +11,19 @@ class LocalBackupService {
 
   static const String _fileName = 'mot-zaique-backup.json';
 
-  static const List<String> _stringListKeys = [
+  // Base keys, without the per-profile suffix (A-11). A key is managed when it
+  // equals a base key (historical profile) or starts with `<base>_` (any other
+  // profile), so a backup covers every profile, not just the active one.
+  static const List<String> _stringListBaseKeys = [
     'favorite_pictograms_v1',
     'current_phrase_v1',
     'saved_phrases_v1',
+    'profiles_v1',
   ];
 
-  static const List<String> _stringKeys = [
+  static const List<String> _stringBaseKeys = [
     'app_settings_v1',
+    'active_profile_v1',
     'favorites_pin_hash_v3',
     'favorites_pin_salt_v3',
     'favorites_recovery_hash_v3',
@@ -29,7 +34,7 @@ class LocalBackupService {
     'search_cache_v1',
   ];
 
-  static const List<String> _intKeys = [
+  static const List<String> _intBaseKeys = [
     'favorites_pin_failed_attempts_v1',
     'favorites_pin_blocked_until_v1',
   ];
@@ -74,16 +79,26 @@ class LocalBackupService {
     return true;
   }
 
+  bool _matches(String key, String baseKey) =>
+      key == baseKey || key.startsWith('${baseKey}_');
+
+  bool _matchesAny(String key, List<String> baseKeys) =>
+      baseKeys.any((baseKey) => _matches(key, baseKey));
+
+  /// Every stored key derived from one of [baseKeys], across all profiles.
+  Iterable<String> _storedKeysFor(List<String> baseKeys) =>
+      _preferences.getKeys().where((key) => _matchesAny(key, baseKeys));
+
   Map<String, dynamic> _collectData() {
     final data = <String, dynamic>{};
 
-    for (final key in _stringListKeys) {
+    for (final key in _storedKeysFor(_stringListBaseKeys)) {
       data[key] = _preferences.getStringList(key);
     }
-    for (final key in _stringKeys) {
+    for (final key in _storedKeysFor(_stringBaseKeys)) {
       data[key] = _preferences.getString(key);
     }
-    for (final key in _intKeys) {
+    for (final key in _storedKeysFor(_intBaseKeys)) {
       data[key] = _preferences.getInt(key);
     }
 
@@ -91,36 +106,33 @@ class LocalBackupService {
   }
 
   Future<void> _applyData(Map<String, dynamic> data) async {
-    for (final key in _stringListKeys) {
-      final value = data[key];
-      if (value is List) {
+    // A restore replaces the managed state: drop every managed key first, so a
+    // profile created after the backup does not survive it.
+    final managed = _storedKeysFor([
+      ..._stringListBaseKeys,
+      ..._stringBaseKeys,
+      ..._intBaseKeys,
+    ]).toList();
+    for (final key in managed) {
+      await _preferences.remove(key);
+    }
+
+    for (final entry in data.entries) {
+      final key = entry.key;
+      final value = entry.value;
+
+      if (value is List && _matchesAny(key, _stringListBaseKeys)) {
         await _preferences.setStringList(
           key,
           value.map((e) => e.toString()).toList(),
         );
-      } else {
-        await _preferences.remove(key);
-      }
-    }
-
-    for (final key in _stringKeys) {
-      final value = data[key];
-      if (value is String) {
+      } else if (value is String && _matchesAny(key, _stringBaseKeys)) {
         await _preferences.setString(key, value);
-      } else {
-        await _preferences.remove(key);
-      }
-    }
-
-    for (final key in _intKeys) {
-      final value = data[key];
-      if (value is int) {
-        await _preferences.setInt(key, value);
-      } else if (value is num) {
+      } else if (value is num && _matchesAny(key, _intBaseKeys)) {
         await _preferences.setInt(key, value.toInt());
-      } else {
-        await _preferences.remove(key);
       }
+      // Anything else (null placeholders from older backups, unknown keys) is
+      // ignored: the key stays removed.
     }
   }
 

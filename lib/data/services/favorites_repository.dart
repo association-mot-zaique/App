@@ -7,8 +7,18 @@ import '../models/pictogram.dart';
 class FavoritesRepository {
   FavoritesRepository(this._preferences);
 
-  static const String _storageKey = 'favorite_pictograms_v1';
+  static const String _baseKey = 'favorite_pictograms_v1';
   final SharedPreferences _preferences;
+
+  /// Suffix identifying the active profile (A-11). Empty for the historical
+  /// profile, so its existing favorites are kept untouched.
+  String profileSuffix = '';
+
+  String get _storageKey => '$_baseKey$profileSuffix';
+
+  /// Drops the favorites of a deleted profile.
+  Future<void> deleteFor(String suffix) =>
+      _preferences.remove('$_baseKey$suffix');
 
   List<Pictogram> readFavorites() {
     final entries = _preferences.getStringList(_storageKey) ?? const [];

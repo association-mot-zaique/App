@@ -156,11 +156,10 @@ class _HomeShellState extends State<HomeShell> {
   }
 
   Future<void> _refreshAfterBackupRestore() async {
-    await Future.wait([
-      widget.favoritesController.load(),
-      widget.phraseBookController.load(),
-      widget.settingsController.load(),
-    ]);
+    // A backup carries the profile list, so reload through the profile
+    // controller: it re-points every per-user repository, then reloads
+    // classeur, réglages, favoris and bande-phrase for the restored profile.
+    await widget.profileController.load();
 
     if (!mounted) {
       return;
