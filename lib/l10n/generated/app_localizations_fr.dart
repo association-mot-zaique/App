@@ -464,6 +464,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get lockAidant => 'Verrouiller le mode aidant';
 
   @override
+  String get aidantArea => 'Espace aidant';
+
+  @override
   String get addFromFile => 'Depuis un fichier';
 
   @override

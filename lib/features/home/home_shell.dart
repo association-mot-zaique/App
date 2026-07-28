@@ -8,7 +8,6 @@ import '../../data/services/pictogram_search_service.dart';
 import '../../data/services/search_cache_repository.dart';
 import '../../data/services/speech_service.dart';
 import '../../l10n/generated/app_localizations.dart';
-import '../../widgets/logo_title.dart';
 import '../classeur/local_classeur_controller.dart';
 import '../communication/classeur_communication_screen.dart';
 import '../communication/communication_screen.dart';
@@ -49,42 +48,39 @@ class HomeShell extends StatefulWidget {
   State<HomeShell> createState() => _HomeShellState();
 }
 
+/// The end user only ever sees the communication screen, full screen and free
+/// of any chrome (no app bar, no navigation bar): every non-essential element
+/// reads as parasitic information for an autistic user (CDC 3.1, retour IME).
+/// The whole aidant toolbox (Favoris + Reglages) lives behind a single
+/// discreet PIN-protected button (CDC A-01).
 class _HomeShellState extends State<HomeShell> {
-  int _selectedIndex = 0;
-  bool _aidantUnlocked = false;
-
-  /// Favorites (1) and Settings (2) make up the PIN-protected aidant area
-  /// (CDC A-01). The communication tab (0) stays freely accessible.
-  static bool _isAidantTab(int index) => index == 1 || index == 2;
-
-  Future<void> _onDestinationSelected(int index) async {
-    if (index == _selectedIndex) {
+  /// Every entry into the aidant area re-asks the PIN: leaving the area is
+  /// what locks it, so the end user can never wander into the configuration.
+  Future<void> _openAidantArea() async {
+    final unlocked = await _ensureAidantUnlocked();
+    if (!mounted || !unlocked) {
       return;
     }
 
-    if (_isAidantTab(index)) {
-      final unlocked = await _ensureAidantUnlocked();
-      if (!mounted || !unlocked) {
-        return;
-      }
-    }
-
-    setState(() {
-      // Returning to the communication tab re-locks the aidant area, so the
-      // end user cannot reach the configuration again without the PIN.
-      if (index == 0) {
-        _aidantUnlocked = false;
-      }
-      _selectedIndex = index;
-    });
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => _AidantAreaScreen(
+          searchService: widget.searchService,
+          searchCacheRepository: widget.searchCacheRepository,
+          favoritesController: widget.favoritesController,
+          settingsController: widget.settingsController,
+          classeurController: widget.classeurController,
+          profileController: widget.profileController,
+          pinRepository: widget.pinRepository,
+          localBackupService: widget.localBackupService,
+          onBackupRestored: _refreshAfterBackupRestore,
+        ),
+      ),
+    );
   }
 
   Future<bool> _ensureAidantUnlocked() async {
     final l10n = AppLocalizations.of(context);
-
-    if (_aidantUnlocked) {
-      return true;
-    }
 
     if (!widget.pinRepository.hasPin()) {
       final pin = await showDialog<String>(
@@ -117,7 +113,6 @@ class _HomeShellState extends State<HomeShell> {
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.pinCreated)));
 
-      _aidantUnlocked = true;
       return true;
     }
 
@@ -130,29 +125,7 @@ class _HomeShellState extends State<HomeShell> {
         ) ??
         false;
 
-    _aidantUnlocked = isValid;
     return isValid;
-  }
-
-  Future<void> _changePin() async {
-    final l10n = AppLocalizations.of(context);
-    final newPin = await showDialog<String>(
-      context: context,
-      builder: (_) => const _ChangePinDialog(),
-    );
-
-    if (newPin == null) {
-      return;
-    }
-
-    await widget.pinRepository.changePin(newPin);
-    if (!mounted) {
-      return;
-    }
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.pinChanged)));
   }
 
   /// Opens the ARASAAC explorer over the classeur. It shares the bande-phrase,
@@ -187,40 +160,18 @@ class _HomeShellState extends State<HomeShell> {
       return;
     }
 
-    setState(() {
-      _aidantUnlocked = false;
-    });
+    // The restored data may carry another PIN and another classeur: go back
+    // to the communication screen, the only always-valid place.
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const LogoTitle(),
-        actions: [
-          if (_isAidantTab(_selectedIndex))
-            IconButton(
-              tooltip: l10n.changePinAction,
-              onPressed: _changePin,
-              icon: const Icon(Icons.password_rounded),
-            ),
-          if (_isAidantTab(_selectedIndex))
-            IconButton(
-              tooltip: l10n.lockAidant,
-              onPressed: () {
-                setState(() {
-                  _selectedIndex = 0;
-                  _aidantUnlocked = false;
-                });
-              },
-              icon: const Icon(Icons.lock_outline_rounded),
-            ),
-        ],
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
+      body: Stack(
         children: [
           // Owned classeur once it holds at least one pictogram, otherwise the
           // ARASAAC explorer as a bootstrap fallback (CDC 6.3/6.4). Guarding on
@@ -247,6 +198,108 @@ class _HomeShellState extends State<HomeShell> {
               );
             },
           ),
+          // The only chrome on the end-user screen: a discreet entry to the
+          // aidant area. Muted on purpose, but still a 48px touch target.
+          Positioned(
+            right: 8,
+            bottom: 8,
+            child: SafeArea(
+              child: IconButton(
+                tooltip: l10n.aidantArea,
+                onPressed: _openAidantArea,
+                icon: const Icon(Icons.lock_outline_rounded, size: 20),
+                style: IconButton.styleFrom(
+                  minimumSize: const Size(48, 48),
+                  backgroundColor: colors.surfaceContainerHighest.withValues(
+                    alpha: 0.7,
+                  ),
+                  foregroundColor: colors.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The PIN-protected aidant toolbox: Favoris and Reglages, with the standard
+/// chrome (app bar, navigation bar) that is banned from the end-user screen.
+class _AidantAreaScreen extends StatefulWidget {
+  const _AidantAreaScreen({
+    required this.searchService,
+    required this.searchCacheRepository,
+    required this.favoritesController,
+    required this.settingsController,
+    required this.classeurController,
+    required this.profileController,
+    required this.pinRepository,
+    required this.localBackupService,
+    required this.onBackupRestored,
+  });
+
+  final PictogramSearchService searchService;
+  final SearchCacheRepository searchCacheRepository;
+  final FavoritesController favoritesController;
+  final SettingsController settingsController;
+  final LocalClasseurController classeurController;
+  final ProfileController profileController;
+  final PinRepository pinRepository;
+  final LocalBackupService localBackupService;
+  final Future<void> Function() onBackupRestored;
+
+  @override
+  State<_AidantAreaScreen> createState() => _AidantAreaScreenState();
+}
+
+class _AidantAreaScreenState extends State<_AidantAreaScreen> {
+  int _selectedIndex = 0;
+
+  Future<void> _changePin() async {
+    final l10n = AppLocalizations.of(context);
+    final newPin = await showDialog<String>(
+      context: context,
+      builder: (_) => const _ChangePinDialog(),
+    );
+
+    if (newPin == null) {
+      return;
+    }
+
+    await widget.pinRepository.changePin(newPin);
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.pinChanged)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.aidantArea),
+        actions: [
+          IconButton(
+            tooltip: l10n.changePinAction,
+            onPressed: _changePin,
+            icon: const Icon(Icons.password_rounded),
+          ),
+          IconButton(
+            tooltip: l10n.lockAidant,
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.lock_outline_rounded),
+          ),
+        ],
+      ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
           FavoritesScreen(
             favoritesController: widget.favoritesController,
             settingsController: widget.settingsController,
@@ -258,66 +311,25 @@ class _HomeShellState extends State<HomeShell> {
             searchService: widget.searchService,
             searchCacheRepository: widget.searchCacheRepository,
             localBackupService: widget.localBackupService,
-            onBackupRestored: _refreshAfterBackupRestore,
+            onBackupRestored: widget.onBackupRestored,
           ),
         ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: _onDestinationSelected,
+        onDestinationSelected: (index) =>
+            setState(() => _selectedIndex = index),
         destinations: [
           NavigationDestination(
-            icon: const Icon(Icons.record_voice_over_rounded),
-            label: l10n.communicateNav,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.lock_rounded),
-            selectedIcon: const Icon(Icons.lock_open_rounded),
+            icon: const Icon(Icons.favorite_rounded),
             label: l10n.favoritesNav,
           ),
           NavigationDestination(
-            // Locked look while unselected (aidant locked); plain settings
-            // icon once selected, i.e. unlocked.
-            icon: const _LockBadgeIcon(Icons.tune_rounded),
-            selectedIcon: const Icon(Icons.tune_rounded),
+            icon: const Icon(Icons.tune_rounded),
             label: l10n.settingsNav,
           ),
         ],
       ),
-    );
-  }
-}
-
-/// A base icon with a small lock badge, used to flag a PIN-protected tab.
-class _LockBadgeIcon extends StatelessWidget {
-  const _LockBadgeIcon(this.icon);
-
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Icon(icon),
-        Positioned(
-          right: -5,
-          bottom: -3,
-          child: Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              color: colors.surface,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.lock_rounded,
-              size: 11,
-              color: colors.onSurfaceVariant,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

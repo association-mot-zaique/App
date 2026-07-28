@@ -359,13 +359,19 @@ class _PhraseStrip extends StatelessWidget {
                   : const SizedBox.shrink(),
             ),
             const SizedBox(height: 8),
+            // Icon-only controls: any button text reads as parasitic
+            // information for the end user (retour IME). Tooltips and
+            // semantic labels keep the actions accessible.
             Row(
               children: [
                 Expanded(
-                  child: FilledButton.icon(
-                    onPressed: hasPhrase ? () => onSpeak() : null,
-                    icon: const Icon(Icons.volume_up_rounded),
-                    label: Text(speakLabel),
+                  child: Semantics(
+                    button: true,
+                    label: speakLabel,
+                    child: FilledButton(
+                      onPressed: hasPhrase ? () => onSpeak() : null,
+                      child: const Icon(Icons.volume_up_rounded),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),

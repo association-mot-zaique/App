@@ -466,6 +466,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get lockAidant => 'Betreuer-Modus sperren';
 
   @override
+  String get aidantArea => 'Betreuer-Bereich';
+
+  @override
   String get addFromFile => 'Aus einer Datei';
 
   @override

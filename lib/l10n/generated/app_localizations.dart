@@ -980,6 +980,12 @@ abstract class AppLocalizations {
   /// **'Lock aidant mode'**
   String get lockAidant;
 
+  /// No description provided for @aidantArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Caregiver area'**
+  String get aidantArea;
+
   /// No description provided for @addFromFile.
   ///
   /// In en, this message translates to:

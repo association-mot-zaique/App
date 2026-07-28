@@ -461,6 +461,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lockAidant => 'Lock aidant mode';
 
   @override
+  String get aidantArea => 'Caregiver area';
+
+  @override
   String get addFromFile => 'From a file';
 
   @override

@@ -463,6 +463,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lockAidant => 'Bloquear el modo asistente';
 
   @override
+  String get aidantArea => 'Espacio del asistente';
+
+  @override
   String get addFromFile => 'Desde un archivo';
 
   @override

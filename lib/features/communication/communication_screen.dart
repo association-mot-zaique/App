@@ -626,7 +626,6 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
       children: [
         _PhraseComposer(
           phrasePictograms: widget.phraseBookController.currentPhrase,
-          phraseText: widget.phraseBookController.currentText,
           speakLabel: l10n.speakPhrase,
           removeLastLabel: l10n.removeLast,
           clearLabel: l10n.clear,
@@ -707,7 +706,6 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
             children: [
               _PhraseComposer(
                 phrasePictograms: widget.phraseBookController.currentPhrase,
-                phraseText: widget.phraseBookController.currentText,
                 speakLabel: l10n.speakPhrase,
                 removeLastLabel: l10n.removeLast,
                 clearLabel: l10n.clear,
@@ -1233,7 +1231,6 @@ class _SavedPhraseTile extends StatelessWidget {
 class _PhraseComposer extends StatelessWidget {
   const _PhraseComposer({
     required this.phrasePictograms,
-    required this.phraseText,
     required this.speakLabel,
     required this.removeLastLabel,
     required this.clearLabel,
@@ -1247,7 +1244,6 @@ class _PhraseComposer extends StatelessWidget {
   });
 
   final List<Pictogram> phrasePictograms;
-  final String phraseText;
   final String speakLabel;
   final String removeLastLabel;
   final String clearLabel;
@@ -1319,48 +1315,40 @@ class _PhraseComposer extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 6),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  phraseText,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
             ],
             const SizedBox(height: 10),
+            // Icon-only controls, no text phrase echo: the pictogram strip IS
+            // the sentence, everything else reads as parasitic information for
+            // the end user (retour IME). Tooltips and semantic labels keep the
+            // actions accessible.
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                FilledButton.icon(
-                  onPressed: hasPhrase ? onSpeak : null,
-                  icon: const Icon(Icons.volume_up_rounded),
-                  label: Text(speakLabel),
+                Semantics(
+                  button: true,
+                  label: speakLabel,
+                  child: FilledButton(
+                    onPressed: hasPhrase ? onSpeak : null,
+                    child: const Icon(Icons.volume_up_rounded),
+                  ),
                 ),
                 if (showSavePhrase)
-                  FilledButton.tonalIcon(
+                  IconButton.filledTonal(
                     key: const Key('save_phrase_button'),
+                    tooltip: savePhraseLabel,
                     onPressed: hasPhrase ? onSavePhrase : null,
                     icon: const Icon(Icons.save_outlined),
-                    label: Text(savePhraseLabel),
                   ),
-                FilledButton.tonalIcon(
+                IconButton.filledTonal(
+                  tooltip: removeLastLabel,
                   onPressed: hasPhrase ? onRemoveLast : null,
                   icon: const Icon(Icons.backspace_outlined),
-                  label: Text(removeLastLabel),
                 ),
-                FilledButton.tonalIcon(
+                IconButton.filledTonal(
+                  tooltip: clearLabel,
                   onPressed: hasPhrase ? onClear : null,
                   icon: const Icon(Icons.delete_sweep_outlined),
-                  label: Text(clearLabel),
                 ),
               ],
             ),
