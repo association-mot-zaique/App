@@ -87,14 +87,17 @@ class PictogramCard extends StatelessWidget {
               ),
               if (showLabel) ...[
                 const SizedBox(height: 8),
-                // Never truncated (retour client): a cut label defeats the
-                // pairing between picture and word. Long labels wrap and the
-                // image gives up the space.
-                Text(
-                  pictogram.label,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14 * scale.clamp(0.9, 1.4),
+                // Not truncated (retour client): long labels wrap and the
+                // image gives up the space. Flexible caps the label at the
+                // physically available height so a narrow cell (many columns)
+                // can never overflow the card.
+                Flexible(
+                  child: Text(
+                    pictogram.label,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 14 * scale.clamp(0.9, 1.4),
+                    ),
                   ),
                 ),
               ],

@@ -341,15 +341,18 @@ class _OwnedPictogramCard extends StatelessWidget {
               ),
               if (showLabel) ...[
                 const SizedBox(height: 6),
-                // Never truncated (retour client): a cut label defeats the
-                // pairing between picture and word. Long labels wrap and the
-                // image gives up the space.
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                // Not truncated (retour client): long labels wrap and the
+                // image gives up the space. Flexible caps the label at the
+                // physically available height so a narrow cell (many columns)
+                // can never overflow the card.
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
               ],
             ],
