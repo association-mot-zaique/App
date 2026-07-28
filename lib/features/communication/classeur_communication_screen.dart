@@ -108,116 +108,138 @@ class _ClasseurCommunicationScreenState
     final l10n = AppLocalizations.of(context);
 
     return SafeArea(
-      child: AnimatedBuilder(
-        animation: Listenable.merge([
-          widget.classeurController,
-          widget.phraseBookController,
-        ]),
-        builder: (context, _) {
-          final settings = widget.settingsController.settings;
-          // Empty categories are hidden: an end user tapping one would land on
-          // a blank screen, which reads as a broken app (CDC 3.1).
-          final categories = widget.classeurController.classeur.categoriesSorted
-              .where(
-                (category) => widget.classeurController.classeur
-                    .pictogramsIn(category.id)
-                    .isNotEmpty,
-              )
-              .toList();
-          if (categories.isEmpty) {
-            return _EmptyClasseurView(
-              title: l10n.communicationEmptyTitle,
-              message: l10n.communicationEmptyMessage,
-            );
-          }
-          // The favorites view is a chip pinned in first position (US-R.03).
-          // It only exists once the aidant marked a favorite, so the category
-          // slots never move while the end user is browsing (CDC 3.1).
-          final favorites = widget.classeurController.classeur.favorites;
-          final hasFavorites = favorites.isNotEmpty;
-          final tabCount = categories.length + (hasFavorites ? 1 : 0);
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // On a short screen (phone in landscape) the vertical stack wastes
+          // the one resource that matters: height. Everything flattens into
+          // rows so the grid keeps the lion's share of the screen.
+          final isCompactHeight = constraints.maxHeight < 500;
 
-          final index = _selectedCategoryIndex.clamp(0, tabCount - 1);
-          final isFavoritesTab = hasFavorites && index == 0;
-          final pictograms = isFavoritesTab
-              ? favorites
-              : widget.classeurController.classeur.pictogramsIn(
-                  categories[hasFavorites ? index - 1 : index].id,
+          return AnimatedBuilder(
+            animation: Listenable.merge([
+              widget.classeurController,
+              widget.phraseBookController,
+            ]),
+            builder: (context, _) {
+              final settings = widget.settingsController.settings;
+              // Empty categories are hidden: an end user tapping one would land on
+              // a blank screen, which reads as a broken app (CDC 3.1).
+              final categories = widget
+                  .classeurController
+                  .classeur
+                  .categoriesSorted
+                  .where(
+                    (category) => widget.classeurController.classeur
+                        .pictogramsIn(category.id)
+                        .isNotEmpty,
+                  )
+                  .toList();
+              if (categories.isEmpty) {
+                return _EmptyClasseurView(
+                  title: l10n.communicationEmptyTitle,
+                  message: l10n.communicationEmptyMessage,
                 );
+              }
+              // The favorites view is a chip pinned in first position (US-R.03).
+              // It only exists once the aidant marked a favorite, so the category
+              // slots never move while the end user is browsing (CDC 3.1).
+              final favorites = widget.classeurController.classeur.favorites;
+              final hasFavorites = favorites.isNotEmpty;
+              final tabCount = categories.length + (hasFavorites ? 1 : 0);
 
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _PhraseStrip(
-                  pictograms: widget.phraseBookController.currentPhrase,
-                  onSpeak: _speakPhrase,
-                  onRemoveLast:
-                      widget.phraseBookController.removeLastFromCurrent,
-                  onClear: widget.phraseBookController.clearCurrent,
-                  speakLabel: l10n.speakPhrase,
-                  removeLastLabel: l10n.removeLast,
-                  clearLabel: l10n.clear,
+              final index = _selectedCategoryIndex.clamp(0, tabCount - 1);
+              final isFavoritesTab = hasFavorites && index == 0;
+              final pictograms = isFavoritesTab
+                  ? favorites
+                  : widget.classeurController.classeur.pictogramsIn(
+                      categories[hasFavorites ? index - 1 : index].id,
+                    );
+
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _PhraseStrip(
+                      pictograms: widget.phraseBookController.currentPhrase,
+                      onSpeak: _speakPhrase,
+                      onRemoveLast:
+                          widget.phraseBookController.removeLastFromCurrent,
+                      onClear: widget.phraseBookController.clearCurrent,
+                      speakLabel: l10n.speakPhrase,
+                      removeLastLabel: l10n.removeLast,
+                      clearLabel: l10n.clear,
+                      compact: isCompactHeight,
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 44,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: tabCount,
+                        separatorBuilder: (_, _) => const SizedBox(width: 8),
+                        itemBuilder: (context, i) {
+                          if (hasFavorites && i == 0) {
+                            return ChoiceChip(
+                              avatar: const Icon(
+                                Icons.favorite_rounded,
+                                size: 18,
+                              ),
+                              label: Text(l10n.favoritesNav),
+                              selected: i == index,
+                              onSelected: (_) =>
+                                  setState(() => _selectedCategoryIndex = i),
+                            );
+                          }
+                          final category = categories[hasFavorites ? i - 1 : i];
+                          return ChoiceChip(
+                            label: Text(category.name),
+                            selected: i == index,
+                            onSelected: (_) =>
+                                setState(() => _selectedCategoryIndex = i),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: pictograms.isEmpty
+                          ? Center(child: Text(l10n.categoryEmptyPictograms))
+                          : GridView.builder(
+                              // Explicit column count when the aidant set one
+                              // (A-12), otherwise size-based automatic layout.
+                              // Cards flatten on short screens so a full row
+                              // (image + complete label) stays visible.
+                              gridDelegate: settings.isAutomaticGridColumns
+                                  ? SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 160,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: isCompactHeight
+                                          ? 1.15
+                                          : 0.82,
+                                    )
+                                  : SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: settings.gridColumns,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: isCompactHeight
+                                          ? 1.15
+                                          : 0.82,
+                                    ),
+                              itemCount: pictograms.length,
+                              itemBuilder: (context, i) => _OwnedPictogramCard(
+                                pictogram: _toPictogram(pictograms[i]),
+                                label: pictograms[i].label,
+                                showLabel: settings.showPictogramLabel,
+                                onTap: () => _onSelect(pictograms[i]),
+                              ),
+                            ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 44,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: tabCount,
-                    separatorBuilder: (_, _) => const SizedBox(width: 8),
-                    itemBuilder: (context, i) {
-                      if (hasFavorites && i == 0) {
-                        return ChoiceChip(
-                          avatar: const Icon(Icons.favorite_rounded, size: 18),
-                          label: Text(l10n.favoritesNav),
-                          selected: i == index,
-                          onSelected: (_) =>
-                              setState(() => _selectedCategoryIndex = i),
-                        );
-                      }
-                      final category = categories[hasFavorites ? i - 1 : i];
-                      return ChoiceChip(
-                        label: Text(category.name),
-                        selected: i == index,
-                        onSelected: (_) =>
-                            setState(() => _selectedCategoryIndex = i),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: pictograms.isEmpty
-                      ? Center(child: Text(l10n.categoryEmptyPictograms))
-                      : GridView.builder(
-                          // Explicit column count when the aidant set one
-                          // (A-12), otherwise size-based automatic layout.
-                          gridDelegate: settings.isAutomaticGridColumns
-                              ? const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 160,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 0.82,
-                                )
-                              : SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: settings.gridColumns,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 0.82,
-                                ),
-                          itemCount: pictograms.length,
-                          itemBuilder: (context, i) => _OwnedPictogramCard(
-                            pictogram: _toPictogram(pictograms[i]),
-                            label: pictograms[i].label,
-                            showLabel: settings.showPictogramLabel,
-                            onTap: () => _onSelect(pictograms[i]),
-                          ),
-                        ),
-                ),
-              ],
-            ),
+              );
+            },
           );
         },
       ),
@@ -340,6 +362,7 @@ class _PhraseStrip extends StatelessWidget {
     required this.speakLabel,
     required this.removeLastLabel,
     required this.clearLabel,
+    required this.compact,
   });
 
   final List<Pictogram> pictograms;
@@ -350,9 +373,66 @@ class _PhraseStrip extends StatelessWidget {
   final String removeLastLabel;
   final String clearLabel;
 
+  /// Single-row layout for short screens (phone in landscape): the strip and
+  /// its controls share one line, so the grid keeps most of the height.
+  final bool compact;
+
   @override
   Widget build(BuildContext context) {
     final hasPhrase = pictograms.isNotEmpty;
+
+    // Icon-only controls: any button text reads as parasitic information for
+    // the end user (retour IME). Tooltips and semantic labels keep the
+    // actions accessible. Speak has a fixed generous width: stretching it to
+    // the full row just produces a giant empty bar.
+    final speakButton = Semantics(
+      button: true,
+      label: speakLabel,
+      child: SizedBox(
+        width: 76,
+        height: 48,
+        child: FilledButton(
+          onPressed: hasPhrase ? () => onSpeak() : null,
+          child: const Icon(Icons.volume_up_rounded),
+        ),
+      ),
+    );
+    final removeLastButton = IconButton.filledTonal(
+      tooltip: removeLastLabel,
+      onPressed: hasPhrase ? () => onRemoveLast() : null,
+      icon: const Icon(Icons.backspace_outlined),
+    );
+    final clearButton = IconButton.filledTonal(
+      tooltip: clearLabel,
+      onPressed: hasPhrase ? () => onClear() : null,
+      icon: const Icon(Icons.delete_sweep_outlined),
+    );
+
+    if (compact) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          child: SizedBox(
+            height: 56,
+            child: Row(
+              children: [
+                Expanded(
+                  child: hasPhrase
+                      ? _buildMiniPictoStrip(context, labelLines: 1)
+                      : const SizedBox.shrink(),
+                ),
+                const SizedBox(width: 8),
+                speakButton,
+                const SizedBox(width: 8),
+                removeLastButton,
+                const SizedBox(width: 4),
+                clearButton,
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Card(
       child: Padding(
@@ -364,75 +444,53 @@ class _PhraseStrip extends StatelessWidget {
               // Tall enough for the image plus a two-line label.
               height: 86,
               child: hasPhrase
-                  ? ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: pictograms.length,
-                      separatorBuilder: (_, _) => const SizedBox(width: 6),
-                      // The tile widens with its label (up to a cap) so even
-                      // long words stay readable in the bande-phrase (retour
-                      // client : le texte doit rester complet).
-                      itemBuilder: (context, index) => ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: 60,
-                          maxWidth: 120,
-                        ),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                padding: const EdgeInsets.all(3),
-                                child: PictogramImage(
-                                  pictogram: pictograms[index],
-                                  size: 100,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              pictograms[index].label,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
+                  ? _buildMiniPictoStrip(context, labelLines: 2)
                   : const SizedBox.shrink(),
             ),
             const SizedBox(height: 8),
-            // Icon-only controls: any button text reads as parasitic
-            // information for the end user (retour IME). Tooltips and
-            // semantic labels keep the actions accessible.
             Row(
               children: [
-                Expanded(
-                  child: Semantics(
-                    button: true,
-                    label: speakLabel,
-                    child: FilledButton(
-                      onPressed: hasPhrase ? () => onSpeak() : null,
-                      child: const Icon(Icons.volume_up_rounded),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filledTonal(
-                  tooltip: removeLastLabel,
-                  onPressed: hasPhrase ? () => onRemoveLast() : null,
-                  icon: const Icon(Icons.backspace_outlined),
-                ),
+                speakButton,
+                const Spacer(),
+                removeLastButton,
                 const SizedBox(width: 4),
-                IconButton.filledTonal(
-                  tooltip: clearLabel,
-                  onPressed: hasPhrase ? () => onClear() : null,
-                  icon: const Icon(Icons.delete_sweep_outlined),
-                ),
+                clearButton,
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// The tile widens with its label (up to a cap) so even long words stay
+  /// readable in the bande-phrase (retour client : le texte doit rester
+  /// complet). [labelLines] drops to 1 in compact mode where height is scarce.
+  Widget _buildMiniPictoStrip(BuildContext context, {required int labelLines}) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: pictograms.length,
+      separatorBuilder: (_, _) => const SizedBox(width: 6),
+      itemBuilder: (context, index) => ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: 60, maxWidth: 120),
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.all(3),
+                child: PictogramImage(pictogram: pictograms[index], size: 100),
+              ),
+            ),
+            Text(
+              pictograms[index].label,
+              maxLines: labelLines,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ],
         ),
