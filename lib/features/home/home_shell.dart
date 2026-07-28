@@ -252,6 +252,36 @@ class _AidantAreaScreenState extends State<_AidantAreaScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    // Landscape: a bottom NavigationBar costs ~80dp of the scarce height, so
+    // the tabs move to a side rail and the content keeps the full height.
+    final size = MediaQuery.sizeOf(context);
+    final useSideRail = size.width > size.height;
+
+    final content = IndexedStack(
+      index: _selectedIndex,
+      children: [
+        FavoritesScreen(
+          favoritesController: widget.favoritesController,
+          settingsController: widget.settingsController,
+        ),
+        CommunicationScreen(
+          searchService: widget.searchService,
+          favoritesController: widget.favoritesController,
+          phraseBookController: widget.phraseBookController,
+          settingsController: widget.settingsController,
+          speechService: widget.speechService,
+        ),
+        SettingsScreen(
+          settingsController: widget.settingsController,
+          classeurController: widget.classeurController,
+          profileController: widget.profileController,
+          searchService: widget.searchService,
+          searchCacheRepository: widget.searchCacheRepository,
+          localBackupService: widget.localBackupService,
+          onBackupRestored: widget.onBackupRestored,
+        ),
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -269,50 +299,55 @@ class _AidantAreaScreenState extends State<_AidantAreaScreen> {
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          FavoritesScreen(
-            favoritesController: widget.favoritesController,
-            settingsController: widget.settingsController,
-          ),
-          CommunicationScreen(
-            searchService: widget.searchService,
-            favoritesController: widget.favoritesController,
-            phraseBookController: widget.phraseBookController,
-            settingsController: widget.settingsController,
-            speechService: widget.speechService,
-          ),
-          SettingsScreen(
-            settingsController: widget.settingsController,
-            classeurController: widget.classeurController,
-            profileController: widget.profileController,
-            searchService: widget.searchService,
-            searchCacheRepository: widget.searchCacheRepository,
-            localBackupService: widget.localBackupService,
-            onBackupRestored: widget.onBackupRestored,
-          ),
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) =>
-            setState(() => _selectedIndex = index),
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.favorite_rounded),
-            label: l10n.favoritesNav,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.travel_explore),
-            label: l10n.exploreArasaac,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.tune_rounded),
-            label: l10n.settingsNav,
-          ),
-        ],
-      ),
+      body: useSideRail
+          ? Row(
+              children: [
+                NavigationRail(
+                  selectedIndex: _selectedIndex,
+                  onDestinationSelected: (index) =>
+                      setState(() => _selectedIndex = index),
+                  labelType: NavigationRailLabelType.all,
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.favorite_rounded),
+                      label: Text(l10n.favoritesNav),
+                    ),
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.travel_explore),
+                      label: Text(l10n.exploreArasaac),
+                    ),
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.tune_rounded),
+                      label: Text(l10n.settingsNav),
+                    ),
+                  ],
+                ),
+                const VerticalDivider(width: 1),
+                Expanded(child: content),
+              ],
+            )
+          : content,
+      bottomNavigationBar: useSideRail
+          ? null
+          : NavigationBar(
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: (index) =>
+                  setState(() => _selectedIndex = index),
+              destinations: [
+                NavigationDestination(
+                  icon: const Icon(Icons.favorite_rounded),
+                  label: l10n.favoritesNav,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.travel_explore),
+                  label: l10n.exploreArasaac,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.tune_rounded),
+                  label: l10n.settingsNav,
+                ),
+              ],
+            ),
     );
   }
 }

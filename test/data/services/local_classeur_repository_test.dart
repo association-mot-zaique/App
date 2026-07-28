@@ -25,6 +25,22 @@ void main() {
       expect(classeur.isEmpty, isTrue);
     });
 
+    test('reanchorImagePath rebases a stale absolute path', () {
+      // Path persisted by the bande-phrase under a previous install or
+      // another profile: only the classeur-relative suffix is still valid.
+      const stale = '/data/old-install/profiles/abc/classeur/images/p_3.png';
+
+      expect(
+        repository.reanchorImagePath(stale),
+        '${tempDir.path}/classeur/images/p_3.png',
+      );
+    });
+
+    test('reanchorImagePath leaves foreign paths untouched', () {
+      const foreign = '/somewhere/else/picture.png';
+      expect(repository.reanchorImagePath(foreign), foreign);
+    });
+
     test('save then load round-trips the classeur', () async {
       var classeur = LocalClasseur.empty();
       final cat = classeur.addCategory('Besoins');

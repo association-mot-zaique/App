@@ -7,11 +7,20 @@ import '../../data/models/saved_phrase.dart';
 import '../../data/services/phrase_book_repository.dart';
 
 class PhraseBookController extends ChangeNotifier {
-  PhraseBookController(this._repository, {Random? random})
-    : _random = random ?? Random();
+  PhraseBookController(
+    this._repository, {
+    Random? random,
+    String Function(String absolutePath)? reanchorLocalImagePath,
+  }) : _random = random ?? Random(),
+       _reanchorLocalImagePath = reanchorLocalImagePath;
 
   final PhraseBookRepository _repository;
   final Random _random;
+
+  /// Repairs the absolute path of an owned image at load time: the stored
+  /// prefix goes stale across reinstalls and profile switches, which left
+  /// broken thumbnails in the bande-phrase.
+  final String Function(String absolutePath)? _reanchorLocalImagePath;
 
   final List<Pictogram> _currentPhrase = <Pictogram>[];
   final List<SavedPhrase> _savedPhrases = <SavedPhrase>[];
@@ -25,13 +34,30 @@ class PhraseBookController extends ChangeNotifier {
   Future<void> load() async {
     _currentPhrase
       ..clear()
-      ..addAll(_repository.readCurrentPhrase());
+      ..addAll(_repository.readCurrentPhrase().map(_reanchored));
 
     _savedPhrases
       ..clear()
-      ..addAll(_repository.readSavedPhrases());
+      ..addAll(
+        _repository.readSavedPhrases().map(
+          (phrase) => SavedPhrase(
+            id: phrase.id,
+            name: phrase.name,
+            pictograms: phrase.pictograms.map(_reanchored).toList(),
+            createdAt: phrase.createdAt,
+          ),
+        ),
+      );
 
     notifyListeners();
+  }
+
+  Pictogram _reanchored(Pictogram pictogram) {
+    final reanchor = _reanchorLocalImagePath;
+    if (reanchor == null || !pictogram.isLocal) {
+      return pictogram;
+    }
+    return pictogram.withLocalImagePath(reanchor(pictogram.localImagePath!));
   }
 
   Future<void> addToCurrent(Pictogram pictogram) async {

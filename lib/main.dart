@@ -32,16 +32,21 @@ Future<void> main() async {
     cache: searchCacheRepository,
   );
 
+  final classeurRepository = await LocalClasseurRepository.create();
+  final classeurController = LocalClasseurController(classeurRepository);
+
   final favoritesRepository = FavoritesRepository(preferences);
   final phraseBookRepository = PhraseBookRepository(preferences);
   final favoritesController = FavoritesController(favoritesRepository);
-  final phraseBookController = PhraseBookController(phraseBookRepository);
+  // The bande-phrase persists absolute image paths; the classeur repository
+  // re-anchors them under the current root at load time.
+  final phraseBookController = PhraseBookController(
+    phraseBookRepository,
+    reanchorLocalImagePath: classeurRepository.reanchorImagePath,
+  );
   final settingsRepository = AppSettingsRepository(preferences);
   final settingsController = SettingsController(settingsRepository);
   final localBackupService = LocalBackupService(preferences);
-
-  final classeurRepository = await LocalClasseurRepository.create();
-  final classeurController = LocalClasseurController(classeurRepository);
 
   // Profiles (A-11) : points every per-user repository at the active profile,
   // then loads its data. It also loads the favoris and phrase controllers, so

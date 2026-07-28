@@ -27,6 +27,22 @@ class Pictogram {
 
   bool get isLocal => localImagePath != null && localImagePath!.isNotEmpty;
 
+  /// Same pictogram pointing at another owned image file, used to re-anchor
+  /// a stale absolute path after a reinstall or a profile switch.
+  Pictogram withLocalImagePath(String newPath) {
+    return Pictogram(
+      id: id,
+      label: label,
+      tags: tags,
+      categories: categories,
+      language: language,
+      aac: aac,
+      schematic: schematic,
+      downloads: downloads,
+      localImagePath: newPath,
+    );
+  }
+
   factory Pictogram.fromArasaacJson(
     Map<String, dynamic> json, {
     required String language,

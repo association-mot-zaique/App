@@ -79,6 +79,22 @@ class LocalClasseurRepository {
     return '${rootDir.path}/$relativePath';
   }
 
+  /// Re-anchors a stored absolute image path under the current classeur
+  /// root. Absolute paths persisted by the bande-phrase go stale whenever
+  /// the app container moves (reinstall, restore) or the active profile
+  /// changes; the part after the classeur root stays valid. Paths without a
+  /// classeur marker are returned untouched.
+  String reanchorImagePath(String absolutePath) {
+    const marker = '/classeur/';
+    final markerIndex = absolutePath.lastIndexOf(marker);
+    if (markerIndex < 0) {
+      return absolutePath;
+    }
+    return absoluteImagePath(
+      absolutePath.substring(markerIndex + marker.length),
+    );
+  }
+
   /// Removes an image file; missing files are ignored.
   Future<void> deleteImage(String relativePath) async {
     if (relativePath.isEmpty) {
