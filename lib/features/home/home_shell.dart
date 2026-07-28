@@ -365,6 +365,9 @@ class _CreatePinDialogState extends State<_CreatePinDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
+      // Scrollable: in landscape the keyboard leaves too little height for
+      // the fields, which otherwise overflow.
+      scrollable: true,
       title: Text(l10n.pinCreateTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -420,6 +423,7 @@ class _RecoveryCodeDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
+      scrollable: true,
       title: Text(l10n.recoveryCodeTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -573,6 +577,7 @@ class _ValidatePinDialogState extends State<_ValidatePinDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
+      scrollable: true,
       // The same PIN gates Favoris and Reglages: the title must name the aidant
       // mode, not one of the two tabs (CDC US-1.07).
       title: Text(l10n.unlockAidantTitle),
@@ -713,6 +718,7 @@ class _RecoverPinDialogState extends State<_RecoverPinDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
+      scrollable: true,
       title: Text(l10n.recoverPinTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -812,6 +818,7 @@ class _ChangePinDialogState extends State<_ChangePinDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
+      scrollable: true,
       title: Text(l10n.changePinTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,

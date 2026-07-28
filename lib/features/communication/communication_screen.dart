@@ -387,6 +387,9 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            // Scrollable: in landscape the keyboard leaves too little height
+            // for the field, which otherwise overflows.
+            scrollable: true,
             title: Text(l10n.savePhraseDialogTitle),
             content: TextField(
               controller: nameController,
