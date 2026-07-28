@@ -168,6 +168,8 @@
   "pictogramAddedNotice": "Pittogramma aggiunto",
   "lockAidant": "Blocca la modalita assistente",
   "aidantArea": "Area assistente",
+  "communicationEmptyTitle": "Il raccoglitore e vuoto",
+  "communicationEmptyMessage": "I pittogrammi aggiunti nell'area assistente appariranno qui.",
   "addFromFile": "Da un file",
   "addFromCamera": "Scatta una foto",
   "creditsLicense": "Licenza",

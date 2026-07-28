@@ -469,6 +469,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get aidantArea => 'Betreuer-Bereich';
 
   @override
+  String get communicationEmptyTitle => 'Der Ordner ist leer';
+
+  @override
+  String get communicationEmptyMessage =>
+      'Im Betreuer-Bereich hinzugefuegte Piktogramme erscheinen hier.';
+
+  @override
   String get addFromFile => 'Aus einer Datei';
 
   @override

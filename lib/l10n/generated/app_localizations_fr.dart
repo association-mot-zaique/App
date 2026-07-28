@@ -467,6 +467,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get aidantArea => 'Espace aidant';
 
   @override
+  String get communicationEmptyTitle => 'Le classeur est vide';
+
+  @override
+  String get communicationEmptyMessage =>
+      'Les pictogrammes ajoutes dans l\'espace aidant apparaitront ici.';
+
+  @override
   String get addFromFile => 'Depuis un fichier';
 
   @override

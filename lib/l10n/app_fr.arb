@@ -168,6 +168,8 @@
   "pictogramAddedNotice": "Pictogramme ajoute",
   "lockAidant": "Verrouiller le mode aidant",
   "aidantArea": "Espace aidant",
+  "communicationEmptyTitle": "Le classeur est vide",
+  "communicationEmptyMessage": "Les pictogrammes ajoutes dans l'espace aidant apparaitront ici.",
   "addFromFile": "Depuis un fichier",
   "addFromCamera": "Prendre une photo",
   "creditsLicense": "Licence",

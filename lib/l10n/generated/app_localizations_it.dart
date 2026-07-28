@@ -465,6 +465,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get aidantArea => 'Area assistente';
 
   @override
+  String get communicationEmptyTitle => 'Il raccoglitore e vuoto';
+
+  @override
+  String get communicationEmptyMessage =>
+      'I pittogrammi aggiunti nell\'area assistente appariranno qui.';
+
+  @override
   String get addFromFile => 'Da un file';
 
   @override

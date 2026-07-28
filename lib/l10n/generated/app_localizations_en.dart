@@ -464,6 +464,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aidantArea => 'Caregiver area';
 
   @override
+  String get communicationEmptyTitle => 'The binder is empty';
+
+  @override
+  String get communicationEmptyMessage =>
+      'Pictograms added in the caregiver area will appear here.';
+
+  @override
   String get addFromFile => 'From a file';
 
   @override

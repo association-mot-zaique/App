@@ -13,15 +13,15 @@ import 'repeat_tap_guard.dart';
 /// Communication mode backed by the owned local classeur (US-1.01 → US-1.06):
 /// the end user browses their own categories and pictograms, entirely from
 /// disk and offline, and composes the bande-phrase. This is the classeur put
-/// at the heart of the app (CDC 6.3/6.4), shown whenever the classeur has at
-/// least one category.
+/// at the heart of the app (CDC 6.3/6.4). Only assimilated pictograms ever
+/// show up here: ARASAAC lives in the aidant area and never appears on its
+/// own (retour IME, US-1.14 / US-2.03).
 class ClasseurCommunicationScreen extends StatefulWidget {
   const ClasseurCommunicationScreen({
     required this.classeurController,
     required this.phraseBookController,
     required this.settingsController,
     required this.speechService,
-    required this.onOpenExplorer,
     super.key,
   });
 
@@ -29,11 +29,6 @@ class ClasseurCommunicationScreen extends StatefulWidget {
   final PhraseBookController phraseBookController;
   final SettingsController settingsController;
   final SpeechService speechService;
-
-  /// Opens the ARASAAC explorer. The classeur is the heart of the app
-  /// (CDC 6.3), but the explorer stays reachable until the IME arbitrates
-  /// whether it should disappear for good (US-1.14 / US-2.03).
-  final VoidCallback onOpenExplorer;
 
   @override
   State<ClasseurCommunicationScreen> createState() =>
@@ -130,7 +125,10 @@ class _ClasseurCommunicationScreenState
               )
               .toList();
           if (categories.isEmpty) {
-            return const SizedBox.shrink();
+            return _EmptyClasseurView(
+              title: l10n.communicationEmptyTitle,
+              message: l10n.communicationEmptyMessage,
+            );
           }
           // The favorites view is a chip pinned in first position (US-R.03).
           // It only exists once the aidant marked a favorite, so the category
@@ -167,18 +165,9 @@ class _ClasseurCommunicationScreenState
                   height: 44,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    // One extra slot for the explorer, kept last so the
-                    // category positions never move (CDC 3.1).
-                    itemCount: tabCount + 1,
+                    itemCount: tabCount,
                     separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, i) {
-                      if (i == tabCount) {
-                        return ActionChip(
-                          avatar: const Icon(Icons.travel_explore, size: 18),
-                          label: Text(l10n.exploreArasaac),
-                          onPressed: widget.onOpenExplorer,
-                        );
-                      }
                       if (hasFavorites && i == 0) {
                         return ChoiceChip(
                           avatar: const Icon(Icons.favorite_rounded, size: 18),
@@ -231,6 +220,54 @@ class _ClasseurCommunicationScreenState
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// Calm end-user empty state: no ARASAAC fallback, no call to action. The
+/// classeur only fills up through the aidant area (retour IME: pictograms
+/// must be assimilated before they appear).
+class _EmptyClasseurView extends StatelessWidget {
+  const _EmptyClasseurView({required this.title, required this.message});
+
+  final String title;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 420),
+        margin: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.menu_book_rounded, size: 44, color: colorScheme.primary),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: textTheme.bodyMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

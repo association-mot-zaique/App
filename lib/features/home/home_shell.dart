@@ -68,10 +68,12 @@ class _HomeShellState extends State<HomeShell> {
           searchService: widget.searchService,
           searchCacheRepository: widget.searchCacheRepository,
           favoritesController: widget.favoritesController,
+          phraseBookController: widget.phraseBookController,
           settingsController: widget.settingsController,
           classeurController: widget.classeurController,
           profileController: widget.profileController,
           pinRepository: widget.pinRepository,
+          speechService: widget.speechService,
           localBackupService: widget.localBackupService,
           onBackupRestored: _refreshAfterBackupRestore,
         ),
@@ -128,28 +130,6 @@ class _HomeShellState extends State<HomeShell> {
     return isValid;
   }
 
-  /// Opens the ARASAAC explorer over the classeur. It shares the bande-phrase,
-  /// so a pictogram picked here lands in the same sentence. Kept reachable
-  /// until the IME arbitrates its removal (US-1.14 / US-2.03).
-  void _openArasaacExplorer() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-            title: Text(AppLocalizations.of(context).exploreArasaac),
-          ),
-          body: CommunicationScreen(
-            searchService: widget.searchService,
-            favoritesController: widget.favoritesController,
-            phraseBookController: widget.phraseBookController,
-            settingsController: widget.settingsController,
-            speechService: widget.speechService,
-          ),
-        ),
-      ),
-    );
-  }
-
   Future<void> _refreshAfterBackupRestore() async {
     // A backup carries the profile list, so reload through the profile
     // controller: it re-points every per-user repository, then reloads
@@ -173,30 +153,15 @@ class _HomeShellState extends State<HomeShell> {
     return Scaffold(
       body: Stack(
         children: [
-          // Owned classeur once it holds at least one pictogram, otherwise the
-          // ARASAAC explorer as a bootstrap fallback (CDC 6.3/6.4). Guarding on
-          // pictograms (not categories) keeps the end user on a usable screen
-          // while the aidant is still filling empty starter categories.
-          AnimatedBuilder(
-            animation: widget.classeurController,
-            builder: (context, _) {
-              if (widget.classeurController.classeur.pictograms.isEmpty) {
-                return CommunicationScreen(
-                  searchService: widget.searchService,
-                  favoritesController: widget.favoritesController,
-                  phraseBookController: widget.phraseBookController,
-                  settingsController: widget.settingsController,
-                  speechService: widget.speechService,
-                );
-              }
-              return ClasseurCommunicationScreen(
-                classeurController: widget.classeurController,
-                phraseBookController: widget.phraseBookController,
-                settingsController: widget.settingsController,
-                speechService: widget.speechService,
-                onOpenExplorer: _openArasaacExplorer,
-              );
-            },
+          // Always the owned classeur, even when empty: ARASAAC pictograms
+          // are never assimilated vocabulary, so they must never show up on
+          // their own (retour IME). The screen renders its own calm empty
+          // state until the aidant fills the classeur.
+          ClasseurCommunicationScreen(
+            classeurController: widget.classeurController,
+            phraseBookController: widget.phraseBookController,
+            settingsController: widget.settingsController,
+            speechService: widget.speechService,
           ),
           // The only chrome on the end-user screen: a discreet entry to the
           // aidant area. Muted on purpose, but still a 48px touch target.
@@ -224,17 +189,22 @@ class _HomeShellState extends State<HomeShell> {
   }
 }
 
-/// The PIN-protected aidant toolbox: Favoris and Reglages, with the standard
-/// chrome (app bar, navigation bar) that is banned from the end-user screen.
+/// The PIN-protected aidant toolbox: Favoris, the ARASAAC explorer and
+/// Reglages, with the standard chrome (app bar, navigation bar) that is
+/// banned from the end-user screen. The explorer lives here so ARASAAC
+/// pictograms are a deliberate aidant choice, never something the end user
+/// stumbles on (retour IME, US-1.14 / US-2.03).
 class _AidantAreaScreen extends StatefulWidget {
   const _AidantAreaScreen({
     required this.searchService,
     required this.searchCacheRepository,
     required this.favoritesController,
+    required this.phraseBookController,
     required this.settingsController,
     required this.classeurController,
     required this.profileController,
     required this.pinRepository,
+    required this.speechService,
     required this.localBackupService,
     required this.onBackupRestored,
   });
@@ -242,10 +212,12 @@ class _AidantAreaScreen extends StatefulWidget {
   final PictogramSearchService searchService;
   final SearchCacheRepository searchCacheRepository;
   final FavoritesController favoritesController;
+  final PhraseBookController phraseBookController;
   final SettingsController settingsController;
   final LocalClasseurController classeurController;
   final ProfileController profileController;
   final PinRepository pinRepository;
+  final SpeechService speechService;
   final LocalBackupService localBackupService;
   final Future<void> Function() onBackupRestored;
 
@@ -304,6 +276,13 @@ class _AidantAreaScreenState extends State<_AidantAreaScreen> {
             favoritesController: widget.favoritesController,
             settingsController: widget.settingsController,
           ),
+          CommunicationScreen(
+            searchService: widget.searchService,
+            favoritesController: widget.favoritesController,
+            phraseBookController: widget.phraseBookController,
+            settingsController: widget.settingsController,
+            speechService: widget.speechService,
+          ),
           SettingsScreen(
             settingsController: widget.settingsController,
             classeurController: widget.classeurController,
@@ -323,6 +302,10 @@ class _AidantAreaScreenState extends State<_AidantAreaScreen> {
           NavigationDestination(
             icon: const Icon(Icons.favorite_rounded),
             label: l10n.favoritesNav,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.travel_explore),
+            label: l10n.exploreArasaac,
           ),
           NavigationDestination(
             icon: const Icon(Icons.tune_rounded),

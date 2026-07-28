@@ -986,6 +986,18 @@ abstract class AppLocalizations {
   /// **'Caregiver area'**
   String get aidantArea;
 
+  /// No description provided for @communicationEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The binder is empty'**
+  String get communicationEmptyTitle;
+
+  /// No description provided for @communicationEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Pictograms added in the caregiver area will appear here.'**
+  String get communicationEmptyMessage;
+
   /// No description provided for @addFromFile.
   ///
   /// In en, this message translates to:

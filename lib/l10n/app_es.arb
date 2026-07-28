@@ -168,6 +168,8 @@
   "pictogramAddedNotice": "Pictograma anadido",
   "lockAidant": "Bloquear el modo asistente",
   "aidantArea": "Espacio del asistente",
+  "communicationEmptyTitle": "El archivador esta vacio",
+  "communicationEmptyMessage": "Los pictogramas anadidos en el espacio del asistente apareceran aqui.",
   "addFromFile": "Desde un archivo",
   "addFromCamera": "Tomar una foto",
   "creditsLicense": "Licencia",

@@ -168,6 +168,8 @@
   "pictogramAddedNotice": "Piktogramm hinzugefuegt",
   "lockAidant": "Betreuer-Modus sperren",
   "aidantArea": "Betreuer-Bereich",
+  "communicationEmptyTitle": "Der Ordner ist leer",
+  "communicationEmptyMessage": "Im Betreuer-Bereich hinzugefuegte Piktogramme erscheinen hier.",
   "addFromFile": "Aus einer Datei",
   "addFromCamera": "Foto aufnehmen",
   "creditsLicense": "Lizenz",
