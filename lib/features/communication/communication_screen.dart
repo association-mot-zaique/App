@@ -584,10 +584,16 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
         return SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final isTablet = constraints.maxWidth >= _tabletBreakpoint;
+              // Side-by-side on wide screens, but also whenever the screen is
+              // short (phone in landscape): the stacked layout piles composer,
+              // categories and keywords above the grid and needs more height
+              // than exists there.
+              final useSideBySideLayout =
+                  constraints.maxWidth >= _tabletBreakpoint ||
+                  constraints.maxHeight < 500;
               return Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: isTablet
+                child: useSideBySideLayout
                     ? _buildTabletLayout(
                         context: context,
                         l10n: l10n,
@@ -713,7 +719,9 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                 removeLastLabel: l10n.removeLast,
                 clearLabel: l10n.clear,
                 savePhraseLabel: l10n.savePhrase,
-                iconSize: _composerIconSize(width),
+                // Short screens keep the smallest thumbnails: height is the
+                // scarce resource there, whatever the width says.
+                iconSize: height < 500 ? 44 : _composerIconSize(width),
                 onSpeak: _speakPhrase,
                 onRemoveLast: _removeLastPhraseItem,
                 onClear: _clearPhrase,
@@ -1116,41 +1124,51 @@ class _SavedPhrasesPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w900,
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Below ~90dp the panel cannot even show its title without
+        // overflowing; the composer above already took the height.
+        if (constraints.maxHeight < 90) {
+          return const SizedBox.shrink();
+        }
+
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: phrases.isEmpty
+                      ? Center(child: Text(emptyMessage))
+                      : ListView.separated(
+                          itemCount: phrases.length,
+                          separatorBuilder: (_, _) => const SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            final phrase = phrases[index];
+                            return _SavedPhraseTile(
+                              phrase: phrase,
+                              loadLabel: loadLabel,
+                              deleteLabel: deleteLabel,
+                              onLoad: onLoad,
+                              onDelete: onDelete,
+                              fullWidth: true,
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: phrases.isEmpty
-                  ? Center(child: Text(emptyMessage))
-                  : ListView.separated(
-                      itemCount: phrases.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 8),
-                      itemBuilder: (context, index) {
-                        final phrase = phrases[index];
-                        return _SavedPhraseTile(
-                          phrase: phrase,
-                          loadLabel: loadLabel,
-                          deleteLabel: deleteLabel,
-                          onLoad: onLoad,
-                          onDelete: onDelete,
-                          fullWidth: true,
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
