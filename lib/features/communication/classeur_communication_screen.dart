@@ -312,10 +312,11 @@ class _OwnedPictogramCard extends StatelessWidget {
               ),
               if (showLabel) ...[
                 const SizedBox(height: 6),
+                // Never truncated (retour client): a cut label defeats the
+                // pairing between picture and word. Long labels wrap and the
+                // image gives up the space.
                 Text(
                   label,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: Theme.of(
                     context,
@@ -360,14 +361,21 @@ class _PhraseStrip extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: 74,
+              // Tall enough for the image plus a two-line label.
+              height: 86,
               child: hasPhrase
                   ? ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: pictograms.length,
                       separatorBuilder: (_, _) => const SizedBox(width: 6),
-                      itemBuilder: (context, index) => SizedBox(
-                        width: 60,
+                      // The tile widens with its label (up to a cap) so even
+                      // long words stay readable in the bande-phrase (retour
+                      // client : le texte doit rester complet).
+                      itemBuilder: (context, index) => ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minWidth: 60,
+                          maxWidth: 120,
+                        ),
                         child: Column(
                           children: [
                             Expanded(
@@ -385,8 +393,9 @@ class _PhraseStrip extends StatelessWidget {
                             ),
                             Text(
                               pictograms[index].label,
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
                           ],

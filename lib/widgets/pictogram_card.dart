@@ -87,10 +87,11 @@ class PictogramCard extends StatelessWidget {
               ),
               if (showLabel) ...[
                 const SizedBox(height: 8),
+                // Never truncated (retour client): a cut label defeats the
+                // pairing between picture and word. Long labels wrap and the
+                // image gives up the space.
                 Text(
                   pictogram.label,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                     fontSize: 14 * scale.clamp(0.9, 1.4),
