@@ -467,6 +467,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get aidantArea => 'Espace aidant';
 
   @override
+  String get orientationTitle => 'Orientation de l\'ecran';
+
+  @override
+  String get orientationLandscape => 'Paysage';
+
+  @override
+  String get orientationPortrait => 'Portrait';
+
+  @override
   String get communicationEmptyTitle => 'Le classeur est vide';
 
   @override

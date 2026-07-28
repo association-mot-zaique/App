@@ -986,6 +986,24 @@ abstract class AppLocalizations {
   /// **'Caregiver area'**
   String get aidantArea;
 
+  /// No description provided for @orientationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Screen orientation'**
+  String get orientationTitle;
+
+  /// No description provided for @orientationLandscape.
+  ///
+  /// In en, this message translates to:
+  /// **'Landscape'**
+  String get orientationLandscape;
+
+  /// No description provided for @orientationPortrait.
+  ///
+  /// In en, this message translates to:
+  /// **'Portrait'**
+  String get orientationPortrait;
+
   /// No description provided for @communicationEmptyTitle.
   ///
   /// In en, this message translates to:

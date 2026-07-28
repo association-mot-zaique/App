@@ -469,6 +469,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get aidantArea => 'Betreuer-Bereich';
 
   @override
+  String get orientationTitle => 'Bildschirmausrichtung';
+
+  @override
+  String get orientationLandscape => 'Querformat';
+
+  @override
+  String get orientationPortrait => 'Hochformat';
+
+  @override
   String get communicationEmptyTitle => 'Der Ordner ist leer';
 
   @override

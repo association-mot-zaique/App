@@ -18,6 +18,9 @@ void main() {
 
       expect(settings.localeCode, AppSettings.defaults.localeCode);
       expect(settings.pictogramScale, AppSettings.defaults.pictogramScale);
+      // Landscape by default: the closest to the physical classeur (retour
+      // client), and a screen that never rotates on its own.
+      expect(settings.orientationMode, OrientationMode.landscape);
     });
 
     test('save and read preserve values', () async {
@@ -38,6 +41,7 @@ void main() {
         speechRate: 0.6,
         gridColumns: 4,
         showPictogramLabel: false,
+        orientationMode: OrientationMode.portrait,
       );
 
       await repository.save(settings);
@@ -54,6 +58,13 @@ void main() {
       expect(restored.speechRate, 0.6);
       expect(restored.gridColumns, 4);
       expect(restored.showPictogramLabel, isFalse);
+      expect(restored.orientationMode, OrientationMode.portrait);
+    });
+
+    test('falls back to landscape when the stored orientation is unknown', () {
+      final settings = AppSettings.fromJson({'orientationMode': 'diagonal'});
+
+      expect(settings.orientationMode, OrientationMode.landscape);
     });
 
     test('defaults to automatic locale (follows the system)', () async {

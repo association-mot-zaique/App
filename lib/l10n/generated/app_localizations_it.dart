@@ -465,6 +465,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get aidantArea => 'Area assistente';
 
   @override
+  String get orientationTitle => 'Orientamento dello schermo';
+
+  @override
+  String get orientationLandscape => 'Orizzontale';
+
+  @override
+  String get orientationPortrait => 'Verticale';
+
+  @override
   String get communicationEmptyTitle => 'Il raccoglitore e vuoto';
 
   @override

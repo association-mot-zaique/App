@@ -1,5 +1,11 @@
 import 'dart:ui';
 
+/// Screen orientation policy (retour client) : a rotating screen is deeply
+/// disorienting for an autistic user, so the app is locked by default.
+/// Landscape is the default because it matches the shape of the physical
+/// classeur the app replaces.
+enum OrientationMode { landscape, portrait, automatic }
+
 class AppSettings {
   const AppSettings({
     required this.pictogramScale,
@@ -14,6 +20,7 @@ class AppSettings {
     required this.speechRate,
     required this.gridColumns,
     required this.showPictogramLabel,
+    required this.orientationMode,
   });
 
   static const AppSettings defaults = AppSettings(
@@ -32,6 +39,7 @@ class AppSettings {
     speechRate: 0.42,
     gridColumns: 0,
     showPictogramLabel: true,
+    orientationMode: OrientationMode.landscape,
   );
 
   final double pictogramScale;
@@ -69,6 +77,10 @@ class AppSettings {
   /// others are distracted by it.
   final bool showPictogramLabel;
 
+  /// Orientation policy, landscape by default (retour client): the aidant can
+  /// switch to portrait or let the device rotate freely.
+  final OrientationMode orientationMode;
+
   bool get isAutomaticGridColumns => gridColumns <= 0;
 
   /// Empty [localeCode] means "automatic": follow the system language.
@@ -90,6 +102,7 @@ class AppSettings {
     double? speechRate,
     int? gridColumns,
     bool? showPictogramLabel,
+    OrientationMode? orientationMode,
   }) {
     return AppSettings(
       pictogramScale: pictogramScale ?? this.pictogramScale,
@@ -105,6 +118,7 @@ class AppSettings {
       speechRate: speechRate ?? this.speechRate,
       gridColumns: gridColumns ?? this.gridColumns,
       showPictogramLabel: showPictogramLabel ?? this.showPictogramLabel,
+      orientationMode: orientationMode ?? this.orientationMode,
     );
   }
 
@@ -129,6 +143,7 @@ class AppSettings {
       'speechRate': speechRate,
       'gridColumns': gridColumns,
       'showPictogramLabel': showPictogramLabel,
+      'orientationMode': orientationMode.name,
     };
   }
 
@@ -165,6 +180,10 @@ class AppSettings {
       speechRate: (json['speechRate'] as num?)?.toDouble() ?? 0.42,
       gridColumns: (json['gridColumns'] as num?)?.toInt() ?? 0,
       showPictogramLabel: json['showPictogramLabel'] as bool? ?? true,
+      orientationMode:
+          OrientationMode.values
+              .asNameMap()[json['orientationMode'] as String? ?? ''] ??
+          OrientationMode.landscape,
     );
   }
 }

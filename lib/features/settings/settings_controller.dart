@@ -64,6 +64,10 @@ class SettingsController extends ChangeNotifier {
     return _update(_settings.copyWith(showPictogramLabel: value));
   }
 
+  Future<void> updateOrientationMode(OrientationMode value) {
+    return _update(_settings.copyWith(orientationMode: value));
+  }
+
   Future<void> _update(AppSettings newSettings) async {
     _settings = newSettings;
     await _repository.save(newSettings);

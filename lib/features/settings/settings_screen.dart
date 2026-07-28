@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../data/models/app_settings.dart';
 import '../../data/services/local_backup_service.dart';
 import '../../data/services/pictogram_search_service.dart';
 import '../../data/services/search_cache_repository.dart';
@@ -218,6 +219,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       widget.settingsController.updateGridColumns(value);
                     }
                   },
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  l10n.orientationTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                // Locked landscape by default (retour client) : a screen that
+                // rotates on its own is disorienting for the end user.
+                SegmentedButton<OrientationMode>(
+                  segments: [
+                    ButtonSegment(
+                      value: OrientationMode.landscape,
+                      icon: const Icon(Icons.stay_current_landscape_rounded),
+                      label: Text(l10n.orientationLandscape),
+                    ),
+                    ButtonSegment(
+                      value: OrientationMode.portrait,
+                      icon: const Icon(Icons.stay_current_portrait_rounded),
+                      label: Text(l10n.orientationPortrait),
+                    ),
+                    ButtonSegment(
+                      value: OrientationMode.automatic,
+                      icon: const Icon(Icons.screen_rotation_rounded),
+                      label: Text(l10n.automaticOption),
+                    ),
+                  ],
+                  selected: {settings.orientationMode},
+                  onSelectionChanged: (selection) => widget.settingsController
+                      .updateOrientationMode(selection.first),
                 ),
                 const SizedBox(height: 6),
                 SwitchListTile.adaptive(

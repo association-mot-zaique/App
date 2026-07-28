@@ -464,6 +464,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aidantArea => 'Caregiver area';
 
   @override
+  String get orientationTitle => 'Screen orientation';
+
+  @override
+  String get orientationLandscape => 'Landscape';
+
+  @override
+  String get orientationPortrait => 'Portrait';
+
+  @override
   String get communicationEmptyTitle => 'The binder is empty';
 
   @override
