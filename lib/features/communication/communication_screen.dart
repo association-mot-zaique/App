@@ -451,13 +451,16 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
   }
 
   /// Columns to display: the aidant's explicit choice (A-12) when set,
-  /// otherwise derived from the screen width.
-  int _columns(double width) {
+  /// otherwise derived from the screen width — capped at 3 on short screens
+  /// (phone in landscape), where more columns make pictos too small to read
+  /// (retour client).
+  int _columns(double width, double height) {
     final chosen = widget.settingsController.settings.gridColumns;
     if (chosen > 0) {
       return chosen;
     }
-    return _columnsForWidth(width);
+    final automatic = _columnsForWidth(width);
+    return height < 500 ? automatic.clamp(2, 3) : automatic;
   }
 
   int _columnsForWidth(double width) {
@@ -629,7 +632,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     required double width,
     required double height,
   }) {
-    final columns = _columns(width);
+    final columns = _columns(width, height);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -703,7 +706,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
     required double width,
     required double height,
   }) {
-    final columns = _columns(width);
+    final columns = _columns(width, height);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
