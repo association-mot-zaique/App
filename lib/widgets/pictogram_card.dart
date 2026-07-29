@@ -53,130 +53,145 @@ class PictogramCard extends StatelessWidget {
         onTap: onSelect,
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: AnimatedContainer(
-                  duration: reducedMotion
-                      ? Duration.zero
-                      : const Duration(milliseconds: 220),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8 * scale.clamp(0.9, 1.8)),
-                    child: PictogramImage(
-                      pictogram: pictogram,
-                      placeholder: const Center(
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                      errorWidget: Icon(
-                        Icons.image_not_supported_outlined,
-                        color: colorScheme.onSurface.withValues(alpha: 0.55),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              if (showLabel) ...[
-                const SizedBox(height: 8),
-                // Not truncated (retour client): long labels wrap and the
-                // image gives up the space. Flexible caps the label at the
-                // physically available height so a narrow cell (many columns)
-                // can never overflow the card.
-                Flexible(
-                  child: Text(
-                    pictogram.label,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 14 * scale.clamp(0.9, 1.4),
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 6),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final compact = constraints.maxWidth < 140;
-                  final addButtonStyle =
-                      (tint != null
-                              ? FilledButton.styleFrom(
-                                  backgroundColor: tint.withValues(alpha: 0.2),
-                                  foregroundColor: HSLColor.fromColor(
-                                    tint,
-                                  ).withLightness(0.25).toColor(),
-                                )
-                              : FilledButton.styleFrom())
-                          .copyWith(
-                            visualDensity: VisualDensity.compact,
-                            padding: WidgetStatePropertyAll(
-                              const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
-                              ),
-                            ),
-                          );
+          child: LayoutBuilder(
+            builder: (context, cellConstraints) {
+              // The label keeps its natural height (full text, retour client)
+              // and the image takes whatever remains. The cap only bites in
+              // the physically impossible case (label + buttons taller than
+              // the cell), where it clips instead of overflowing.
+              final maxLabelHeight = (cellConstraints.maxHeight - 8 - 6 - 38)
+                  .clamp(0.0, double.infinity);
 
-                  return SizedBox(
-                    height: 38,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: compact
-                              ? FilledButton(
-                                  onPressed: onSelect,
-                                  style: addButtonStyle,
-                                  child: const Icon(
-                                    Icons.add_rounded,
-                                    size: 20,
-                                  ),
-                                )
-                              : FilledButton.tonalIcon(
-                                  onPressed: onSelect,
-                                  style: addButtonStyle,
-                                  icon: const Icon(Icons.add_rounded, size: 18),
-                                  label: Text(
-                                    phraseActionLabel,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                        ),
-                        const SizedBox(width: 6),
-                        SizedBox(
-                          width: 38,
-                          height: 38,
-                          child: IconButton.filledTonal(
-                            tooltip: isFavorite
-                                ? removeFavoriteTooltip
-                                : saveFavoriteTooltip,
-                            onPressed: onToggleFavorite,
-                            visualDensity: VisualDensity.compact,
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              isFavorite
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              size: 20,
-                              color: isFavorite
-                                  ? const Color(0xFFDA6A6A)
-                                  : null,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: AnimatedContainer(
+                      duration: reducedMotion
+                          ? Duration.zero
+                          : const Duration(milliseconds: 220),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(8 * scale.clamp(0.9, 1.8)),
+                        child: PictogramImage(
+                          pictogram: pictogram,
+                          placeholder: const Center(
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          ),
+                          errorWidget: Icon(
+                            Icons.image_not_supported_outlined,
+                            color: colorScheme.onSurface.withValues(
+                              alpha: 0.55,
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  );
-                },
-              ),
-            ],
+                  ),
+                  if (showLabel) ...[
+                    const SizedBox(height: 8),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: maxLabelHeight),
+                      child: Text(
+                        pictogram.label,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14 * scale.clamp(0.9, 1.4),
+                        ),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 6),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final compact = constraints.maxWidth < 140;
+                      final addButtonStyle =
+                          (tint != null
+                                  ? FilledButton.styleFrom(
+                                      backgroundColor: tint.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      foregroundColor: HSLColor.fromColor(
+                                        tint,
+                                      ).withLightness(0.25).toColor(),
+                                    )
+                                  : FilledButton.styleFrom())
+                              .copyWith(
+                                visualDensity: VisualDensity.compact,
+                                padding: WidgetStatePropertyAll(
+                                  const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
+                                ),
+                              );
+
+                      return SizedBox(
+                        height: 38,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: compact
+                                  ? FilledButton(
+                                      onPressed: onSelect,
+                                      style: addButtonStyle,
+                                      child: const Icon(
+                                        Icons.add_rounded,
+                                        size: 20,
+                                      ),
+                                    )
+                                  : FilledButton.tonalIcon(
+                                      onPressed: onSelect,
+                                      style: addButtonStyle,
+                                      icon: const Icon(
+                                        Icons.add_rounded,
+                                        size: 18,
+                                      ),
+                                      label: Text(
+                                        phraseActionLabel,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                            ),
+                            const SizedBox(width: 6),
+                            SizedBox(
+                              width: 38,
+                              height: 38,
+                              child: IconButton.filledTonal(
+                                tooltip: isFavorite
+                                    ? removeFavoriteTooltip
+                                    : saveFavoriteTooltip,
+                                onPressed: onToggleFavorite,
+                                visualDensity: VisualDensity.compact,
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  size: 20,
+                                  color: isFavorite
+                                      ? const Color(0xFFDA6A6A)
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

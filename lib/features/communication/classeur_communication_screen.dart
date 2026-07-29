@@ -326,36 +326,46 @@ class _OwnedPictogramCard extends StatelessWidget {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.all(6),
-                  child: PictogramImage(pictogram: pictogram),
-                ),
-              ),
-              if (showLabel) ...[
-                const SizedBox(height: 6),
-                // Not truncated (retour client): long labels wrap and the
-                // image gives up the space. Flexible caps the label at the
-                // physically available height so a narrow cell (many columns)
-                // can never overflow the card.
-                Flexible(
-                  child: Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
+          child: LayoutBuilder(
+            builder: (context, cellConstraints) {
+              // The label keeps its natural height (full text, retour client)
+              // and the image takes whatever remains. The cap only bites in
+              // the physically impossible case (label taller than the cell),
+              // where it clips instead of overflowing.
+              final maxLabelHeight = (cellConstraints.maxHeight - 6).clamp(
+                0.0,
+                double.infinity,
+              );
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.all(6),
+                      child: PictogramImage(pictogram: pictogram),
                     ),
                   ),
-                ),
-              ],
-            ],
+                  if (showLabel) ...[
+                    const SizedBox(height: 6),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: maxLabelHeight),
+                      child: Text(
+                        label,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              );
+            },
           ),
         ),
       ),
