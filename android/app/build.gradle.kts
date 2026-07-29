@@ -1,7 +1,9 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // The Flutter Gradle Plugin must be applied after the Android Gradle plugin.
+    // It brings its own built-in Kotlin: kotlin-android must not be applied
+    // here (migrate-to-built-in-kotlin). The KGP version pinned in
+    // settings.gradle.kts stays only for the plugins that still need it.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -11,12 +13,10 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        // Aligned with the JVM target of Flutter's built-in Kotlin (21):
+        // a mismatch fails compileDebugKotlin.
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     defaultConfig {
