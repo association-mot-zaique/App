@@ -209,10 +209,15 @@ class _ClasseurCommunicationScreenState
                               // Explicit column count when the aidant set one
                               // (A-12), otherwise size-based automatic layout.
                               // Cards flatten on short screens so a full row
-                              // (image + complete label) stays visible.
+                              // (image + complete label) stays visible, and
+                              // grow wider there (~3 columns on a phone in
+                              // landscape): more, smaller pictos read poorly
+                              // (retour client).
                               gridDelegate: settings.isAutomaticGridColumns
                                   ? SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 160,
+                                      maxCrossAxisExtent: isCompactHeight
+                                          ? 280
+                                          : 160,
                                       mainAxisSpacing: 10,
                                       crossAxisSpacing: 10,
                                       childAspectRatio: isCompactHeight
