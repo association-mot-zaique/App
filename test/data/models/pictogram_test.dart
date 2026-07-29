@@ -66,5 +66,16 @@ void main() {
       expect(restored.localImagePath, original.localImagePath);
       expect(restored.label, 'maison');
     });
+
+    test('imageUrl only requests variants that ARASAAC actually serves', () {
+      const pictogram = Pictogram(id: 2462, label: 'querer');
+
+      // 100 does not exist server-side (404, broken thumbnail): it must be
+      // promoted to the closest real variant.
+      expect(pictogram.imageUrl(size: 100), contains('2462_300.png'));
+      expect(pictogram.imageUrl(size: 300), contains('2462_300.png'));
+      expect(pictogram.imageUrl(size: 400), contains('2462_500.png'));
+      expect(pictogram.imageUrl(size: 900), contains('2462_2500.png'));
+    });
   });
 }

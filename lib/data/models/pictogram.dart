@@ -123,7 +123,17 @@ class Pictogram {
   }
 
   String imageUrl({int size = 300}) {
-    return 'https://static.arasaac.org/pictograms/$id/${id}_$size.png';
+    // ARASAAC only serves the 300, 500 and 2500 px variants; any other value
+    // (e.g. 100 for a thumbnail) is a 404 and shows up as a broken image.
+    final int servedSize;
+    if (size <= 300) {
+      servedSize = 300;
+    } else if (size <= 500) {
+      servedSize = 500;
+    } else {
+      servedSize = 2500;
+    }
+    return 'https://static.arasaac.org/pictograms/$id/${id}_$servedSize.png';
   }
 
   String get semanticKey {
