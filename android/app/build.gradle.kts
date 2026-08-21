@@ -24,10 +24,12 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        // Aligned with the JVM target of Flutter's built-in Kotlin (21):
-        // a mismatch fails compileDebugKotlin.
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        // Java and Kotlin MUST target the same JVM version, and the default
+        // of Flutter's built-in Kotlin differs across environments (21 on a
+        // local JDK 21, 17 on the CI's JDK 17): both sides are pinned to 17
+        // explicitly — see the KotlinCompile block below.
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -73,4 +75,13 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// Pins the Kotlin JVM target to match compileOptions (17): the default of
+// Flutter's built-in Kotlin depends on the JDK present (21 locally, 17 on
+// the CI), and any mismatch fails compileReleaseKotlin.
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
