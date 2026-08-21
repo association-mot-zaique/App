@@ -2,6 +2,7 @@ import '../models/pictogram.dart';
 import '../models/pictogram_search_result.dart';
 import 'arasaac_api.dart';
 import 'search_cache_repository.dart';
+import 'sensitive_content_filter.dart';
 
 abstract class PictogramSearchService {
   Future<PictogramSearchResult> search(
@@ -137,6 +138,11 @@ class ArasaacSearchService implements PictogramSearchService {
     final filtered = <Pictogram>[];
 
     for (final picto in items) {
+      // Non negotiable, before any user-configurable filter: violent or
+      // sexual content must never surface (politique Familles Google Play).
+      if (SensitiveContentFilter.isBlocked(picto)) {
+        continue;
+      }
       if (onlyAacPictograms && !picto.aac) {
         continue;
       }

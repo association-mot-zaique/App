@@ -8,6 +8,8 @@ class Pictogram {
     this.aac = false,
     this.schematic = false,
     this.downloads = 0,
+    this.violence = false,
+    this.sex = false,
     this.localImagePath,
   });
 
@@ -19,6 +21,13 @@ class Pictogram {
   final bool aac;
   final bool schematic;
   final int downloads;
+
+  /// ARASAAC's own content flags. Flagged pictograms are filtered out of
+  /// every search: the app is distributed in Google Play's children category,
+  /// where any reachable violent or sexual content is grounds for rejection
+  /// (politique Familles, rejet du 21/08/2026).
+  final bool violence;
+  final bool sex;
 
   /// Absolute path to an owned image on disk. When set, the pictogram is a
   /// local classeur entry and must be rendered from the file, never the
@@ -39,6 +48,8 @@ class Pictogram {
       aac: aac,
       schematic: schematic,
       downloads: downloads,
+      violence: violence,
+      sex: sex,
       localImagePath: newPath,
     );
   }
@@ -86,6 +97,8 @@ class Pictogram {
       aac: _boolFromJson(json['aac']),
       schematic: _boolFromJson(json['schematic']),
       downloads: _intFromJson(json['downloads']),
+      violence: _boolFromJson(json['violence']),
+      sex: _boolFromJson(json['sex']),
     );
   }
 
@@ -104,6 +117,8 @@ class Pictogram {
       aac: json['aac'] as bool? ?? false,
       schematic: json['schematic'] as bool? ?? false,
       downloads: _intFromJson(json['downloads']),
+      violence: json['violence'] as bool? ?? false,
+      sex: json['sex'] as bool? ?? false,
       localImagePath: json['localImagePath'] as String?,
     );
   }
@@ -118,6 +133,8 @@ class Pictogram {
       'aac': aac,
       'schematic': schematic,
       'downloads': downloads,
+      'violence': violence,
+      'sex': sex,
       if (localImagePath != null) 'localImagePath': localImagePath,
     };
   }
