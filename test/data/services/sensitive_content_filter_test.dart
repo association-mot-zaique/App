@@ -43,6 +43,18 @@ void main() {
       expect(SensitiveContentFilter.isBlocked(warm), isFalse);
     });
 
+    test('blocks unflagged sexual content through the label blocklist', () {
+      // Not flagged sex=true by ARASAAC (verified on the API).
+      const sexWord = Pictogram(id: 10345, label: 'sexe');
+      const genitals = Pictogram(
+        id: 39699,
+        label: 'toucher les parties génitales',
+      );
+
+      expect(SensitiveContentFilter.isBlocked(sexWord), isTrue);
+      expect(SensitiveContentFilter.isBlocked(genitals), isTrue);
+    });
+
     test('keeps everyday CAA vocabulary', () {
       const eat = Pictogram(id: 6, label: 'manger');
       const knife = Pictogram(id: 7, label: 'couteau');

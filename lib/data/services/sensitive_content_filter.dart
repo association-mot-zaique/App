@@ -35,7 +35,16 @@ class SensitiveContentFilter {
     r'pistole|gewehr|waffe|waffen|krieg|granate|dolch|morden|mord|'
     r'selbstmord|gewalt|folter|'
     // italiano
-    r'fucile|armi|bombardare|pugnale|uccidere|omicidio|violenza|tortura'
+    r'fucile|armi|bombardare|pugnale|uccidere|omicidio|violenza|tortura|'
+    // contenu sexuel non couvert par le drapeau ARASAAC (ex : "sexe",
+    // "toucher les parties genitales" ne sont pas marques sex=true).
+    // francais / english
+    r"sexe|sex|sexuel(?:le)?s?|sexual|g[eé]nitale?s?|g[eé]nitaux|genitals?|"
+    r'porno(?:graphie|graphy)?|porn|masturb\w*|[eé]roti(?:que|c)|'
+    r"faire l'amour|intercourse|"
+    // espanol / deutsch / italiano
+    r'sexo|sessuale|sesso|sexuell|genitalien|genitali|pornograf[ií]a|'
+    r'pornografie|pornografia|erotico|erotisch'
     r')\b',
     caseSensitive: false,
   );
